@@ -1,15 +1,15 @@
 export const setLocalStorageItem = (key, value) => {
-    return localStorage.setItem(key, JSON.stringify(value));
+  return localStorage.setItem(key, JSON.stringify(value));
 };
-  
+
 export const getLocalStorageItem = (key, defaultValue = null) => {
-    try {
-        return JSON.parse(localStorage.getItem(key, defaultValue));
-    } catch (error) {
-        return defaultValue;
-    }
+  try {
+    return JSON.parse(localStorage.getItem(key, defaultValue));
+  } catch (error) {
+    return defaultValue;
+  }
 };
-  
+
 export const removeLocalStorageItem = key => {
-    localStorage.removeItem(key);
+  localStorage.removeItem(key);
 };

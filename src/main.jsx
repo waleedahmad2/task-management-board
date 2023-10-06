@@ -1,20 +1,15 @@
-import React, {useEffect, useLocation, useNavigationType, createRoutesFromChildren, matchRoutes} from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import {
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { ToastContainer } from 'react-toastify';
-import { version } from '../package.json';
+import * as Sentry from '@sentry/react';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
+import React, {useEffect, useLocation, useNavigationType, createRoutesFromChildren, matchRoutes} from 'react';
 import CacheBuster from 'react-cache-buster';
-import * as Sentry from "@sentry/react";
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import ErrorPage from './ErrorPage.jsx'
+import ReactDOM from 'react-dom/client';
+import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import {ToastContainer} from 'react-toastify';
+
+import App from './App.jsx';
+import ErrorPage from './ErrorPage.jsx';
+import {version} from '../package.json';
 
 
 const queryClient = new QueryClient();
@@ -34,7 +29,7 @@ if (!import.meta.env.VITE_SENTRY_DSN) {
           matchRoutes
         ),
       }),
-      new Sentry.Replay()
+      new Sentry.Replay(),
     ],
     // Transactions for performance monitoring.
     tracesSampleRate: import.meta.env.VITE_SENTRY_SAMPLE_RATE,
@@ -45,18 +40,18 @@ if (!import.meta.env.VITE_SENTRY_DSN) {
   });
 }
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
-  },
-], { basename: '/app' });
-
-
-const isCacheBusterEnable = ["stage", "prod"].includes(
-  import.meta.env.VITE_ENV
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <App />,
+      errorElement: <ErrorPage />,
+    },
+  ],
+  {basename: '/app'}
 );
+
+const isCacheBusterEnable = ['stage', 'prod'].includes(import.meta.env.VITE_ENV);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -72,5 +67,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <ToastContainer />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
