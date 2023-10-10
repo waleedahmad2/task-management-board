@@ -8,3 +8,4 @@ export {
   usePutMutation,
   useDeleteMutation,
 } from './networkRequestService';
+export {useSentry} from './useSentry';

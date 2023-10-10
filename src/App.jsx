@@ -1,10 +1,12 @@
 import {useQueryClient} from '@tanstack/react-query';
 import {toast} from 'react-toastify';
 
-import {apiEndpoints, queryKeys, useGetQuery, usePostMutation, useSetupAxios} from './services';
+import {apiEndpoints, queryKeys, useGetQuery, usePostMutation, useSentry, useSetupAxios} from './services';
 
 function App() {
   useSetupAxios();
+  useSentry();
+
   const queryClient = useQueryClient();
 
   const {data, isFetching} = useGetQuery(queryKeys?.USERS, apiEndpoints.POSTS, {abcMno: 'xyz'});
