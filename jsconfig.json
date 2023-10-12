@@ -8,6 +8,7 @@
       "@pages/*": ["pages/*"],
       "@routes": ["routes"],
       "@common/*": ["common/*"],
+      "@useContext": ["context"],
     },
   },
   "include": ["src"]

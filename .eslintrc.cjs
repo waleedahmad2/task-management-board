@@ -14,8 +14,8 @@ module.exports = {
     'plugin:import/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parserOptions: {ecmaVersion: 'latest', sourceType: 'module'},
-  settings: {react: {version: '18.2'}},
+  parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
+  settings: { react: { version: '18.2' } },
   plugins: ['react-refresh', 'import',],
   rules: {
     'import/no-unresolved': 'off',
@@ -23,7 +23,7 @@ module.exports = {
     "react-hooks/exhaustive-deps": "off",
     'react-refresh/only-export-components': [
       'warn',
-      {allowConstantExport: true},
+      { allowConstantExport: true },
     ],
     'import/order': ['error', {
       'newlines-between': 'always',

@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
-import {defineConfig} from 'vite';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react()],
@@ -12,6 +12,7 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, './src/pages'),
       '@routes': path.resolve(__dirname, './src/routes'),
       '@common': path.resolve(__dirname, './src/common'),
+      '@useContext': path.resolve(__dirname, './src/context'),
     },
   },
   server: {
