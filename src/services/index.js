@@ -1,6 +1,6 @@
-export {useSetupAxios} from './useSetupAxios';
-export {apiEndpoints} from './apiEndpoints';
-export {queryKeys} from './queryKeys';
+export { useSetupAxios } from './useSetupAxios';
+export { apiEndpoints } from './apiEndpoints';
+export { queryKeys } from './queryKeys';
 export {
   useGetQuery,
   usePostMutation,
@@ -8,4 +8,4 @@ export {
   usePutMutation,
   useDeleteMutation,
 } from './networkRequestService';
-export {useSentry} from './useSentry';
+export { useSentry } from './useSentry';

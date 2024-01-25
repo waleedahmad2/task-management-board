@@ -1,21 +1,16 @@
-import { getLocalStorageItem } from '@utils';
+import { ROUTES } from '@routes';
+import { ACCESS_TOKEN, getLocalStorageItem } from '@utils';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { ROUTES } from './Routes';
-
-const PrivateRoute = props => {
+export function PrivateRoute({ children }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!getLocalStorageItem('accessToken')) {
+    if (!getLocalStorageItem(ACCESS_TOKEN)) {
       navigate(ROUTES.UN_AUTHORIZED, { replace: true });
     }
   }, []);
 
-  const { children } = props;
-
   return children;
-};
-
-export default PrivateRoute;
+}

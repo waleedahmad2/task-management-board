@@ -1,1 +1,1 @@
-export {default as Unauthorized} from './Unauthorized';
+export { Unauthorized } from './Unauthorized';

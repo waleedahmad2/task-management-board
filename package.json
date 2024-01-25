@@ -5,7 +5,7 @@
   "type": "module",
   "homepage": "/app",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 3000",
     "generate-meta-tag": "node ./node_modules/react-cache-buster/dist/generate-meta-tag.js",
     "build": "yarn generate-meta-tag && vite build",
     "serve": "serve dist",
