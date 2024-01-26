@@ -1,6 +1,6 @@
+import { ENABLE } from '@constants';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ENABLE } from '@utils';
 import React from 'react';
 import CacheBuster from 'react-cache-buster';
 import ReactDOM from 'react-dom/client';

@@ -1,4 +1,5 @@
-import { ACCESS_TOKEN, getLocalStorageItem } from '@utils';
+import { ACCESS_TOKEN } from '@constants';
+import { getLocalStorageItem } from '@utils';
 import axios from 'axios';
 import * as caseConverter from 'change-object-case';
 

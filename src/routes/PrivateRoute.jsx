@@ -1,5 +1,6 @@
+import { ACCESS_TOKEN } from '@constants';
 import { ROUTES } from '@routes';
-import { ACCESS_TOKEN, getLocalStorageItem } from '@utils';
+import { getLocalStorageItem } from '@utils';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 

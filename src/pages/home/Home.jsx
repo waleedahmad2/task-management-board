@@ -2,7 +2,7 @@ import { useGetQuery, usePostMutation, apiEndpoints, queryKeys } from '@services
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
-export function Home() {
+export const Home = () => {
   const queryClient = useQueryClient();
 
   const { data, isFetching } = useGetQuery(queryKeys?.USERS, apiEndpoints.POSTS, { abcMno: 'xyz' });
@@ -40,4 +40,4 @@ export function Home() {
       <button onClick={onClickTitle}> Click me to Post</button>
     </>
   );
-}
+};
