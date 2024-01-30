@@ -1,9 +1,9 @@
 module.exports = {
   root: true,
   env: {
-    "node": true,
-    "commonjs": true,
-    "browser": true,
+    'node': true,
+    'commonjs': true,
+    'browser': true,
     es2020: true
   },
   extends: [
@@ -20,7 +20,7 @@ module.exports = {
   rules: {
     'import/no-unresolved': 'off',
     'react/prop-types': 'off',
-    "react-hooks/exhaustive-deps": "off",
+    'react-hooks/exhaustive-deps': 'off',
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
@@ -37,21 +37,21 @@ module.exports = {
         caseInsensitive: true
       }
     }],
-    "indent": [
-      "error",
+    'indent': [
+      'error',
       2
     ],
-    "linebreak-style": [
-      "error",
-      "unix"
+    'linebreak-style': [
+      'error',
+      'unix'
     ],
-    "quotes": [
-      "error",
-      "single"
+    'quotes': [
+      'error',
+      'single'
     ],
-    "semi": [
-      "error",
-      "always"
+    'semi': [
+      'error',
+      'always'
     ]
   },
 }

@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 
-const useFormikForm = (initialValues, onSubmit, validationSchema) => {
+export function useFormikForm(initialValues, onSubmit, validationSchema) {
   const formik = useFormik({
     initialValues,
     onSubmit,
@@ -22,6 +22,4 @@ const useFormikForm = (initialValues, onSubmit, validationSchema) => {
     getFieldError,
     isFieldTouched,
   };
-};
-
-export default useFormikForm;
+}

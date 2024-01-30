@@ -1,17 +1,17 @@
+import { ACCESS_TOKEN } from '@genericConstants';
+import { getLocalStorageItem } from '@utils';
 import axios from 'axios';
 import * as caseConverter from 'change-object-case';
 
-import {getLocalStorageItem} from '../utils';
+const options = { recursive: true, arrayRecursive: true };
 
-const options = {recursive: true, arrayRecursive: true};
+export function useSetupAxios() {
+  axios.defaults.baseURL = `${import.meta.env.VITE_APP_BASE_URL}`;
 
-export const useSetupAxios = () => {
   axios.interceptors.request.use(config => {
-    const accessToken = getLocalStorageItem('accessToken');
+    const accessToken = getLocalStorageItem(ACCESS_TOKEN);
 
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
+    if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
 
     if (!(config?.data instanceof FormData)) {
       const caseConvertedData = caseConverter.snakeKeys(config?.data, options);
@@ -36,4 +36,4 @@ export const useSetupAxios = () => {
   );
 
   return;
-};
+}

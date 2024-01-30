@@ -1,1 +1,1 @@
-export {setLocalStorageItem, getLocalStorageItem, removeLocalStorageItem} from './local-storage';
+export { setLocalStorageItem, getLocalStorageItem, removeLocalStorageItem } from './localStorage';

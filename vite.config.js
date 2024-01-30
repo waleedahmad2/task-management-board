@@ -13,6 +13,7 @@ export default defineConfig({
       '@routes': path.resolve(__dirname, './src/routes'),
       '@common': path.resolve(__dirname, './src/common'),
       '@useContext': path.resolve(__dirname, './src/context'),
+      '@genericConstants': path.resolve(__dirname, './src/utils/constants/genericConstants'),
     },
   },
   server: {
