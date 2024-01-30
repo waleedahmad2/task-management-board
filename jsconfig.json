@@ -9,7 +9,7 @@
       "@routes": ["routes"],
       "@common/*": ["common/*"],
       "@useContext": ["context"],
-      "@constants": ["utils/constants"],
+      "@genericConstants": ["utils/constants/genericConstants"],
     },
   },
   "include": ["src"]
