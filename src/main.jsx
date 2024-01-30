@@ -1,4 +1,4 @@
-import { ENABLE } from '@genericConstants';
+import { ENABLE } from '@constants';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import React from 'react';

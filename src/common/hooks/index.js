@@ -1,1 +1,1 @@
-export { default as useFormikForm } from './useFormikForm';
+export { useFormikForm } from './useFormikForm';

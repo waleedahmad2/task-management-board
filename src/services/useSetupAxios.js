@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN } from '@genericConstants';
+import { ACCESS_TOKEN } from '@constants';
 import { getLocalStorageItem } from '@utils';
 import axios from 'axios';
 import * as caseConverter from 'change-object-case';
@@ -6,8 +6,6 @@ import * as caseConverter from 'change-object-case';
 const options = { recursive: true, arrayRecursive: true };
 
 export function useSetupAxios() {
-  axios.defaults.baseURL = `${import.meta.env.VITE_APP_BASE_URL}`;
-
   axios.interceptors.request.use(config => {
     const accessToken = getLocalStorageItem(ACCESS_TOKEN);
 
