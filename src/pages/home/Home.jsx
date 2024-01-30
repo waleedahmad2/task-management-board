@@ -1,6 +1,6 @@
-import { useGetQuery, usePostMutation, apiEndpoints, queryKeys } from '@services';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { useGetQuery, usePostMutation, apiEndpoints, queryKeys } from '@services';
 
 export function Home() {
   const queryClient = useQueryClient();

@@ -1,8 +1,8 @@
+import { useState } from 'react';
+import { RouterProvider } from 'react-router-dom';
 import { router } from '@routes';
 import { useSentry, useSetupAxios } from '@services';
 import { AppContext } from '@useContext';
-import { useState } from 'react';
-import { RouterProvider } from 'react-router-dom';
 
 function App() {
   useSetupAxios();

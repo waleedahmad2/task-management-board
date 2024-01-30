@@ -1,7 +1,7 @@
-import { ENABLE } from '@constants';
-import * as Sentry from '@sentry/react';
 import { useEffect } from 'react';
 import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
+import * as Sentry from '@sentry/react';
+import { ENABLE } from '@constants';
 
 export const useSentry = () => {
   if (import.meta.env.VITE_SENTRY === ENABLE && !!import.meta.env.VITE_SENTRY_DSN) {
