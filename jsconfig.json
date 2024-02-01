@@ -9,8 +9,8 @@
       "@routes": ["routes"],
       "@common/*": ["common/*"],
       "@useContext": ["context"],
-      "@constants": ["constants"],
-    },
+      "@constants": ["constants"]
+    }
   },
   "include": ["src"]
 }

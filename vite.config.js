@@ -1,9 +1,17 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    sentryVitePlugin({
+      org: 'sentry-boilerplate',
+      project: 'javascript-react',
+    }),
+  ],
+
   resolve: {
     alias: {
       '@assets': path.resolve(__dirname, './src/assets'),
@@ -16,8 +24,13 @@ export default defineConfig({
       '@constants': path.resolve(__dirname, './src/constants'),
     },
   },
+
   server: {
     host: true,
     port: 3000,
+  },
+
+  build: {
+    sourcemap: true,
   },
 });

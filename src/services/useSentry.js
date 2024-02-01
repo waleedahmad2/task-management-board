@@ -17,7 +17,6 @@ export const useSentry = () => {
             matchRoutes
           ),
         }),
-        new Sentry.Replay(),
       ],
       tracesSampleRate: import.meta.env.VITE_SENTRY_SAMPLE_RATE,
       replaysSessionSampleRate: import.meta.env.VITE_SENTRY_REPLAYS_SESSION_SAMPLE_RATE,
