@@ -1,7 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { useGetQuery, usePostMutation, apiEndpoints, queryKeys } from '@services';
-import { POST_ERROR_MESSAGE } from '@constants';
+
+import { POST_ERROR_MESSAGE } from '#/constants';
+import { useGetQuery, usePostMutation, apiEndpoints, queryKeys } from '#/services';
 
 export function useHome() {
   const queryClient = useQueryClient();
@@ -16,7 +17,7 @@ export function useHome() {
 
   const onClickTitle = () => {
     mutate({
-      data: {
+      payload: {
         title: 'foo',
         body: 'bar',
         userId: 1,

@@ -25,7 +25,7 @@ module.exports = {
     'import/order': [
       'error',
       {
-        groups: [['type'], ['builtin', 'external'], ['internal', 'parent', 'sibling', 'index']],
+        groups: [['builtin'], ['external'], ['internal', 'parent', 'sibling', 'index']],
         pathGroups: [
           {
             pattern: 'react',
@@ -38,46 +38,12 @@ module.exports = {
             position: 'before',
           },
           {
-            pattern: 'react-router-dom',
-            group: 'builtin',
-            position: 'before',
-          },
-          {
-            pattern: '@common/*',
+            pattern: '#/**/*',
             group: 'internal',
-          },
-          {
-            pattern: '@pages/*',
-            group: 'internal',
-          },
-          {
-            pattern: '@routes',
-            group: 'internal',
-          },
-          {
-            pattern: '@services',
-            group: 'internal',
-          },
-          {
-            pattern: '@utils',
-            group: 'internal',
-          },
-          {
-            pattern: '@useContext',
-            group: 'internal',
-          },
-          {
-            pattern: '@constants',
-            group: 'internal',
-            position: 'after',
-          },
-          {
-            pattern: '@assets/*',
-            group: 'internal',
-            position: 'after',
           },
         ],
         pathGroupsExcludedImportTypes: ['internal'],
+        'newlines-between': 'always',
         alphabetize: {
           order: 'asc',
           caseInsensitive: true,

@@ -1,4 +1,4 @@
-import { useHome } from '@pages/home';
+import { useHome } from '#/pages/home';
 
 export function Home() {
   const { data, isFetching, onClickTitle } = useHome();

@@ -21,8 +21,8 @@ export const useGetQuery = (key, url, params = {}, options) => {
 
 export const usePostMutation = (url, onSuccess, onError) => {
   return useMutation({
-    mutationFn: ({ data, params }) => {
-      return performPostRequest({ url, data, params });
+    mutationFn: ({ payload, params }) => {
+      return performPostRequest({ url, payload, params });
     },
     onSuccess,
     onError,
@@ -31,8 +31,8 @@ export const usePostMutation = (url, onSuccess, onError) => {
 
 export const useUpdateMutation = (url, onSuccess, onError) => {
   return useMutation({
-    mutationFn: ({ data, params }) => {
-      return performPatchRequest({ url, data, params });
+    mutationFn: ({ payload, params }) => {
+      return performPatchRequest({ url, payload, params });
     },
     onSuccess,
     onError,
@@ -41,8 +41,8 @@ export const useUpdateMutation = (url, onSuccess, onError) => {
 
 export const usePutMutation = (url, onSuccess, onError) => {
   return useMutation({
-    mutationFn: ({ data, params }) => {
-      return performPutRequest({ url, data, params });
+    mutationFn: ({ payload, params }) => {
+      return performPutRequest({ url, payload, params });
     },
     onSuccess,
     onError,
@@ -51,8 +51,8 @@ export const usePutMutation = (url, onSuccess, onError) => {
 
 export const useDeleteMutation = (url, onSuccess, onError) => {
   return useMutation({
-    mutationFn: ({ data, params }) => {
-      return performDeleteRequest({ url, data, params });
+    mutationFn: ({ payload, params }) => {
+      return performDeleteRequest({ url, payload, params });
     },
     onSuccess,
     onError,
