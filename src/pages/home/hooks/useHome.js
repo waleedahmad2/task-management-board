@@ -7,8 +7,6 @@ import { useGetQuery, usePostMutation, apiEndpoints, queryKeys } from '#/service
 export function useHome() {
   const queryClient = useQueryClient();
 
-  console.log('test');
-
   const { data, isFetching } = useGetQuery(queryKeys?.USERS, apiEndpoints.POSTS, { abcMno: 'xyz' });
 
   const onPostPostSuccess = () => queryClient.invalidateQueries({ queryKey: [queryKeys?.USERS] });

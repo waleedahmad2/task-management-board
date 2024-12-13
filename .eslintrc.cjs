@@ -1,27 +1,27 @@
-import { defineConfig } from 'eslint-define-config';
-import eslintPluginImport from 'eslint-plugin-import';
-
-export default defineConfig({
-  languageOptions: {
-    globals: {
-      node: 'readonly',
-      commonjs: 'readonly',
-      browser: 'readonly',
-      es2020: 'readonly',
-    },
-    parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
+module.exports = {
+  root: true,
+  env: {
+    node: true,
+    commonjs: true,
+    browser: true,
+    es2020: true,
   },
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:react-hooks/recommended',
+    'plugin:import/recommended',
+  ],
+  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },
-  plugins: {
-    import: eslintPluginImport,
-  },
-  ignores: ['dist', 'eslint.config.cjs', 'eslint.config.js'],
-  files: ['*.js', '*.jsx', '*.ts', '*.tsx'],
+  plugins: ['react-refresh', 'import'],
   rules: {
     'import/no-unresolved': 'off',
     'react/prop-types': 'off',
     'react-hooks/exhaustive-deps': 'off',
-    'no-console': ['error', { allow: ['warn', 'error'] }],
+    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'import/order': [
       'error',
       {
@@ -55,4 +55,4 @@ export default defineConfig({
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
   },
-});
+};
