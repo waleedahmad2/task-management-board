@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
+import { POST_ERROR_MESSAGE } from '#/constants';
 import { useGetQuery, usePostMutation, apiEndpoints, queryKeys } from '#/services';
-import { POST_ERROR_MESSAGE } from '#/utils/messages';
 
 export function useHome() {
   const queryClient = useQueryClient();

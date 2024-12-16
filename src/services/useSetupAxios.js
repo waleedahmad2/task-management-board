@@ -1,8 +1,8 @@
 import axios from 'axios';
 import * as caseConverter from 'change-object-case';
 
-import { ACCESS_TOKEN } from '#/utils/constants';
-import { getLocalStorageItem } from '#/utils/localStorage';
+import { ACCESS_TOKEN } from '#/constants';
+import { getLocalStorageItem } from '#/utils';
 
 const options = { recursive: true, arrayRecursive: true };
 
