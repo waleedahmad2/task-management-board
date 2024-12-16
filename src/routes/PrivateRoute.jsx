@@ -1,8 +1,8 @@
 import { Navigate } from 'react-router-dom';
 
-import { ACCESS_TOKEN } from '#/constants';
+import { ACCESS_TOKEN } from '#/utils/constants';
 import { ROUTES } from '#/routes';
-import { getLocalStorageItem } from '#/utils';
+import { getLocalStorageItem } from '#/utils/localStorage';
 
 export function PrivateRoute({ children }) {
   if (getLocalStorageItem(ACCESS_TOKEN)) return children;
