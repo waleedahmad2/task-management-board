@@ -6,6 +6,9 @@ This document outlines our team's code acceptance criteria and best practices fo
 
 ### CSS Guidelines
 - Avoid using percentage values for positioning attributes (e.g., `top`, `left`, `right`, `bottom`)
+
+  **Reason**: Percentage-based positioning can cause unpredictable behavior depending on the parent element's dimensions. Using pixel values ensures more precise and consistent placement.  
+
   ```css
   /* ❌ Don't do this */
   .element {
@@ -26,6 +29,8 @@ This document outlines our team's code acceptance criteria and best practices fo
 - Use descriptive names for event handlers that indicate the action being performed
 - Avoid generic names like `handle` or `handleClick`
 
+ **Reason**: Descriptive names improve readability and make the code easier to understand, especially in larger codebases.
+
 ```jsx
 /* ❌ Don't do this */
 const handle = (e) => {
@@ -33,7 +38,7 @@ const handle = (e) => {
 };
 
 /* ✅ Do this instead */
-const updateUserProfile = (e) => {
+const handleUserProfile = (e) => {
   // ...
 };
 ```
@@ -42,7 +47,7 @@ const updateUserProfile = (e) => {
 - Use JSDoc comments only for:
   1. Utility functions
   2. Component function declarations
-- Avoid excessive documentation for self-explanatory code
+- Avoid excessive documentation for self-explanatory code.
 
 ```jsx
 /* ✅ Good - JSDoc for utility function */
@@ -57,11 +62,11 @@ const formatDate = (dateString) => {
 
 /* ❌ Don't do this - over-documentation */
 /**
- * Renders a button
- * @param {string} label - The button text
- * @returns {JSX.Element} The button element
+ * useState hook to manage the state of the count
+ * @param {number} count - The initial count value
+ * @returns {Array} An array with the state value and a function to update it
  */
-const Button = ({ label }) => <button>{label}</button>;
+const [count, setCount] = useState(0);
 ```
 
 ### JSX Formatting
@@ -84,26 +89,24 @@ const Button = ({ label }) => <button>{label}</button>;
 ```
 
 #### Event Handlers
-- Don't create wrapper functions just to call `preventDefault`
-- Use inline prevention or combine with other necessary logic
+- Avoiding creating `anonymous` functions
 
 ```jsx
 /* ❌ Don't do this */
-const handleSubmit = (e) => {
-  e.preventDefault();
-  onSubmit(data);
-};
+const handleUserAvatarItemClick = itemId => {
+  //. ...
+}
+list.map(item => (
+  <UserAvatarItem onClick={()=>handleUserAvatarItemClick(item?.id)} />
+))
 
 /* ✅ Do this instead */
-const handleSubmit = (e) => {
-  e.preventDefault();
-  validateData(data);
-  updateState(newState);
-  onSubmit(data);
-};
-
-// Or if just preventing default
-<form onSubmit={(e) => e.preventDefault()}>
+const handleUserAvatarItemClick = itemId => () => {
+  //. ...
+}
+list.map(item => (
+  <UserAvatarItem onClick={handleUserAvatarItemClick(item?.id)} />
+))
 ```
 
 #### Component Structure
@@ -128,11 +131,4 @@ const Header = () => (
   </div>
 );
 ```
-
-## Pull Request Process
-
-1. Ensure your code follows all the guidelines above
-2. Update documentation if you're adding new features or changing existing ones
-3. Add appropriate tests for new functionality
-4. Get at least one code review before merging
 
