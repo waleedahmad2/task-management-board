@@ -15,6 +15,7 @@ export const getLocalStorageItem = (key, defaultValue = null) => {
     const decrypted = bytes.toString(CryptoJS.enc.Utf8);
     return decrypted ? JSON.parse(decrypted) : defaultValue;
   } catch (error) {
+    console.error('Failed to decrypt:', error);
     return defaultValue;
   }
 };
