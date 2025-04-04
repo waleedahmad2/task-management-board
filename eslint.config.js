@@ -1,8 +1,8 @@
 import { defineConfig } from 'eslint-define-config';
 import eslintPluginImport from 'eslint-plugin-import';
-import eslintPluginReact from 'eslint-plugin-react';
 import eslintPluginReactRefresh from 'eslint-plugin-react-refresh';
 import eslintPluginUnusedImports from 'eslint-plugin-unused-imports';
+import eslintPluginReact from 'eslint-plugin-react';
 
 export default defineConfig([
   {

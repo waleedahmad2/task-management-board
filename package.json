@@ -11,6 +11,7 @@
     "serve": "serve dist",
     "lint": "eslint 'src/**/*.{js,jsx}' --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
+    "prepare": "husky install",
     "svgs": "npx @svgr/cli -d src/assets/svgs/components src/assets/svgs --filename-case kebab"
   },
   "lint-staged": {
@@ -49,7 +50,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "eslint-plugin-unused-imports": "^4.1.4",
-    "lefthook": "^1.11.3",
+    "husky": "^9.1.7",
     "lint-staged": "^15.2.11",
     "prettier": "3.4.2",
     "serve": "^14.2.4",
