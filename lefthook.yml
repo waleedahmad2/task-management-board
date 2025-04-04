@@ -1,6 +1,0 @@
-pre-commit:
-  commands:
-    check:
-      glob: 'src/**/*.{js,jsx,ts,tsx}'
-      run: yarn lint {staged_files}
-      stage_fixed: true
