@@ -23,6 +23,9 @@ function App() {
     enableSentry();
   }, []);
 
+  console.log('test');
+  console.log('test');
+
   return (
     <QueryClientProvider client={queryClient}>
       <CacheBuster currentVersion={version} isEnabled={isCacheBusterEnable} metaFileDirectory={'.'}>
