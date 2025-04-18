@@ -2,10 +2,10 @@ pre-commit:
   parallel: true
   commands:
     lint:
-      glob: "*.{js,jsx}"
+      glob: '*.{js,jsx}'
       run: yarn lint
     format:
-      glob: "*.{js,jsx}"
+      glob: '*.{js,jsx}'
       run: prettier --write {staged_files} && git add {staged_files}
     test:
       run: yarn test
