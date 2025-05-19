@@ -5,8 +5,8 @@ import { Route, createBrowserRouter, createRoutesFromElements } from 'react-rout
 import { ROUTES } from '#/constants';
 import { PrivateRoute } from '#/routes';
 
-const Home = lazy(() => import('#/pages/home/components/Home'));
-const Unauthorized = lazy(() => import('#/pages/unauthorized/components/Unauthorized'));
+const Home = lazy(() => import('#/pages/Home'));
+const Unauthorized = lazy(() => import('#/pages/Unauthorized'));
 
 // replace this with your own loading component
 const LoadingFallback = () => (

@@ -5,7 +5,7 @@ import { reactRouterV6BrowserTracingIntegration } from '@sentry/react';
 import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
 
 const useSentry = () => {
-  const enableSentry = !!Number(import.meta.env.VITE_SENTRY) && !!import.meta.env.VITE_SENTRY_DSN;
+  const enableSentry = Boolean(Number(import.meta.env.VITE_SENTRY)) && Boolean(import.meta.env.VITE_SENTRY_DSN);
 
   if (enableSentry) {
     Sentry.init({
