@@ -1,5 +1,4 @@
 import path from 'path';
-
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
@@ -10,6 +9,10 @@ export default defineConfig({
     sentryVitePlugin({
       org: 'sentry-boilerplate',
       project: 'javascript-react',
+      sourcemaps: {
+        assets: './dist/**',
+        filesToDeleteAfterUpload: ['./dist/**/*.js.map'],
+      },
     }),
   ],
 

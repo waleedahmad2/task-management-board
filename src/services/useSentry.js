@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import * as Sentry from '@sentry/react';
+import { reactRouterV6BrowserTracingIntegration } from '@sentry/react';
 import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
 
 export const useSentry = () => {
@@ -10,14 +11,12 @@ export const useSentry = () => {
     Sentry.init({
       dsn: import.meta.env.VITE_SENTRY_DSN,
       integrations: [
-        new Sentry.BrowserTracing({
-          routingInstrumentation: Sentry.reactRouterV6Instrumentation(
-            useEffect,
-            useLocation,
-            useNavigationType,
-            createRoutesFromChildren,
-            matchRoutes
-          ),
+        reactRouterV6BrowserTracingIntegration({
+          useEffect,
+          useLocation,
+          useNavigationType,
+          createRoutesFromChildren,
+          matchRoutes,
         }),
       ],
       tracesSampleRate: import.meta.env.VITE_SENTRY_SAMPLE_RATE,
