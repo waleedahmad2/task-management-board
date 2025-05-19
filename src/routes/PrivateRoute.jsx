@@ -1,11 +1,12 @@
 import { Navigate } from 'react-router-dom';
 
+import { useAuth } from '#/context';
 import { ROUTES } from '#/routes';
-import { ACCESS_TOKEN } from '#/utils/constants';
-import { getLocalStorageItem } from '#/utils/localStorage';
 
 export function PrivateRoute({ children }) {
-    if (getLocalStorageItem(ACCESS_TOKEN)) return children;
+  const { token } = useAuth();
 
-    return <Navigate to={ROUTES.UN_AUTHORIZED} replace />;
+  if (token) return children;
+
+  return <Navigate to={ROUTES.UN_AUTHORIZED} replace />;
 }

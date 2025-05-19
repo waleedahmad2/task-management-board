@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
+import { AuthProvider } from '#/context';
 import { router } from '#/routes';
 import { useSentry, useSetupAxios } from '#/services';
 
@@ -13,11 +14,13 @@ function App() {
   useSentry();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <ToastContainer />
-      <ReactQueryDevtools />
-    </QueryClientProvider>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <ToastContainer />
+        <ReactQueryDevtools />
+      </QueryClientProvider>
+    </AuthProvider>
   );
 }
 
