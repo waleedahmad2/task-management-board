@@ -10,8 +10,6 @@ export const setLocalStorageItem = (key, value) => {
 export const getLocalStorageItem = (key, defaultValue = null) => {
   const encrypted = localStorage.getItem(key);
 
-  console.log('encrypted: ', encrypted);
-
   if (!encrypted) return defaultValue;
 
   try {

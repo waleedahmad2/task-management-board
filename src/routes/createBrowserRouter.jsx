@@ -1,9 +1,9 @@
 import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 
+import { ROUTES } from '#/constants';
 import { Home } from '#/pages/home';
 import { Unauthorized } from '#/pages/unauthorized';
 import { PrivateRoute } from '#/routes';
-import { ROUTES } from '#/constants';
 
 // eslint-disable-next-line no-unused-vars
 const createPrivateRoute = Component => {

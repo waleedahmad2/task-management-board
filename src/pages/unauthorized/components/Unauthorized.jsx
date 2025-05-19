@@ -1,3 +1,3 @@
 export function Unauthorized() {
-    return <h1>Unauthorized</h1>;
+  return <h1>Unauthorized</h1>;
 }

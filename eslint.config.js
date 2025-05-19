@@ -7,94 +7,98 @@ import eslintPluginReactRefresh from 'eslint-plugin-react-refresh';
 import eslintPluginUnusedImports from 'eslint-plugin-unused-imports';
 
 export default [
-    {
-        languageOptions: {
-            parserOptions: {
-                ecmaVersion: 'latest',
-                sourceType: 'module',
-                ecmaFeatures: {
-                    jsx: true,
-                },
-            },
-            globals: {
-                node: 'readonly',
-                commonjs: 'readonly',
-                browser: 'readonly',
-                es2020: 'readonly',
-            },
+  {
+    languageOptions: {
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
         },
-        settings: {
-            react: { version: 'detect' },
-        },
-        plugins: {
-            import: eslintPluginImport,
-            'react-refresh': eslintPluginReactRefresh,
-            'unused-imports': eslintPluginUnusedImports,
-            react: eslintPluginReact,
-            'react-hooks': eslintPluginReactHooks,
-            'jsx-a11y': eslintPluginJsxA11y,
-            prettier: eslintPluginPrettier,
-        },
-        rules: {
-            'import/no-unresolved': 'off',
-            'react/prop-types': 'off',
-            'react-hooks/exhaustive-deps': 'off',
-            'react-hooks/rules-of-hooks': 'error',
-            'no-console': ['error', { allow: ['warn', 'error'] }],
-            'react/jsx-uses-react': 'error',
-            'react/jsx-uses-vars': 'error',
-            'jsx-a11y/anchor-is-valid': [
-                'warn',
-                {
-                    components: ['Link'],
-                    specialLink: ['hrefLeft', 'hrefRight'],
-                    aspects: ['invalidHref', 'preferButton'],
-                },
-            ],
-            'import/order': [
-                'error',
-                {
-                    groups: [['builtin'], ['external'], ['internal', 'parent', 'sibling', 'index']],
-                    pathGroups: [
-                        {
-                            pattern: 'react',
-                            group: 'builtin',
-                            position: 'before',
-                        },
-                        {
-                            pattern: 'react-dom/client',
-                            group: 'builtin',
-                            position: 'before',
-                        },
-                        {
-                            pattern: '#/**/*',
-                            group: 'internal',
-                        },
-                    ],
-                    pathGroupsExcludedImportTypes: ['internal'],
-                    'newlines-between': 'always',
-                    alphabetize: {
-                        order: 'asc',
-                        caseInsensitive: true,
-                    },
-                },
-            ],
-            'no-unused-vars': [
-                'error',
-                {
-                    vars: 'all',
-                    args: 'after-used',
-                    ignoreRestSiblings: false,
-                },
-            ],
-            'unused-imports/no-unused-imports': 'error',
-            'linebreak-style': ['error', 'unix'],
-            quotes: ['error', 'single'],
-            'jsx-quotes': ['error', 'prefer-single'],
-            semi: ['error', 'always'],
-            'prettier/prettier': 'error',
-        },
-
-        files: ['**/*.jsx', '**/*.js'],
+      },
+      globals: {
+        node: 'readonly',
+        commonjs: 'readonly',
+        browser: 'readonly',
+        es2020: 'readonly',
+      },
     },
+    settings: {
+      react: { version: 'detect' },
+    },
+    plugins: {
+      import: eslintPluginImport,
+      'react-refresh': eslintPluginReactRefresh,
+      'unused-imports': eslintPluginUnusedImports,
+      react: eslintPluginReact,
+      'react-hooks': eslintPluginReactHooks,
+      'jsx-a11y': eslintPluginJsxA11y,
+      prettier: eslintPluginPrettier,
+    },
+    rules: {
+      'import/no-unresolved': 'off',
+      'react/prop-types': 'off',
+      'react-hooks/exhaustive-deps': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'no-console': ['error', { allow: ['warn', 'error'] }],
+      'react/jsx-uses-react': 'error',
+      'react/jsx-uses-vars': 'error',
+      'jsx-a11y/anchor-is-valid': [
+        'warn',
+        {
+          components: ['Link'],
+          specialLink: ['hrefLeft', 'hrefRight'],
+          aspects: ['invalidHref', 'preferButton'],
+        },
+      ],
+      'import/order': [
+        'error',
+        {
+          groups: [
+            ['builtin'],
+            ['external'],
+            ['internal', 'parent', 'sibling', 'index'],
+          ],
+          pathGroups: [
+            {
+              pattern: 'react',
+              group: 'builtin',
+              position: 'before',
+            },
+            {
+              pattern: 'react-dom/client',
+              group: 'builtin',
+              position: 'before',
+            },
+            {
+              pattern: '#/**/*',
+              group: 'internal',
+            },
+          ],
+          pathGroupsExcludedImportTypes: ['internal'],
+          'newlines-between': 'always',
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
+        },
+      ],
+      'no-unused-vars': [
+        'error',
+        {
+          vars: 'all',
+          args: 'after-used',
+          ignoreRestSiblings: false,
+        },
+      ],
+      'unused-imports/no-unused-imports': 'error',
+      'linebreak-style': ['error', 'unix'],
+      quotes: ['error', 'single'],
+      'jsx-quotes': ['error', 'prefer-single'],
+      semi: ['error', 'always'],
+      'prettier/prettier': 'error',
+    },
+
+    files: ['**/*.jsx', '**/*.js'],
+  },
 ];

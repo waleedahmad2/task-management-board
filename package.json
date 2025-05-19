@@ -10,12 +10,13 @@
     "serve": "serve dist",
     "lint": "eslint 'src/**/*.{js,jsx}' --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "svgs": "npx @svgr/cli -d src/assets/svgs/components src/assets/svgs --filename-case kebab"
+    "svgs": "npx @svgr/cli -d src/assets/svgs/components src/assets/svgs --filename-case kebab",
+    "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "eslint --fix"
+    "*.{js,jsx}": [
+      "prettier --write --config ./.prettierrc",
+      "eslint --fix --config ./eslint.config.js"
     ]
   },
   "dependencies": {
@@ -51,7 +52,8 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "eslint-plugin-unused-imports": "^4.1.4",
-    "lint-staged": "^15.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.0.0",
     "prettier": "3.5.3",
     "serve": "^14.2.4",
     "vite": "^6.2.5"

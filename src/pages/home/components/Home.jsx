@@ -34,7 +34,7 @@ const Home = () => {
    * });
    */
 
-  return <div className="text-xl text-center mt-5 text-blue-500">Cogent Labs</div>;
+  return <div className='text-xl text-center mt-5 text-blue-500'>Cogent Labs</div>;
 };
 
 export { Home };

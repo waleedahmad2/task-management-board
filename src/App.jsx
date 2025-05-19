@@ -4,8 +4,8 @@ import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import { AuthProvider } from '#/context';
-import { router } from '#/routes';
 import { useSetupAxios, useSentry } from '#/hooks';
+import { router } from '#/routes';
 
 function AppContent() {
   const queryClient = new QueryClient();
