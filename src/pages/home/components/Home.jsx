@@ -3,7 +3,7 @@ import React from 'react';
 const Home = () => {
   /**
    * @example
-   * const { data, isLoading, error } = useGetQuery({
+   * const { data, isFetching, error } = useGetQuery({
    *   key: 'users',
    *   url: '/api/users',
    *   params: { role: 'admin' },

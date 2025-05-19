@@ -5,21 +5,26 @@ import { ToastContainer } from 'react-toastify';
 
 import { AuthProvider } from '#/context';
 import { router } from '#/routes';
-import { useSentry, useSetupAxios } from '#/services';
+import { useSetupAxios, useSentry } from '#/hooks';
+
+function AppContent() {
+  const queryClient = new QueryClient();
+  useSetupAxios();
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      <ToastContainer />
+      <ReactQueryDevtools />
+    </QueryClientProvider>
+  );
+}
 
 function App() {
-  const queryClient = new QueryClient();
-
-  useSetupAxios();
   useSentry();
 
   return (
     <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <ToastContainer />
-        <ReactQueryDevtools />
-      </QueryClientProvider>
+      <AppContent />
     </AuthProvider>
   );
 }

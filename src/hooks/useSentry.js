@@ -4,7 +4,7 @@ import * as Sentry from '@sentry/react';
 import { reactRouterV6BrowserTracingIntegration } from '@sentry/react';
 import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
 
-export const useSentry = () => {
+const useSentry = () => {
   const enableSentry = !!Number(import.meta.env.VITE_SENTRY) && !!import.meta.env.VITE_SENTRY_DSN;
 
   if (enableSentry) {
@@ -25,3 +25,5 @@ export const useSentry = () => {
     });
   }
 };
+
+export default useSentry;
