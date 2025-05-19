@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
 import { useAuth } from '#/context';
-import { ROUTES } from '#/routes';
+import { ROUTES } from '#/constants';
 
 export function PrivateRoute({ children }) {
   const { token } = useAuth();
