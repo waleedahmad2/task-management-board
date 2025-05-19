@@ -5,7 +5,7 @@ import { ACCESS_TOKEN } from '#/utils/constants';
 import { getLocalStorageItem } from '#/utils/localStorage';
 
 export function PrivateRoute({ children }) {
-  if (getLocalStorageItem(ACCESS_TOKEN)) return children;
+    if (getLocalStorageItem(ACCESS_TOKEN)) return children;
 
-  return <Navigate to={ROUTES.UN_AUTHORIZED} replace />;
+    return <Navigate to={ROUTES.UN_AUTHORIZED} replace />;
 }

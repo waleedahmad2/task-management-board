@@ -7,32 +7,32 @@ import { getLocalStorageItem } from '#/utils/localStorage';
 const options = { recursive: true, arrayRecursive: true };
 
 export function useSetupAxios() {
-  axios.interceptors.request.use(config => {
-    const accessToken = getLocalStorageItem(ACCESS_TOKEN);
+    axios.interceptors.request.use(config => {
+        const accessToken = getLocalStorageItem(ACCESS_TOKEN);
 
-    if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
+        if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
 
-    if (!(config?.data instanceof FormData)) {
-      const caseConvertedData = caseConverter.snakeKeys(config?.data, options);
-      config.data = caseConvertedData;
-    }
+        if (!(config?.data instanceof FormData)) {
+            const caseConvertedData = caseConverter.snakeKeys(config?.data, options);
+            config.data = caseConvertedData;
+        }
 
-    const caseConvertedData = caseConverter.snakeKeys(config.params);
-    config.params = caseConvertedData;
+        const caseConvertedData = caseConverter.snakeKeys(config.params);
+        config.params = caseConvertedData;
 
-    return config;
-  });
+        return config;
+    });
 
-  axios.interceptors.response.use(
-    response => {
-      const caseConvertedData = caseConverter.camelKeys(response?.data, options);
-      response.data = caseConvertedData;
-      return response;
-    },
-    error => {
-      return Promise.reject(error);
-    }
-  );
+    axios.interceptors.response.use(
+        response => {
+            const caseConvertedData = caseConverter.camelKeys(response?.data, options);
+            response.data = caseConvertedData;
+            return response;
+        },
+        error => {
+            return Promise.reject(error);
+        }
+    );
 
-  return;
+    return;
 }

@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const getUrl = relativeUrl => `${import.meta.env.VITE_BACKEND_BASE_URL}${relativeUrl}`;
+import env from '#env';
+
+const getUrl = relativeUrl => `${env.VITE_BACKEND_BASE_URL}${relativeUrl}`;
 
 export const performGetRequest = ({ url, params = {} }) => axios.get(getUrl(url), { params });
 
@@ -11,4 +13,4 @@ export const performPutRequest = (url, payload = {}, params = {}) => axios.put(g
 export const performPatchRequest = (url, payload = {}, params = {}) => axios.patch(getUrl(url), payload, { params });
 
 export const performDeleteRequest = (url, payload = {}, params = {}) =>
-  axios.delete(getUrl(url), { params: params, payload });
+    axios.delete(getUrl(url), { params: params, payload });
