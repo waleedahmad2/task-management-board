@@ -6,6 +6,8 @@ import { ToastContainer } from 'react-toastify';
 import { AuthProvider } from '#/context';
 import { useSetupAxios, useSentry } from '#/hooks';
 import { router } from '#/routes';
+import { ErrorBoundary } from 'react-error-boundary';
+import ErrorFallback from './components/ErrorFallback';
 
 function AppContent() {
   const queryClient = new QueryClient();
@@ -20,12 +22,17 @@ function AppContent() {
 }
 
 function App() {
-  useSentry();
-
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => {
+        window.location.reload();
+      }}
+    >
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 
