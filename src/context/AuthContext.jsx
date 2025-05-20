@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 
-import { ACCESS_TOKEN } from '#/utils/constants';
+import { ACCESS_TOKEN } from '#/constants';
 import { getLocalStorageItem, setLocalStorageItem, removeLocalStorageItem } from '#/utils/localStorage';
 
 const AuthContext = createContext(null);
