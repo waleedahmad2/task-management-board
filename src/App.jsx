@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import { AuthProvider } from '#/context';
 import { useSetupAxios } from '#/hooks';
 import { router } from '#/routes';
-import ErrorFallback from './components/ErrorFallback';
+import ErrorFallback from './components/errorFallback/ErrorFallback';
 
 function AppContent() {
   const queryClient = new QueryClient();
@@ -23,12 +23,7 @@ function AppContent() {
 
 function App() {
   return (
-    <ErrorBoundary
-      FallbackComponent={ErrorFallback}
-      onReset={() => {
-        window.location.reload();
-      }}
-    >
+    <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>
       <AuthProvider>
         <AppContent />
       </AuthProvider>

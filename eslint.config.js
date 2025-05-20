@@ -54,11 +54,7 @@ export default [
       'import/order': [
         'error',
         {
-          groups: [
-            ['builtin'],
-            ['external'],
-            ['internal', 'parent', 'sibling', 'index'],
-          ],
+          groups: [['builtin'], ['external'], ['internal', 'parent', 'sibling', 'index']],
           pathGroups: [
             {
               pattern: 'react',
@@ -93,10 +89,16 @@ export default [
       ],
       'unused-imports/no-unused-imports': 'error',
       'linebreak-style': ['error', 'unix'],
-      quotes: ['error', 'single'],
+      quotes: ['error', 'single', { avoidEscape: true }],
       'jsx-quotes': ['error', 'prefer-single'],
       semi: ['error', 'always'],
-      'prettier/prettier': 'error',
+      'prettier/prettier': [
+        'error',
+        {
+          singleQuote: true,
+          parser: 'flow',
+        },
+      ],
     },
 
     files: ['**/*.jsx', '**/*.js'],
