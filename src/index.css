@@ -1,1 +1,18 @@
 @import 'tailwindcss';
+
+/* Tailwind CSS @apply examples:
+ * 
+ * .btn {
+ *   @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600;
+ * }
+ * 
+ * .card {
+ *   @apply bg-white rounded-lg shadow-md p-6;
+ * }
+ * 
+ * .input {
+ *   @apply border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500;
+ * }
+ * 
+ * Use @apply to extract Tailwind's utility classes into custom CSS classes
+ */
