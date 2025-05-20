@@ -1,12 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ErrorBoundary } from 'react-error-boundary';
 import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import { AuthProvider } from '#/context';
-import { useSetupAxios, useSentry } from '#/hooks';
+import { useSetupAxios } from '#/hooks';
 import { router } from '#/routes';
-import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from './components/ErrorFallback';
 
 function AppContent() {
