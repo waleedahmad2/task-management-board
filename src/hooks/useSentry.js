@@ -4,12 +4,14 @@ import * as Sentry from '@sentry/react';
 import { reactRouterV6BrowserTracingIntegration } from '@sentry/react';
 import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
 
+import env from '#env';
+
 const useSentry = () => {
-  const enableSentry = Boolean(Number(import.meta.env.VITE_SENTRY)) && Boolean(import.meta.env.VITE_SENTRY_DSN);
+  const enableSentry = Boolean(Number(env.VITE_SENTRY)) && Boolean(env.VITE_SENTRY_DSN);
 
   if (enableSentry) {
     Sentry.init({
-      dsn: import.meta.env.VITE_SENTRY_DSN,
+      dsn: env.VITE_SENTRY_DSN,
       integrations: [
         reactRouterV6BrowserTracingIntegration({
           useEffect,
@@ -19,9 +21,9 @@ const useSentry = () => {
           matchRoutes,
         }),
       ],
-      tracesSampleRate: import.meta.env.VITE_SENTRY_SAMPLE_RATE,
-      replaysSessionSampleRate: import.meta.env.VITE_SENTRY_REPLAYS_SESSION_SAMPLE_RATE,
-      replaysOnErrorSampleRate: import.meta.env.VITE_REPLAYS_ON_ERROR_SAMPLE_RATE,
+      tracesSampleRate: env.VITE_SENTRY_SAMPLE_RATE,
+      replaysSessionSampleRate: env.VITE_SENTRY_REPLAYS_SESSION_SAMPLE_RATE,
+      replaysOnErrorSampleRate: env.VITE_REPLAYS_ON_ERROR_SAMPLE_RATE,
     });
   }
 };
