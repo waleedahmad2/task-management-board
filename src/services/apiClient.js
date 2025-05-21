@@ -1,14 +1,23 @@
 import axios from 'axios';
 
-const getUrl = relativeUrl => `${import.meta.env.VITE_BACKEND_BASE_URL}${relativeUrl}`;
+import env from '#env';
 
-export const performGetRequest = ({ url, params = {} }) => axios.get(getUrl(url), { params });
+export const axiosInstance = axios.create({
+  baseURL: env.VITE_BACKEND_BASE_URL,
+});
 
-export const performPostRequest = ({ url, payload = {}, params = {} }) => axios.post(getUrl(url), payload, { params });
+export const cleanupAxiosInstance = () => {
+  axiosInstance.interceptors.request.clear();
+  axiosInstance.interceptors.response.clear();
+};
 
-export const performPutRequest = (url, payload = {}, params = {}) => axios.put(getUrl(url), payload, { params });
+export const performGetRequest = ({ url, params = {} }) => axiosInstance.get(url, { params });
 
-export const performPatchRequest = (url, payload = {}, params = {}) => axios.patch(getUrl(url), payload, { params });
+export const performPostRequest = ({ url, payload = {}, params = {} }) => axiosInstance.post(url, payload, { params });
+
+export const performPutRequest = (url, payload = {}, params = {}) => axiosInstance.put(url, payload, { params });
+
+export const performPatchRequest = (url, payload = {}, params = {}) => axiosInstance.patch(url, payload, { params });
 
 export const performDeleteRequest = (url, payload = {}, params = {}) =>
-  axios.delete(getUrl(url), { params: params, payload });
+  axiosInstance.delete(url, { params: params, payload });

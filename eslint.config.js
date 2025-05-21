@@ -1,10 +1,12 @@
-import { defineConfig } from 'eslint-define-config';
 import eslintPluginImport from 'eslint-plugin-import';
+import eslintPluginJsxA11y from 'eslint-plugin-jsx-a11y';
+import eslintPluginPrettier from 'eslint-plugin-prettier';
+import eslintPluginReact from 'eslint-plugin-react';
+import eslintPluginReactHooks from 'eslint-plugin-react-hooks';
 import eslintPluginReactRefresh from 'eslint-plugin-react-refresh';
 import eslintPluginUnusedImports from 'eslint-plugin-unused-imports';
-import eslintPluginReact from 'eslint-plugin-react';
 
-export default defineConfig([
+export default [
   {
     languageOptions: {
       parserOptions: {
@@ -22,22 +24,33 @@ export default defineConfig([
       },
     },
     settings: {
-      react: { version: '18.2' },
+      react: { version: 'detect' },
     },
     plugins: {
       import: eslintPluginImport,
       'react-refresh': eslintPluginReactRefresh,
       'unused-imports': eslintPluginUnusedImports,
       react: eslintPluginReact,
+      'react-hooks': eslintPluginReactHooks,
+      'jsx-a11y': eslintPluginJsxA11y,
+      prettier: eslintPluginPrettier,
     },
-    files: ['**/*.jsx', '**/*.js'],
     rules: {
       'import/no-unresolved': 'off',
       'react/prop-types': 'off',
       'react-hooks/exhaustive-deps': 'off',
+      'react-hooks/rules-of-hooks': 'error',
       'no-console': ['error', { allow: ['warn', 'error'] }],
       'react/jsx-uses-react': 'error',
       'react/jsx-uses-vars': 'error',
+      'jsx-a11y/anchor-is-valid': [
+        'warn',
+        {
+          components: ['Link'],
+          specialLink: ['hrefLeft', 'hrefRight'],
+          aspects: ['invalidHref', 'preferButton'],
+        },
+      ],
       'import/order': [
         'error',
         {
@@ -75,10 +88,19 @@ export default defineConfig([
         },
       ],
       'unused-imports/no-unused-imports': 'error',
-      indent: ['error', 2],
       'linebreak-style': ['error', 'unix'],
-      quotes: ['error', 'single'],
+      quotes: ['error', 'single', { avoidEscape: true }],
+      'jsx-quotes': ['error', 'prefer-single'],
       semi: ['error', 'always'],
+      'prettier/prettier': [
+        'error',
+        {
+          singleQuote: true,
+          parser: 'flow',
+        },
+      ],
     },
+
+    files: ['**/*.jsx', '**/*.js'],
   },
-]);
+];

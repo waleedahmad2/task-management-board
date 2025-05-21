@@ -5,9 +5,10 @@ This document outlines our team's code acceptance criteria and best practices fo
 ## Code Style and Formatting
 
 ### CSS Guidelines
+
 - Avoid using percentage values for positioning attributes (e.g., `top`, `left`, `right`, `bottom`)
 
-  **Reason**: Percentage-based positioning can cause unpredictable behavior depending on the parent element's dimensions. Using pixel values ensures more precise and consistent placement.  
+  **Reason**: Percentage-based positioning can cause unpredictable behavior depending on the parent element's dimensions. Using pixel values ensures more precise and consistent placement.
 
   ```css
   /* ❌ Don't do this */
@@ -26,10 +27,11 @@ This document outlines our team's code acceptance criteria and best practices fo
   ```
 
 ### Event Handler Naming
+
 - Use descriptive names for event handlers that indicate the action being performed
 - Avoid generic names like `handle` or `handleClick`
 
- **Reason**: Descriptive names improve readability and make the code easier to understand, especially in larger codebases.
+  **Reason**: Descriptive names improve readability and make the code easier to understand, especially in larger codebases.
 
 ```jsx
 /* ❌ Don't do this */
@@ -44,6 +46,7 @@ const handleUserProfile = (e) => {
 ```
 
 ### Documentation
+
 - Use JSDoc comments only for:
   1. Utility functions
   2. Component function declarations
@@ -72,6 +75,7 @@ const [count, setCount] = useState(0);
 ### JSX Formatting
 
 #### Spacing
+
 - Don't use empty string expressions (`{''}`) to add spacing
 - Use CSS margins or padding instead
 
@@ -89,34 +93,42 @@ const [count, setCount] = useState(0);
 ```
 
 #### Event Handlers
+
 - Avoiding creating `anonymous` functions
 
 ```jsx
 /* ❌ Don't do this */
-const handleUserAvatarItemClick = itemId => {
+const handleUserAvatarItemClick = (itemId) => {
   //. ...
-}
-list.map(item => (
-  <UserAvatarItem onClick={()=>handleUserAvatarItemClick(item?.id)} />
-))
+};
+list.map((item) => <UserAvatarItem onClick={() => handleUserAvatarItemClick(item?.id)} />);
 
 /* ✅ Do this instead */
-const handleUserAvatarItemClick = itemId => () => {
+const handleUserAvatarItemClick = (itemId) => () => {
   //. ...
-}
-list.map(item => (
-  <UserAvatarItem onClick={handleUserAvatarItemClick(item?.id)} />
-))
+};
+list.map((item) => <UserAvatarItem onClick={handleUserAvatarItemClick(item?.id)} />);
 ```
 
 #### Component Structure
+
 - Maintain proper indentation for all JSX
 - Break down complex JSX into multiple lines for readability
 - Don't write static JSX in a single line without indentation
 
 ```jsx
 /* ❌ Don't do this */
-const Header = () => <div><h1>Welcome</h1><nav><ul><li>Home</li><li>About</li></ul></nav></div>;
+const Header = () => (
+  <div>
+    <h1>Welcome</h1>
+    <nav>
+      <ul>
+        <li>Home</li>
+        <li>About</li>
+      </ul>
+    </nav>
+  </div>
+);
 
 /* ✅ Do this instead */
 const Header = () => (
@@ -131,4 +143,3 @@ const Header = () => (
   </div>
 );
 ```
-

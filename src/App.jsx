@@ -1,39 +1,33 @@
-import { useEffect } from 'react';
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import CacheBuster from 'react-cache-buster';
+import { ErrorBoundary } from 'react-error-boundary';
 import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
+import { AuthProvider } from '#/context';
+import { useSetupAxios } from '#/hooks';
 import { router } from '#/routes';
-import { useSentry, useSetupAxios } from '#/services';
-import { version } from '../package.json';
+import ErrorFallback from './components/errorFallback/ErrorFallback';
 
-function App() {
+function AppContent() {
   const queryClient = new QueryClient();
-
-  const isCacheBusterEnable = !!Number(import.meta.env.VITE_CACHE_BUSTER);
-
-  const enableAxiosInterceptor = useSetupAxios;
-  const enableSentry = useSentry;
-
-  useEffect(() => {
-    enableAxiosInterceptor();
-    enableSentry();
-  }, []);
-
-  console.log('test');
-  console.log('test');
-
+  useSetupAxios();
   return (
     <QueryClientProvider client={queryClient}>
-      <CacheBuster currentVersion={version} isEnabled={isCacheBusterEnable} metaFileDirectory={'.'}>
-        <RouterProvider router={router} />
-      </CacheBuster>
+      <RouterProvider router={router} />
       <ToastContainer />
       <ReactQueryDevtools />
     </QueryClientProvider>
+  );
+}
+
+function App() {
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

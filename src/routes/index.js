@@ -1,3 +1,2 @@
-export { ROUTES } from './Routes';
-export { router } from './createBrowserRouter';
+export { router } from './CreateBrowserRouter';
 export { PrivateRoute } from './PrivateRoute';

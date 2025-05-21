@@ -1,11 +1,15 @@
-import path from 'path';
+import path from 'node:path';
+
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
+  base: '/app',
   plugins: [
     react(),
+    tailwindcss(),
     sentryVitePlugin({
       org: 'sentry-boilerplate',
       project: 'javascript-react',
@@ -15,10 +19,10 @@ export default defineConfig({
       },
     }),
   ],
-
   resolve: {
     alias: {
       '#': path.resolve(__dirname, './src'),
+      '#env': path.resolve(__dirname, './env.mjs'),
     },
   },
 
