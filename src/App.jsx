@@ -5,13 +5,12 @@ import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import { AuthProvider } from '#/context';
-import { useSetupAxios } from '#/hooks';
 import { router } from '#/routes';
 import ErrorFallback from './components/errorFallback/ErrorFallback';
 
 function AppContent() {
   const queryClient = new QueryClient();
-  useSetupAxios();
+
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />

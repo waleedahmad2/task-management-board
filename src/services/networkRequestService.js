@@ -40,7 +40,7 @@ export const useGetQuery = ({ key, url, params = {}, options = {} }) => {
 
 const createMutationHook =
   requestFn =>
-  (url, onSuccess, onError, options = {}) => {
+  ({ url, onSuccess, onError, options = {} }) => {
     const queryClient = useQueryClient();
 
     return useMutation({

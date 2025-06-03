@@ -24,4 +24,4 @@ export const getLocalStorageItem = (key, defaultValue = null) => {
 
 export const removeLocalStorageItem = key => localStorage.removeItem(key);
 
-export const clearLocalStorageItem = () => localStorage.clear();
+export const clearLocalStorage = () => localStorage.clear();
