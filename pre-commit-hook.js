@@ -4,10 +4,8 @@ import { fileURLToPath } from 'url';
 import { globby } from 'globby';
 import * as babelParser from '@babel/parser';
 import babelTraverse from '@babel/traverse';
-import { createRequire } from 'module';
 
 const traverse = babelTraverse.default;
-const require = createRequire(import.meta.url);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,11 +44,11 @@ const isPathCaseCorrect = (importPath, fileDir) => {
     const entries = fs.readdirSync(currentDir, { withFileTypes: true });
     if (i === importSegments.length - 1) {
       // Last segment: check for file (without extension)
-      const files = entries.filter((entry) => entry.isFile());
-      const match = files.find((entry) => path.parse(entry.name).name === segment);
+      const files = entries.filter(entry => entry.isFile());
+      const match = files.find(entry => path.parse(entry.name).name === segment);
       if (!match) {
         // Try case-insensitive match
-        const ciMatch = files.find((entry) => path.parse(entry.name).name.toLowerCase() === segment.toLowerCase());
+        const ciMatch = files.find(entry => path.parse(entry.name).name.toLowerCase() === segment.toLowerCase());
         if (ciMatch) {
           return false; // Case mismatch
         } else {
@@ -60,9 +58,11 @@ const isPathCaseCorrect = (importPath, fileDir) => {
       }
     } else {
       // Directory segment
-      const match = entries.find((entry) => entry.isDirectory() && entry.name === segment);
+      const match = entries.find(entry => entry.isDirectory() && entry.name === segment);
       if (!match) {
-        const ciMatch = entries.find((entry) => entry.isDirectory() && entry.name.toLowerCase() === segment.toLowerCase());
+        const ciMatch = entries.find(
+          entry => entry.isDirectory() && entry.name.toLowerCase() === segment.toLowerCase()
+        );
         if (ciMatch) {
           return false; // Case mismatch
         } else {
@@ -76,7 +76,7 @@ const isPathCaseCorrect = (importPath, fileDir) => {
   return true;
 };
 
-const checkFile = (filePath) => {
+const checkFile = filePath => {
   const code = fs.readFileSync(filePath, 'utf8');
   const ast = babelParser.parse(code, {
     sourceType: 'module',
@@ -85,16 +85,14 @@ const checkFile = (filePath) => {
 
   const fileDir = path.dirname(filePath);
   const errors = [];
-  const relative = (p) => path.relative(process.cwd(), p);
+  const relative = p => path.relative(process.cwd(), p);
 
-  const handlePath = (source) => {
+  const handlePath = source => {
     const resolvedPath = resolveWithFallbacks(source, fileDir);
     if (!resolvedPath) return;
 
     if (!isPathCaseCorrect(source, fileDir)) {
-      errors.push(
-        `❌ Case mismatch: import/export '${source}' in file '${relative(filePath)}'`
-      );
+      errors.push(`❌ Case mismatch: import/export '${source}' in file '${relative(filePath)}'`);
     }
   };
 
@@ -123,14 +121,11 @@ const checkFile = (filePath) => {
 (async () => {
   const files = await globby([`${SRC_DIR}/**/*.{js,jsx,ts,tsx}`], { absolute: true });
 
-  console.log(`🔍 Scanning ${files.length} files in: ${SRC_DIR}`);
-  files.forEach((f) => console.log('📄', path.relative(SRC_DIR, f)));
-
   const allErrors = files.flatMap(checkFile);
 
   if (allErrors.length > 0) {
     console.error('\nImport case check failed with the following issues:');
-    allErrors.forEach((err) => console.error(err));
+    allErrors.forEach(err => console.error(err));
     process.exit(1);
   } else {
     console.log('\n✅ All import paths match file casing correctly.');
