@@ -1,1 +1,2 @@
+yarn check-import-case
 yarn lint --fix
