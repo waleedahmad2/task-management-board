@@ -31,18 +31,48 @@ const resolveWithFallbacks = (importPath, fileDir) => {
   return null;
 };
 
-const isPathCaseCorrect = (expectedPath) => {
-  const parts = expectedPath.split(path.sep);
-  let currentPath = path.isAbsolute(expectedPath) ? path.sep : '';
-
-  for (const part of parts) {
-    if (!part) continue;
-    const entries = fs.readdirSync(currentPath || '.', { withFileTypes: true });
-    const match = entries.find((entry) => entry.name.toLowerCase() === part.toLowerCase());
-    if (!match || match.name !== part) return false;
-    currentPath = path.join(currentPath, part);
+const isPathCaseCorrect = (importPath, fileDir) => {
+  // Remove extension from importPath
+  const importPathNoExt = importPath.replace(/\.[^/.]+$/, '');
+  // Resolve the absolute path as written
+  const absImportPath = path.resolve(fileDir, importPathNoExt);
+  // Get the relative path from the importing file's directory
+  const relPath = path.relative(fileDir, absImportPath);
+  // Split into segments
+  const importSegments = relPath.split(path.sep);
+  let currentDir = fileDir;
+  for (let i = 0; i < importSegments.length; i++) {
+    const segment = importSegments[i];
+    const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+    if (i === importSegments.length - 1) {
+      // Last segment: check for file (without extension)
+      const files = entries.filter((entry) => entry.isFile());
+      const match = files.find((entry) => path.parse(entry.name).name === segment);
+      if (!match) {
+        // Try case-insensitive match
+        const ciMatch = files.find((entry) => path.parse(entry.name).name.toLowerCase() === segment.toLowerCase());
+        if (ciMatch) {
+          return false; // Case mismatch
+        } else {
+          // Not found at all, skip (not a case issue)
+          return true;
+        }
+      }
+    } else {
+      // Directory segment
+      const match = entries.find((entry) => entry.isDirectory() && entry.name === segment);
+      if (!match) {
+        const ciMatch = entries.find((entry) => entry.isDirectory() && entry.name.toLowerCase() === segment.toLowerCase());
+        if (ciMatch) {
+          return false; // Case mismatch
+        } else {
+          // Not found at all, skip
+          return true;
+        }
+      }
+      currentDir = path.join(currentDir, segment);
+    }
   }
-
   return true;
 };
 
@@ -61,13 +91,9 @@ const checkFile = (filePath) => {
     const resolvedPath = resolveWithFallbacks(source, fileDir);
     if (!resolvedPath) return;
 
-    // Always compare base names without extension for case sensitivity
-    const importBaseNoExt = path.basename(source, path.extname(source));
-    const resolvedBaseNoExt = path.basename(resolvedPath, path.extname(resolvedPath));
-
-    if (importBaseNoExt !== resolvedBaseNoExt) {
+    if (!isPathCaseCorrect(source, fileDir)) {
       errors.push(
-        `❌ Case mismatch: import/export '${source}' → resolves to '${path.basename(resolvedPath)}' in file '${relative(filePath)}'`
+        `❌ Case mismatch: import/export '${source}' in file '${relative(filePath)}'`
       );
     }
   };
