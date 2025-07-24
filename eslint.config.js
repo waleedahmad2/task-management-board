@@ -25,6 +25,18 @@ export default [
     },
     settings: {
       react: { version: 'detect' },
+      'import/resolver': {
+        alias: {
+          map: [
+            ['#', './src'],
+            ['#env', './env.mjs'],
+          ],
+          extensions: ['.js', '.jsx'],
+        },
+        node: {
+          extensions: ['.js', '.jsx'],
+        },
+      },
     },
     plugins: {
       import: eslintPluginImport,
@@ -36,7 +48,7 @@ export default [
       prettier: eslintPluginPrettier,
     },
     rules: {
-      'import/no-unresolved': 'off',
+      'import/no-unresolved': ['error', { caseSensitive: true }],
       'react/prop-types': 'off',
       'react-hooks/exhaustive-deps': 'off',
       'react-hooks/rules-of-hooks': 'error',
