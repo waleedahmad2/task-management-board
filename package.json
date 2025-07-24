@@ -11,8 +11,7 @@
     "lint": "eslint 'src/**/*.{js,jsx}' --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "svgs": "npx @svgr/cli -d src/assets/svgs/components src/assets/svgs --filename-case kebab",
-    "prepare": "husky",
-    "check-import-case": "node pre-commit-hook.js"
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,jsx}": [
@@ -46,8 +45,6 @@
     "zod": "^3.25.13"
   },
   "devDependencies": {
-    "@babel/parser": "^7.28.0",
-    "@babel/traverse": "^7.28.0",
     "@svgr/cli": "^8.1.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.1",
@@ -62,7 +59,6 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "eslint-plugin-unused-imports": "^4.1.4",
-    "globby": "^14.1.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.0.0",
     "prettier": "3.5.3",
