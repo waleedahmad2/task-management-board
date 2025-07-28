@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
 import {
   performGetRequest,
@@ -27,6 +27,40 @@ export const useGetQuery = ({ key, url, params = {}, options = {} }) => {
     queryFn: () => performGetRequest({ url, params }).then(res => res.data),
     retry: false,
     refetchOnWindowFocus: false,
+    ...options,
+  });
+};
+
+/**
+ * Custom React Query hook for infinite scroll (pagination).
+ *
+ * @param {Object} config - Configuration object for the query.
+ * @param {string} config.key - Unique key for the query cache.
+ * @param {string} config.url - The endpoint URL to fetch data from.
+ * @param {Object} [config.params={}] - Optional query parameters to include in the request.
+ * @param {number} [config.limit=10] - The number of items to fetch per page.
+ * @param {Function} [config.getNextPageParam] - Function to get the next page param from the last page.
+ * @param {Object} [config.options={}] - Additional options to pass to the `useInfiniteQuery` hook.
+ * @returns {Object} - Returns the result from `useInfiniteQuery`, including status, data, error, fetchNextPage, etc.
+ */
+
+export const useInfiniteScrollQuery = ({ key, url, params = {}, limit = 10, getNextPageParam, options = {} }) => {
+  return useInfiniteQuery({
+    queryKey: [key, params, limit],
+    queryFn: ({ pageParam = 1 }) =>
+      performGetRequest({ url, params: { ...params, page: pageParam, limit } }).then(res => res.data),
+    getNextPageParam: (lastPage, allPages) => {
+      if (getNextPageParam) {
+        return getNextPageParam(lastPage, allPages);
+      }
+
+      // fallback assumes lastPage is an array
+      if (Array.isArray(lastPage) && lastPage.length === limit) {
+        return allPages.length + 1;
+      }
+
+      return undefined;
+    },
     ...options,
   });
 };
