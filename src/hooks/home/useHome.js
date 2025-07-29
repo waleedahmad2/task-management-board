@@ -1,8 +1,9 @@
-import { useHomeData } from '#/data';
 import { useMemo } from 'react';
 
+import { useHomeData } from '#/data';
+
 /**
- * useHome — Generic business logic hook  
+ * useHome — Generic business logic hook
  *
  * This hook encapsulates reusable business logic for fetching and transforming user data
  * AND for preparing payloads, validating and other business rules for GET, POST, PUT, DELETE operations.
@@ -21,22 +22,11 @@ import { useMemo } from 'react';
  */
 
 export const useHome = () => {
-  const {
-    usersData,
-    isUsersLoading,
-    createPost,
-    isPosting,
-  } = useHomeData();
+  const { usersData, isUsersLoading, createPost, isPosting } = useHomeData();
 
   // Example: filter only users from "Robel-Corkery"
   const filteredUsers = useMemo(() => {
-    return (
-      (!isUsersLoading &&
-        Object.values(usersData).filter(
-          (user) => user?.company?.name === 'Johns Group'
-        )) ||
-      []
-    );
+    return (!isUsersLoading && Object.values(usersData).filter(user => user?.company?.name === 'Johns Group')) || [];
   }, [usersData]);
 
   /**

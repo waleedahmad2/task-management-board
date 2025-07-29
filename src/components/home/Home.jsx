@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useHome } from '#/hooks';
 
 //  * Intended to be used in scalable React applications as part of a separation-of-concerns pattern:
