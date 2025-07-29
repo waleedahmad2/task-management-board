@@ -1,3 +1,4 @@
 export const apiEndpoints = {
-  POSTS: 'posts',
+  GET_USERS: '/users',
+  POST_CREATE_USER: '/posts',
 };

@@ -1,40 +1,44 @@
 import React from 'react';
+import { useHome } from '#/hooks';
+
+//  * Intended to be used in scalable React applications as part of a separation-of-concerns pattern:
+//  * - UI components (e.g. Home.jsx) only focus on UI Making
 
 const Home = () => {
-  /**
-   * @example
-   * const { data, isFetching, error } = useGetQuery({
-   *   key: 'users',
-   *   url: '/api/users',
-   *   params: { role: 'admin' },
-   * });
-   */
+  const { users, isLoading, handleCreate, isPosting } = useHome();
 
-  /**
-   * Example usage of the `usePostMutation` custom hook to create a new post.
-   *
-   * This example uses the mutation hook returned by `usePostMutation`, which wraps a POST request.
-   * It also leverages built-in toast notifications by passing `successMessage` and `errorMessage` options.
-   *
-   * @example
-   * const { mutate: createPost } = usePostMutation(
-   *   '/posts',                     // API endpoint
-   *   handleSuccess,               // Success callback (optional)
-   *   handleError,                 // Error callback (optional)
-   *   {
-   *     invalidateKeys: ['posts'],            // Query keys to invalidate on success
-   *     successMessage: 'Post created successfully!', // Toast message on success
-   *     errorMessage: 'Failed to create post.',       // Toast message on error
-   *   }
-   * );
-   *
-   * // Call the mutation:
-   * createPost({
-   *   payload: { title: 'Hello', body: 'World' },  // Data to send
-   * });
-   */
+  return (
+    <div className='p-6 max-w-3xl mx-auto'>
+      <h1 className='text-2xl font-bold mb-4 text-center text-blue-600'>Cogent Labs</h1>
 
-  return <div className='text-xl text-center mt-5 text-blue-500'>Cogent Labs</div>;
+      <div className='mb-4 text-center'>
+        <button
+          className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition'
+          onClick={handleCreate}
+          disabled={isPosting}
+        >
+          {isPosting ? 'Creating...' : 'Create Dummy User'}
+        </button>
+      </div>
+
+      <h2 className='text-xl font-semibold mb-2'>Users List</h2>
+      {isLoading ? (
+        <p>Loading users...</p>
+      ) : (
+        <ul className='list-disc list-inside'>
+          {users &&
+            Object.values(users).map(user => (
+              <div key={user.id} className='p-4 border rounded shadow-sm mb-2'>
+                <h2 className='text-lg font-semibold'>{user.name}</h2>
+                <p>Email: {user.email}</p>
+                <p>Company: {user.company?.name}</p>
+                <p>City: {user.address?.city}</p>
+              </div>
+            ))}
+        </ul>
+      )}
+    </div>
+  );
 };
 
 export default Home;
