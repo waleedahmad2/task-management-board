@@ -1,15 +1,25 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 import { ACCESS_TOKEN } from '#/constants';
 import { getLocalStorageItem, setLocalStorageItem, removeLocalStorageItem } from '#/utils/localStorage';
 
-const AuthContext = createContext(null);
+interface AuthContextType {
+  token: string | null;
+  login: (newToken: string) => void;
+  logout: () => void;
+}
 
-export function AuthProvider({ children }) {
-  const localStorageToken = getLocalStorageItem(ACCESS_TOKEN);
-  const [token, setToken] = useState(localStorageToken);
+const AuthContext = createContext<AuthContextType | null>(null);
 
-  const login = newToken => {
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export function AuthProvider({ children }: AuthProviderProps) {
+  const localStorageToken = getLocalStorageItem(ACCESS_TOKEN) as string | null;
+  const [token, setToken] = useState<string | null>(localStorageToken);
+
+  const login = (newToken: string) => {
     setToken(newToken);
     setLocalStorageItem(ACCESS_TOKEN, newToken);
   };

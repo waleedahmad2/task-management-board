@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
+import { FallbackProps } from 'react-error-boundary';
 
-const ErrorFallback = ({ error, resetErrorBoundary }) => {
+const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   //replace with your own error Fallback Ui
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
@@ -19,11 +19,6 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
       </div>
     </div>
   );
-};
-
-ErrorFallback.propTypes = {
-  error: PropTypes.object.isRequired,
-  resetErrorBoundary: PropTypes.func.isRequired,
 };
 
 export default ErrorFallback;

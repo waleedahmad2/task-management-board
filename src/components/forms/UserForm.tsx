@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { JSX } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { userFormSchema } from '#/schemas/userFormSchema';
+import { User } from '#/types/user';
 
 /**
  * User Registration Form demo component.
  */
 
-const UserForm = () => {
+const UserForm = (): JSX.Element => {
   const {
     register,
     handleSubmit,
@@ -19,13 +20,13 @@ const UserForm = () => {
     resolver: zodResolver(userFormSchema),
   });
 
-  const onSubmit = data => {
+  const onSubmit = (data: User) => {
     alert(`User data submitted:\n${JSON.stringify(data, null, 2)}`);
     reset();
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className='space-y-6 max-w-md mx-auto'>
+    <form onSubmit={handleSubmit(onSubmit as any)} noValidate className='space-y-6 max-w-md mx-auto'>
       {/* Name */}
       <div>
         <label htmlFor='name' className='block font-semibold mb-1 text-gray-700'>

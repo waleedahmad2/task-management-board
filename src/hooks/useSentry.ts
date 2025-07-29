@@ -6,7 +6,7 @@ import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType }
 
 import env from '#env';
 
-const useSentry = () => {
+const useSentry = (): void => {
   const enableSentry = Boolean(Number(env.VITE_SENTRY)) && Boolean(env.VITE_SENTRY_DSN);
 
   if (enableSentry) {
@@ -21,9 +21,9 @@ const useSentry = () => {
           matchRoutes,
         }),
       ],
-      tracesSampleRate: env.VITE_SENTRY_SAMPLE_RATE,
-      replaysSessionSampleRate: env.VITE_SENTRY_REPLAYS_SESSION_SAMPLE_RATE,
-      replaysOnErrorSampleRate: env.VITE_REPLAYS_ON_ERROR_SAMPLE_RATE,
+      tracesSampleRate: Number(env.VITE_SENTRY_SAMPLE_RATE),
+      replaysSessionSampleRate: Number(env.VITE_SENTRY_REPLAYS_SESSION_SAMPLE_RATE),
+      replaysOnErrorSampleRate: Number(env.VITE_REPLAYS_ON_ERROR_SAMPLE_RATE),
     });
   }
 };

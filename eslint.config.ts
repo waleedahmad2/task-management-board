@@ -1,3 +1,5 @@
+import parser from '@typescript-eslint/parser';
+import eslintPluginTs from '@typescript-eslint/eslint-plugin';
 import eslintPluginImport from 'eslint-plugin-import';
 import eslintPluginJsxA11y from 'eslint-plugin-jsx-a11y';
 import eslintPluginPrettier from 'eslint-plugin-prettier';
@@ -5,16 +7,20 @@ import eslintPluginReact from 'eslint-plugin-react';
 import eslintPluginReactHooks from 'eslint-plugin-react-hooks';
 import eslintPluginReactRefresh from 'eslint-plugin-react-refresh';
 import eslintPluginUnusedImports from 'eslint-plugin-unused-imports';
+import type { FlatESLintConfig } from 'eslint-define-config';
 
-export default [
+const config: FlatESLintConfig[] = [
   {
+    files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
+      parser,
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
         ecmaFeatures: {
           jsx: true,
         },
+        project: './tsconfig.json',
       },
       globals: {
         node: 'readonly',
@@ -31,14 +37,15 @@ export default [
             ['#', './src'],
             ['#env', './env.mjs'],
           ],
-          extensions: ['.js', '.jsx'],
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
         node: {
-          extensions: ['.js', '.jsx'],
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
       },
     },
     plugins: {
+      '@typescript-eslint': eslintPluginTs as unknown as any,
       import: eslintPluginImport,
       'react-refresh': eslintPluginReactRefresh,
       'unused-imports': eslintPluginUnusedImports,
@@ -91,7 +98,8 @@ export default [
           },
         },
       ],
-      'no-unused-vars': [
+      'no-unused-vars': 'off', // Let TypeScript handle this
+      '@typescript-eslint/no-unused-vars': [
         'error',
         {
           vars: 'all',
@@ -99,6 +107,7 @@ export default [
           ignoreRestSiblings: false,
         },
       ],
+      '@typescript-eslint/no-explicit-any': 'off',
       'unused-imports/no-unused-imports': 'error',
       'linebreak-style': ['error', 'unix'],
       quotes: ['error', 'single', { avoidEscape: true }],
@@ -108,11 +117,11 @@ export default [
         'error',
         {
           singleQuote: true,
-          parser: 'flow',
+          parser: 'typescript',
         },
       ],
     },
-
-    files: ['**/*.jsx', '**/*.js'],
   },
 ];
+
+export default config;
