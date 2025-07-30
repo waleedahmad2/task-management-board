@@ -14,9 +14,31 @@ import { useHomeData } from '#/data';
  * - UI rendering only: `Home.jsx`
  *
  * @returns {{
- *   users: Object[],
+ *   users: Array<{
+ *     id: number,
+ *     name: string,
+ *     email: string,
+ *     username: string,
+ *     address?: {
+ *       street: string,
+ *       suite: string,
+ *       city: string,
+ *       zipcode: string,
+ *       geo: {
+ *         lat: string,
+ *         lng: string,
+ *       }
+ *     },
+ *     phone: string,
+ *     website: string,
+ *     company?: {
+ *       name: string,
+ *       catchPhrase: string,
+ *       bs: string
+ *     }
+ *   }>,
  *   isLoading: boolean,
- *   handleCreate: () => void,
+ *   handleCreatePost: () => void,
  *   isPosting: boolean,
  * }}
  */
@@ -33,7 +55,7 @@ export const useHome = () => {
    * Business logic before creating a user.
    * - This is where you can add validations, transform payloads, etc.
    */
-  const handleCreate = () => {
+  const handleCreatePost = () => {
     // 👇 Dummy logic: payload with static title/body, later can use dynamic form
     const newUserPayload = {
       title: 'Dummy Title',
@@ -52,7 +74,7 @@ export const useHome = () => {
   return {
     users: filteredUsers,
     isLoading: isUsersLoading,
-    handleCreate,
+    handleCreatePost,
     isPosting,
   };
 };

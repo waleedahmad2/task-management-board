@@ -6,7 +6,7 @@ import { useHome } from '#/hooks';
 //  * - UI components (e.g. Home.jsx) only focus on UI Making
 
 const Home = () => {
-  const { users, isLoading, handleCreate, isPosting } = useHome();
+  const { users, isLoading, handleCreatePost, isPosting } = useHome();
 
   return (
     <div className='p-6 max-w-3xl mx-auto'>
@@ -15,7 +15,7 @@ const Home = () => {
       <div className='mb-4 text-center'>
         <button
           className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition'
-          onClick={handleCreate}
+          onClick={handleCreatePost}
           disabled={isPosting}
         >
           {isPosting ? 'Creating...' : 'Create Dummy User'}
@@ -26,15 +26,15 @@ const Home = () => {
       {isLoading ? (
         <p>Loading users...</p>
       ) : (
-        <ul className='list-disc list-inside'>
+        <ul className='list-disc list-inside space-y-2'>
           {users &&
             Object.values(users).map(user => (
-              <div key={user.id} className='p-4 border rounded shadow-sm mb-2'>
+              <li key={user.id} className='p-4 border rounded shadow-sm list-none'>
                 <h2 className='text-lg font-semibold'>{user.name}</h2>
                 <p>Email: {user.email}</p>
                 <p>Company: {user.company?.name}</p>
                 <p>City: {user.address?.city}</p>
-              </div>
+              </li>
             ))}
         </ul>
       )}

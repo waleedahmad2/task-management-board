@@ -9,7 +9,29 @@ import { usePostMutation, useGetQuery } from '#/services';
  * It utilizes custom `useGetQuery` and `usePostMutation` hooks for query and mutation logic.
  *
  * @returns {{
- *   users: Array|undefined,
+ *    users: Array<{
+ *     id: number,
+ *     name: string,
+ *     email: string,
+ *     username: string,
+ *     address?: {
+ *       street: string,
+ *       suite: string,
+ *       city: string,
+ *       zipcode: string,
+ *       geo: {
+ *         lat: string,
+ *         lng: string,
+ *       }
+ *     },
+ *     phone: string,
+ *     website: string,
+ *     company?: {
+ *       name: string,
+ *       catchPhrase: string,
+ *       bs: string
+ *     }
+ *   }>,
  *   loadingUsers: boolean,
  *   handleCreate: () => void,
  *   isPosting: boolean
@@ -19,7 +41,7 @@ export const useHomeData = () => {
   const { data: usersData, isLoading: isUsersLoading } = useGetQuery({
     key: 'users',
     url: apiEndpoints.GET_USERS,
-    // params: { role: 'admin' }, // Optional query parameters
+    params: {}, // Optional query parameters
   });
 
   /**
@@ -30,8 +52,8 @@ export const useHomeData = () => {
    * });
    *   */
   const {
-    mutate: createPost,            // Function to call the mutation
-    isPending: isPosting,          // Indicates if the mutation is in progress
+    mutate: createPost, // Function to call the mutation
+    isPending: isPosting, // Indicates if the mutation is in progress
     // isSuccess,                  // Indicates if the mutation was successful
     // isError,                    // Indicates if the mutation encountered an error
   } = usePostMutation({
