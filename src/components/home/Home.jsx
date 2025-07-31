@@ -1,16 +1,39 @@
 import React from 'react';
 
+// Use this import when you need to apply business logic before rendering
 import { useHome } from '#/hooks';
 
-//  * Intended to be used in scalable React applications as part of a separation-of-concerns pattern:
-//  * - UI components (e.g. Home.jsx) only focus on UI Making
+// Use this import when no transformation or filtering is needed — direct data rendering
 
+/**
+ * Home component — purely UI-focused.
+ *
+ * This follows the separation of concerns design:
+ * ------------------------------------------------------------------
+ * ✅ If business logic is needed (filtering, transforming, validation),
+ *    use the `useHome` hook to receive already-processed data.
+ *
+ * ✅ If no processing is needed (raw data rendering),
+ *    directly call the `useGetPosts` hook from the data layer here.
+ *
+ * 🔁 Only one approach should be used at a time.
+ */
 const Home = () => {
-  const { users, isLoading, handleCreatePost, isPosting } = useHome();
+  // -----------------------------
+  // ✅ Option A — Use with logic
+  const { posts, isLoading, handleCreatePost, isPosting } = useHome();
+
+  // -----------------------------
+  // ✅ Option B — Use raw data directly from query (no business logic)
+  // const { data: post, isLoading } = useGetPosts();
 
   return (
     <div className='p-6 max-w-3xl mx-auto'>
       <h1 className='text-2xl font-bold mb-4 text-center text-blue-600'>Cogent Labs</h1>
+
+      {/* 
+        👉 Only show this button when using  hooks/useHome for mutations.
+      */}
 
       <div className='mb-4 text-center'>
         <button
@@ -22,18 +45,17 @@ const Home = () => {
         </button>
       </div>
 
-      <h2 className='text-xl font-semibold mb-2'>Users List</h2>
+      <h2 className='text-xl font-semibold mb-2'>Posts List</h2>
       {isLoading ? (
-        <p>Loading users...</p>
+        <p>Loading Posts...</p>
       ) : (
         <ul className='list-disc list-inside space-y-2'>
-          {users &&
-            Object.values(users).map(user => (
-              <li key={user.id} className='p-4 border rounded shadow-sm list-none'>
-                <h2 className='text-lg font-semibold'>{user.name}</h2>
-                <p>Email: {user.email}</p>
-                <p>Company: {user.company?.name}</p>
-                <p>City: {user.address?.city}</p>
+          {posts &&
+            Object.values(posts).map(post => (
+              <li key={posts.id} className='p-4 border rounded shadow-sm list-none'>
+                <h2 className='text-lg font-semibold'>{post.title}</h2>
+                <p>User Id: {post.userId}</p>
+                <p>Body: {post.body}</p>
               </li>
             ))}
         </ul>

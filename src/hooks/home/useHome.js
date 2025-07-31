@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
-import { useHomeData } from '#/data';
+import { useCreatePost } from '#/data';
+import { useGetPosts } from '#/data';
 
 /**
  * useHome — Generic business logic hook
@@ -9,8 +10,9 @@ import { useHomeData } from '#/data';
  * AND for preparing payloads, validating and other business rules for GET, POST, PUT, DELETE operations.
  *
  * Intended to be used in scalable React apps:
- * - Fetching logic: `data/home.js`
  * - Business rules (filtering, validation, Input functions): `hooks/useHome.js`
+ * - Data fetching layer: `data/home/queries/getPosts.js`
+ * - Data mutations (POST, PUT, DELETE): `data/home/mutations/createPosts.js` etc
  * - UI rendering only: `Home.jsx`
  *
  * @returns {{
@@ -44,17 +46,24 @@ import { useHomeData } from '#/data';
  */
 
 export const useHome = () => {
-  const { usersData, isUsersLoading, createPost, isPosting } = useHomeData();
+  const { mutate: createPost, isPending: isPosting } = useCreatePost(
+    () => console.warn('User created'),
+    err => console.error(err.message)
+  );
 
-  // Example: filter only users from "Robel-Corkery"
-  const filteredUsers = useMemo(() => {
-    return (!isUsersLoading && Object.values(usersData).filter(user => user?.company?.name === 'Johns Group')) || [];
-  }, [usersData]);
+  // Fetch users data
+  const { data: postsData, isLoading: isPostsLoading } = useGetPosts();
+
+  // Example: filter only users from "Johns Group"
+  const filteredPosts = useMemo(() => {
+    return (!isPostsLoading && Object.values(postsData).filter(post => post?.id === 1)) || [];
+  }, [postsData]);
 
   /**
    * Business logic before creating a user.
    * - This is where you can add validations, transform payloads, etc.
    */
+
   const handleCreatePost = () => {
     // 👇 Dummy logic: payload with static title/body, later can use dynamic form
     const newUserPayload = {
@@ -72,8 +81,8 @@ export const useHome = () => {
   };
 
   return {
-    users: filteredUsers,
-    isLoading: isUsersLoading,
+    posts: filteredPosts,
+    isLoading: isPostsLoading,
     handleCreatePost,
     isPosting,
   };
