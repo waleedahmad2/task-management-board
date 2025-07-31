@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { useCreatePost } from '#/data';
-import { useGetPosts } from '#/data';
+import { useCreatePost } from '#/data/home/mutations/createPost';
+import { useGetPosts } from '#/data/home/queries/getPosts';
 
 /**
  * useHome — Generic business logic hook

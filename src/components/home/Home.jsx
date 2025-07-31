@@ -4,7 +4,7 @@ import React from 'react';
 import { useHome } from '#/hooks';
 
 // Use this import when no transformation or filtering is needed — direct data rendering
-// import { useGetPosts } from '#/data';
+// import { useGetPosts } from '#/data/home/queries/getPosts';
 
 /**
  * Home component — purely UI-focused.

@@ -11,10 +11,10 @@
 //  * @returns {Object} - React Query mutation object (mutate, isPending, error, etc.)
 //  *
 //  * Usage:
-//  * const { mutate: updatePost, isPending } = usePutPosts(onSuccess, onError);
+//  * const { mutate: updatePost, isPending } = useUpdatePost(onSuccess, onError);
 //  * updatePost({ postId: 1, payload: { title: 'Updated' } });
 //  */
-// export const usePutPosts = (onSuccess, onError) => {
+// export const useUpdatePost = (onSuccess, onError) => {
 //   return useMutation({
 //     mutationFn: ({ postId, payload = {}, params = {}, config = {} }) => {
 //       if (!postId) throw new Error('postId is required for updating a post');
