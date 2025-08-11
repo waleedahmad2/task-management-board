@@ -1,0 +1,38 @@
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
+
+import { apiEndpoints, queryKeys } from '#/constants';
+import { performGetRequest } from '#/services/apiClient';
+import type { PostsResponse, UseGetPostsProps } from '#/types/home/api.types';
+
+/**
+ * Custom hook to fetch posts using React Query.
+ *
+ * This hook uses the `performGetRequest` utility to call the `/posts` endpoint
+ * and retrieve post data. It accepts optional query parameters and React Query options.
+ *
+ * This query will typically be used in:
+ * `data/home/queries/getPosts.js` to separate the data layer from components.
+ *
+ * @example
+ * const { data, isLoading, error } = useGetPosts({
+ *   params: { limit: 10 },
+ *   options: { staleTime: 300000 }
+ * });
+ */
+
+export const useGetPosts = ({ params = {}, options = {} }: UseGetPostsProps = {}): UseQueryResult<
+  PostsResponse,
+  Error
+> => {
+  return useQuery<PostsResponse, Error, PostsResponse, [string, Record<string, any>]>({
+    queryKey: [queryKeys.POSTS, params],
+    queryFn: () =>
+      performGetRequest({
+        url: apiEndpoints.POSTS,
+        params,
+      }).then(res => res.data as PostsResponse),
+    retry: false,
+    refetchOnWindowFocus: false,
+    ...options,
+  });
+};
