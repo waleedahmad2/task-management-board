@@ -22,7 +22,7 @@ const config: FlatESLintConfig[] = [
         },
         project: './tsconfig.json',
       },
-      globals: {
+      globals: { 
         node: 'readonly',
         commonjs: 'readonly',
         browser: 'readonly',
@@ -107,7 +107,7 @@ const config: FlatESLintConfig[] = [
           ignoreRestSiblings: false,
         },
       ],
-      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-explicit-any': 'error',
       'unused-imports/no-unused-imports': 'error',
       'linebreak-style': ['error', 'unix'],
       quotes: ['error', 'single', { avoidEscape: true }],

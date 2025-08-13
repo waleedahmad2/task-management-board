@@ -1,22 +1,24 @@
 import type { UseQueryOptions } from '@tanstack/react-query';
 
-import type { Post } from './types';
+import type { Post } from '../types';
 
 // -------- GET POSTS --------
-
 export type PostsResponse = Record<number, Post>;
 
 // Props for the useGetPosts hook
 
-export interface UseGetPostsProps {
-  params?: Record<string, any>;
-  options?: Omit<
-    UseQueryOptions<PostsResponse, Error, PostsResponse, [string, Record<string, any>]>,
-    'queryKey' | 'queryFn'
-  >;
+export interface UseGetPostsProps<TParams extends Record<string, unknown> = Record<string, unknown>> {
+  params?: TParams;
+  options?: Omit<UseQueryOptions<PostsResponse, Error, PostsResponse, [string, TParams]>, 'queryKey' | 'queryFn'>;
 }
 
 // -------- CREATE POST --------
+// Generic Params type — defaults to empty object if not specified
+export interface CreatePostVariables<TParams extends Record<string, unknown> = Record<string, unknown>> {
+  payload?: CreatePostPayload;
+  params?: TParams;
+}
+
 export interface CreatePostPayload {
   userId?: number;
   title?: string;
@@ -28,9 +30,4 @@ export interface CreatePostResponse {
   id: number;
   title: string;
   body: string;
-}
-
-export interface CreatePostVariables {
-  payload?: CreatePostPayload;
-  params?: Record<string, any>;
 }

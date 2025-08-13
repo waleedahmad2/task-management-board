@@ -1,7 +1,7 @@
-import React, { JSX } from 'react';
+import { JSX } from 'react';
 
 import { useHome } from '#/hooks';
-import { Post, UseHomeReturn } from '#/types/home/types';
+import { Post, UseHomeReturn } from '#/types/types';
 
 // Use this import when you need to apply business logic before rendering
 // Use this import when no transformation or filtering is needed — direct data rendering
@@ -43,7 +43,7 @@ const Home = (): JSX.Element => {
           onClick={handleCreatePost}
           disabled={isPosting}
         >
-          {isPosting ? 'Creating...' : 'Create Dummy User'}
+          {isPosting ? 'Creating...' : 'Create Dummy Post'}
         </button>
       </div>
 

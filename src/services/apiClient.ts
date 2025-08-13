@@ -1,25 +1,56 @@
+import type { RequestParams, RequestWithPayload } from '#/types/apiClient.types';
 import axiosInstance from './axiosInstance';
 
-interface RequestParams {
-  url: string;
-  params?: Record<string, any>;
-}
+// Generic GET
+export const performGetRequest = <TResponse, TParams extends Record<string, unknown> = Record<string, unknown>>({
+  url,
+  params = {} as TParams,
+}: RequestParams<TParams>): Promise<TResponse> => axiosInstance.get<TResponse>(url, { params }).then(res => res.data);
 
-interface RequestWithPayload extends RequestParams {
-  payload?: any;
-}
+// Generic POST
+export const performPostRequest = <
+  TResponse,
+  TPayload extends object,
+  TParams extends Record<string, unknown> = Record<string, unknown>,
+>({
+  url,
+  payload = {} as TPayload,
+  params = {} as TParams,
+}: RequestWithPayload<TPayload, TParams>): Promise<TResponse> =>
+  axiosInstance.post<TResponse>(url, payload, { params }).then(res => res.data);
 
-export const performGetRequest = ({ url, params = {} }: RequestParams): Promise<any> =>
-  axiosInstance.get(url, { params });
+// Generic PUT
+export const performPutRequest = <
+  TResponse,
+  TPayload extends Record<string, unknown> = Record<string, unknown>,
+  TParams extends Record<string, unknown> = Record<string, unknown>,
+>({
+  url,
+  payload = {} as TPayload,
+  params = {} as TParams,
+}: RequestWithPayload<TPayload, TParams>): Promise<TResponse> =>
+  axiosInstance.put<TResponse>(url, payload, { params }).then(res => res.data);
 
-export const performPostRequest = ({ url, payload = {}, params = {} }: RequestWithPayload): Promise<any> =>
-  axiosInstance.post(url, payload, { params });
+// Generic PATCH
+export const performPatchRequest = <
+  TResponse,
+  TPayload extends Record<string, unknown> = Record<string, unknown>,
+  TParams extends Record<string, unknown> = Record<string, unknown>,
+>({
+  url,
+  payload = {} as TPayload,
+  params = {} as TParams,
+}: RequestWithPayload<TPayload, TParams>): Promise<TResponse> =>
+  axiosInstance.patch<TResponse>(url, payload, { params }).then(res => res.data);
 
-export const performPutRequest = ({ url, payload = {}, params = {} }: RequestWithPayload): Promise<any> =>
-  axiosInstance.put(url, payload, { params });
-
-export const performPatchRequest = ({ url, payload = {}, params = {} }: RequestWithPayload): Promise<any> =>
-  axiosInstance.patch(url, payload, { params });
-
-export const performDeleteRequest = ({ url, payload = {}, params = {} }: RequestWithPayload): Promise<any> =>
-  axiosInstance.delete(url, { data: payload, params });
+// Generic DELETE
+export const performDeleteRequest = <
+  TResponse,
+  TPayload extends Record<string, unknown> = Record<string, unknown>,
+  TParams extends Record<string, unknown> = Record<string, unknown>,
+>({
+  url,
+  payload = {} as TPayload,
+  params = {} as TParams,
+}: RequestWithPayload<TPayload, TParams>): Promise<TResponse> =>
+  axiosInstance.delete<TResponse>(url, { data: payload, params }).then(res => res.data);

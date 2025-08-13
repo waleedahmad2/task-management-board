@@ -3,7 +3,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { InfiniteQueryConfig } from '#/types/services';
 import { performGetRequest } from './apiClient';
 
-export function useInfiniteScrollQuery<TData = any, TParams extends Record<string, any> = Record<string, any>>({
+export function useInfiniteScrollQuery<TData, TParams extends Record<string, unknown> = Record<string, unknown>>({
   key,
   url,
   params = {} as TParams,
@@ -11,39 +11,51 @@ export function useInfiniteScrollQuery<TData = any, TParams extends Record<strin
   getNextPageParam,
   options = { initialPageParam: 1 },
 }: InfiniteQueryConfig<TParams, TData>) {
-  // Create stable query key by serializing params
   const stableParams = JSON.stringify(params);
 
   return useInfiniteQuery<TData, unknown, TData, [string, string, number]>({
     queryKey: [key, stableParams, limit],
     queryFn: ({ pageParam = 1 }) =>
-      performGetRequest({ url, params: { ...params, page: pageParam, limit } }).then(res => res.data as TData),
+      performGetRequest<TData, TParams>({
+        url,
+        params: { ...params, page: pageParam, limit } as TParams & { page: number; limit: number },
+      }),
     getNextPageParam: (lastPage, allPages) => {
       if (getNextPageParam) {
         return getNextPageParam(lastPage, allPages);
       }
       // Enhanced fallback logic that handles different response formats
       if (Array.isArray(lastPage)) {
-        if (lastPage.length === limit) {
-          return allPages.length + 1;
-        }
-      } else if (lastPage && typeof lastPage === 'object') {
-        const data = (lastPage as any).data || (lastPage as any).items || (lastPage as any).results;
-        const hasNext =
-          (lastPage as any).hasNext !== undefined
-            ? (lastPage as any).hasNext
-            : (lastPage as any).total
-              ? allPages.length * limit < (lastPage as any).total
-              : data && data.length === limit;
-        if (hasNext) {
-          return allPages.length + 1;
-        }
+        return lastPage.length === limit ? allPages.length + 1 : undefined;
       }
+
+      if (lastPage && typeof lastPage === 'object') {
+        type Paginated = {
+          data?: unknown[];
+          items?: unknown[];
+          results?: unknown[];
+          hasNext?: boolean;
+          total?: number;
+        };
+
+        const pageObj = lastPage as Paginated;
+        const data = pageObj.data ?? pageObj.items ?? pageObj.results;
+
+        const hasNext =
+          pageObj.hasNext !== undefined
+            ? pageObj.hasNext
+            : pageObj.total !== undefined
+              ? allPages.length * limit < pageObj.total
+              : Array.isArray(data) && data.length === limit;
+
+        return hasNext ? allPages.length + 1 : undefined;
+      }
+
       return undefined;
     },
     retry: false,
     refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
     ...options,
   });
 }

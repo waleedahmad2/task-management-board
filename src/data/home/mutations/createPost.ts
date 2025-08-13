@@ -2,24 +2,23 @@ import { useMutation, UseMutationOptions, UseMutationResult } from '@tanstack/re
 
 import { apiEndpoints } from '#/constants';
 import { performPostRequest } from '#/services/apiClient';
-import type { CreatePostResponse, CreatePostVariables } from '#/types/home/api.types';
+import type { CreatePostResponse, CreatePostVariables, CreatePostPayload } from '#/types/home/api.types';
 /**
  * Custom hook to send a POST request to create a new user.
  *
  * This mutation will typically be used in:
  * `data/home/mutations/createPosts.js` to separate the data layer from components.
  *
-
  *
  */
 
-export const useCreatePost = (
+export const useCreatePost = <TParams extends Record<string, unknown> = Record<string, unknown>>(
   onSuccess?: (data: CreatePostResponse) => void,
   onError?: (error: Error) => void,
-  options?: UseMutationOptions<CreatePostResponse, Error, CreatePostVariables>
-): UseMutationResult<CreatePostResponse, Error, CreatePostVariables> => {
-  return useMutation<CreatePostResponse, Error, CreatePostVariables>({
-    mutationFn: ({ payload = {}, params = {} }: CreatePostVariables = {}) => {
+  options?: UseMutationOptions<CreatePostResponse, Error, CreatePostVariables<TParams>>
+): UseMutationResult<CreatePostResponse, Error, CreatePostVariables<TParams>> => {
+  return useMutation<CreatePostResponse, Error, CreatePostVariables<TParams>>({
+    mutationFn: ({ payload = {} as CreatePostPayload, params = {} as TParams }: CreatePostVariables<TParams> = {}) => {
       return performPostRequest({
         url: apiEndpoints.POSTS,
         payload,

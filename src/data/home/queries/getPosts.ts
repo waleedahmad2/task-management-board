@@ -20,17 +20,17 @@ import type { PostsResponse, UseGetPostsProps } from '#/types/home/api.types';
  * });
  */
 
-export const useGetPosts = ({ params = {}, options = {} }: UseGetPostsProps = {}): UseQueryResult<
-  PostsResponse,
-  Error
-> => {
-  return useQuery<PostsResponse, Error, PostsResponse, [string, Record<string, any>]>({
+export const useGetPosts = <TParams extends Record<string, unknown> = Record<string, unknown>>({
+  params = {} as TParams,
+  options = {},
+}: UseGetPostsProps<TParams> = {}): UseQueryResult<PostsResponse, Error> => {
+  return useQuery<PostsResponse, Error, PostsResponse, [string, TParams]>({
     queryKey: [queryKeys.POSTS, params],
     queryFn: () =>
       performGetRequest({
         url: apiEndpoints.POSTS,
         params,
-      }).then(res => res.data as PostsResponse),
+      }),
     retry: false,
     refetchOnWindowFocus: false,
     ...options,
