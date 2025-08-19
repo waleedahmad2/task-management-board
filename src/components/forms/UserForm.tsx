@@ -1,4 +1,4 @@
-import React, { JSX } from 'react';
+import type { JSX } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
