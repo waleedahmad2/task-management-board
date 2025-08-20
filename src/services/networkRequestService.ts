@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { InfiniteQueryConfig } from '#/types/services';
+import { InfiniteQueryConfig } from '#/types/services.types';
 import { performGetRequest } from './apiClient';
 
 export function useInfiniteScrollQuery<TData, TParams extends Record<string, unknown> = Record<string, unknown>>({

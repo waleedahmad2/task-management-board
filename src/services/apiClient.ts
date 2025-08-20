@@ -10,7 +10,7 @@ export const performGetRequest = <TResponse, TParams extends Record<string, unkn
 // Generic POST
 export const performPostRequest = <
   TResponse,
-  TPayload extends object,
+  TPayload extends Record<string, unknown>,
   TParams extends Record<string, unknown> = Record<string, unknown>,
 >({
   url,

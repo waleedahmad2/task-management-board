@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { userFormSchema } from '#/schemas/userFormSchema';
-import { UserFormInput } from '#/types/user';
+import type { UserFormData } from '#/schemas/userFormSchema';
 
 /**
  * User Registration Form demo component.
@@ -20,7 +20,7 @@ const UserForm = (): JSX.Element => {
     resolver: zodResolver(userFormSchema),
   });
 
-  const onSubmit: SubmitHandler<UserFormInput> = (data: UserFormInput) => {
+  const onSubmit: SubmitHandler<UserFormData> = (data: UserFormData) => {
     alert(`User data submitted:\n${JSON.stringify(data, null, 2)}`);
     reset();
   };

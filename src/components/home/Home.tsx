@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 
 import { useHome } from '#/hooks';
-import { Post, UseHomeReturn } from '#/types/types';
+import { Post, UseHomeReturn } from '#/types/home/post.types';
 
 // Use this import when you need to apply business logic before rendering
 // Use this import when no transformation or filtering is needed — direct data rendering

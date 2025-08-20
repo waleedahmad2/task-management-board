@@ -1,6 +1,6 @@
 import type { UseQueryOptions } from '@tanstack/react-query';
 
-import type { Post } from '../types';
+import type { Post } from './post.types';
 
 // -------- GET POSTS --------
 export type PostsResponse = Record<number, Post>;
@@ -19,7 +19,7 @@ export interface CreatePostVariables<TParams extends Record<string, unknown> = R
   params?: TParams;
 }
 
-export interface CreatePostPayload {
+export interface CreatePostPayload extends Record<string, unknown> {
   userId?: number;
   title?: string;
   body?: string;
