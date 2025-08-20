@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useCreatePost } from '#/data/home/mutations/createPost';
 import { useGetPosts } from '#/data/home/queries/getPosts';
 import { Post, UseHomeReturn } from '#/types/home/post.types';
+import { ApiError } from '#/types/shared/error.types';
 
 /**
  * useHome — Generic business logic hook
@@ -21,7 +22,7 @@ import { Post, UseHomeReturn } from '#/types/home/post.types';
 export const useHome = (): UseHomeReturn => {
   const { mutate: createPost, isPending: isPosting } = useCreatePost(
     () => console.warn('User created'),
-    err => console.error(err.message)
+    (err: ApiError) => console.error(err.message)
   );
 
   // Fetch users data
