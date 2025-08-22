@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 
 import { useHome } from '#/hooks';
-import { Post, UseHomeReturn } from '#/types/home/post.types';
+import { Post, UsePostsResult } from '#/types/home/post.types';
 
 // Use this import when you need to apply business logic before rendering
 // Use this import when no transformation or filtering is needed — direct data rendering
@@ -23,7 +23,7 @@ import { Post, UseHomeReturn } from '#/types/home/post.types';
 const Home = (): JSX.Element => {
   // -----------------------------
   // ✅ Option A — Use with logic
-  const { posts, isLoading, handleCreatePost, isPosting }: UseHomeReturn = useHome();
+  const { posts, isLoading, handleCreatePost, isPosting }: UsePostsResult = useHome();
 
   // -----------------------------
   // ✅ Option B — Use raw data directly from query (no business logic)

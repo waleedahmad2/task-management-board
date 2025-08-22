@@ -31,8 +31,6 @@ export const useGetPosts = <TParams extends Record<string, unknown> = Record<str
         url: apiEndpoints.POSTS,
         params,
       }),
-    retry: false,
-    refetchOnWindowFocus: false,
     ...options,
   });
 };

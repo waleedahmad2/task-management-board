@@ -11,7 +11,14 @@ import { router } from '#/routes';
 import ErrorFallback from './components/errorFallback/ErrorFallback';
 
 function AppContent(): JSX.Element {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        refetchOnWindowFocus: false,
+      },
+    },
+  });
 
   return (
     <QueryClientProvider client={queryClient}>

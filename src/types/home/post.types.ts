@@ -5,7 +5,7 @@ export interface Post {
   body: string;
 }
 
-export interface UseHomeReturn {
+export interface UsePostsResult {
   posts: Post[];
   isLoading: boolean;
   handleCreatePost: () => void;

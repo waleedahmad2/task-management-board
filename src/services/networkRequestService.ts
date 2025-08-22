@@ -53,8 +53,6 @@ export function useInfiniteScrollQuery<TData, TParams extends Record<string, unk
 
       return undefined;
     },
-    retry: false,
-    refetchOnWindowFocus: false,
     staleTime: 5 * 60 * 1000,
     ...options,
   });
