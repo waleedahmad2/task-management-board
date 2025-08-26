@@ -107,7 +107,23 @@ const config: FlatESLintConfig[] = [
           ignoreRestSiblings: false,
         },
       ],
+      "@typescript-eslint/ban-tslint-comment": "error",
       '@typescript-eslint/no-explicit-any': 'error',
+      // TypeScript-specific rules - Performance & Best Practices
+      '@typescript-eslint/ban-ts-comment': [
+        'error',
+        {
+          'ts-expect-error': 'allow-with-description',
+          'ts-ignore': false,
+          'ts-nocheck': false,
+          'ts-check': false,
+        },
+      ],
+      '@typescript-eslint/no-empty-function': 'warn',
+      '@typescript-eslint/no-empty-interface': 'error',
+      '@typescript-eslint/consistent-type-exports': 'error',
+      '@typescript-eslint/no-duplicate-enum-values': 'error',
+      "@typescript-eslint/no-duplicate-type-constituents": "error",
       'unused-imports/no-unused-imports': 'error',
       'linebreak-style': ['error', 'unix'],
       quotes: ['error', 'single', { avoidEscape: true }],
