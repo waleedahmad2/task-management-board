@@ -1,7 +1,8 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 import { apiEndpoints, queryKeys } from '#/constants';
-import { performGetRequest } from '#/services/apiClient';
+import { GET } from '#/constants';
+import { performRequest } from '#/services/apiClient';
 import type { PostsResponse, UseGetPostsProps } from '#/types/home/api.types';
 
 /**
@@ -27,7 +28,8 @@ export const useGetPosts = <TParams extends Record<string, unknown> = Record<str
   return useQuery<PostsResponse, Error, PostsResponse, [string, TParams]>({
     queryKey: [queryKeys.POSTS, params],
     queryFn: () =>
-      performGetRequest({
+      performRequest({
+        method: GET,
         url: apiEndpoints.POSTS,
         params,
       }),

@@ -1,7 +1,8 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
+import { GET } from '#/constants';
 import { InfiniteQueryConfig } from '#/types/services.types';
-import { performGetRequest } from './apiClient';
+import { performRequest } from './apiClient';
 
 export function useInfiniteScrollQuery<TData, TParams extends Record<string, unknown> = Record<string, unknown>>({
   key,
@@ -16,7 +17,8 @@ export function useInfiniteScrollQuery<TData, TParams extends Record<string, unk
   return useInfiniteQuery<TData, unknown, TData, [string, string, number]>({
     queryKey: [key, stableParams, limit],
     queryFn: ({ pageParam = 1 }) =>
-      performGetRequest<TData, TParams>({
+      performRequest<TData, undefined, TParams>({
+        method: GET,
         url,
         params: { ...params, page: pageParam, limit } as TParams & { page: number; limit: number },
       }),

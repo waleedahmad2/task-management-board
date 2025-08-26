@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 
 import { useCreatePost } from '#/data/home/mutations/createPost';
 import { useGetPosts } from '#/data/home/queries/getPosts';
+import { ApiError } from '#/types/common/error.types';
 import { Post, UsePostsResult } from '#/types/home/post.types';
-import { ApiError } from '#/types/shared/error.types';
 
 /**
  * useHome — Generic business logic hook
