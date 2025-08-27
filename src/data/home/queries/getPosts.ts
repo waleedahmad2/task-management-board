@@ -12,7 +12,7 @@ import type { PostsResponse, UseGetPostsProps } from '#/types/home/api.types';
  * and retrieve post data. It accepts optional query parameters and React Query options.
  *
  * This query will typically be used in:
- * `data/home/queries/getPosts.js` to separate the data layer from components.
+ * `data/home/queries/getPosts.ts` to separate the data layer from components.
  *
  * @example
  * const { data, isLoading, error } = useGetPosts({

@@ -35,7 +35,6 @@ import { performRequest } from './apiClient';
  * ```
  */
 
-
 export function useInfiniteScrollQuery<TData, TParams extends Record<string, unknown> = Record<string, unknown>>({
   key,
   url,

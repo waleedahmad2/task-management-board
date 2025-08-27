@@ -12,10 +12,10 @@ import { Post, UsePostsResult } from '#/types/home/post.types';
  * AND for preparing payloads, validating and other business rules for GET, POST, PUT, DELETE operations.
  *
  * Intended to be used in scalable React apps:
- * - Business rules (filtering, validation, Input functions): `hooks/useHome.js`
- * - Data fetching layer: `data/home/queries/getPosts.js`
- * - Data mutations (POST, PUT, DELETE): `data/home/mutations/createPosts.js` etc
- * - UI rendering only: `Home.jsx`
+ * - Business rules (filtering, validation, Input functions): `hooks/useHome.ts`
+ * - Data fetching layer: `data/home/queries/getPosts.ts`
+ * - Data mutations (POST, PUT, DELETE): `data/home/mutations/createPosts.ts` etc
+ * - UI rendering only: `Home.tsx`
  *
  */
 
