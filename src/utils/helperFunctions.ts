@@ -16,3 +16,26 @@
  * - Example: formatDate(new Date(), { locale: 'en-US' })
  * - Complexity: O(1)
  */
+
+import { Paginated } from '#/types/services.types';
+export function getNextPageParamHelper<TData>(lastPage: TData, allPages: TData[], limit: number): number | undefined {
+  if (Array.isArray(lastPage)) {
+    return lastPage.length === limit ? allPages.length + 1 : undefined;
+  }
+
+  if (lastPage && typeof lastPage === 'object') {
+    const pageObj = lastPage as Paginated;
+    const data = pageObj.data ?? pageObj.items ?? pageObj.results;
+
+    const hasNext =
+      pageObj.hasNext !== undefined
+        ? pageObj.hasNext
+        : pageObj.total !== undefined
+          ? allPages.length * limit < pageObj.total
+          : Array.isArray(data) && data.length === limit;
+
+    return hasNext ? allPages.length + 1 : undefined;
+  }
+
+  return undefined;
+}

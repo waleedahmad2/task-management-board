@@ -44,3 +44,11 @@ export interface InfiniteQueryConfig<
     'queryKey' | 'queryFn' | 'getNextPageParam'
   >;
 }
+
+export type Paginated = {
+  data?: unknown[];
+  items?: unknown[];
+  results?: unknown[];
+  hasNext?: boolean;
+  total?: number;
+};
