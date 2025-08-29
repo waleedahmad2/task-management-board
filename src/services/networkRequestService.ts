@@ -44,7 +44,7 @@ export function useInfiniteScrollQuery<TData, TParams extends Record<string, unk
   params = {} as TParams,
   getNextPageParam,
   options = { initialPageParam: 1 },
-}: Omit<InfiniteQueryConfig<TParams, TData>, 'limit'>) {
+}: InfiniteQueryConfig<TParams, TData>) {
   const stableParams = JSON.stringify(params);
 
   return useInfiniteQuery<TData, unknown, TData, [string, string, number]>({
