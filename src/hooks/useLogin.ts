@@ -19,7 +19,7 @@ export function useLogin() {
 
     try {
       const response = await AuthService.login({ email: data.email });
-      login(response.token);
+      await login(response.token);
       showToast('success', LOGIN_SUCCESS);
       onSuccess?.();
     } catch (error) {

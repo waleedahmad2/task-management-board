@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 import { ACCESS_TOKEN } from '#/constants';
 import { AuthService } from '#/services/authService';
@@ -10,7 +10,7 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (newToken: string) => void;
+  login: (newToken: string) => Promise<void>;
   logout: () => void;
   isAdmin: () => boolean;
   isMember: () => boolean;
@@ -30,18 +30,48 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(() => getLocalStorageItem(ACCESS_TOKEN) as string | null);
-  const [isLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const login = (newToken: string): void => {
+  // Initialize auth state on app load
+  useEffect(() => {
+    const initAuth = async (): Promise<void> => {
+      const storedToken = getLocalStorageItem(ACCESS_TOKEN) as string | null;
+      
+      if (storedToken) {
+        try {
+          const userData = await AuthService.validateToken(storedToken);
+          if (userData) {
+            setUser(userData);
+            setToken(storedToken);
+          } else {
+            removeLocalStorageItem(ACCESS_TOKEN);
+          }
+        } catch (error) {
+          console.error('Token validation failed:', error);
+          removeLocalStorageItem(ACCESS_TOKEN);
+        }
+      }
+      setIsLoading(false);
+    };
+
+    initAuth();
+  }, []);
+
+  const login = async (newToken: string): Promise<void> => {
     setToken(newToken);
     setLocalStorageItem(ACCESS_TOKEN, newToken);
 
-    AuthService.validateToken(newToken)
-      .then(userData => userData && setUser(userData))
-      .catch(error => {
-        console.error('Token validation failed during login:', error);
+    try {
+      const userData = await AuthService.validateToken(newToken);
+      if (userData) {
+        setUser(userData);
+      } else {
         logout();
-      });
+      }
+    } catch (error) {
+      console.error('Token validation failed during login:', error);
+      logout();
+    }
   };
 
   const logout = (): void => {
