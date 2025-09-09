@@ -3,9 +3,9 @@ import { JSX } from 'react';
 import { LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+import { Button } from '#/components/ui/Button';
 import { ROUTES } from '#/constants';
 import { useAuth } from '#/context';
-import { Button } from '#/components/ui/Button';
 
 /**
  * Sidebar footer component with user info and logout
