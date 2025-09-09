@@ -1,4 +1,5 @@
 import { JSX, useMemo } from 'react';
+
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { NAVIGATION_ITEMS } from '#/constants';
@@ -39,7 +40,7 @@ const SidebarItemsList = (): JSX.Element => {
   const isActive = (path: string): boolean => selectedPath === path;
 
   return (
-    <nav className="flex-1 p-4 space-y-2">
+    <nav className='flex-1 p-4 space-y-2'>
       {NAVIGATION_ITEMS.map(({ id, icon, label, description, path }) => (
         <SidebarListItem
           key={id}

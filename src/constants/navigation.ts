@@ -1,8 +1,4 @@
-import { 
-  FolderKanban, 
-  Kanban, 
-  CheckSquare 
-} from 'lucide-react';
+import { FolderKanban, Kanban, CheckSquare } from 'lucide-react';
 
 import { ROUTES } from './routes';
 

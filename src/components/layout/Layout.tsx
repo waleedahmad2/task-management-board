@@ -1,7 +1,7 @@
 import { JSX } from 'react';
-import { Outlet } from 'react-router-dom';
 
-import { Sidebar } from '../sidebar/Sidebar';
+import { Outlet } from 'react-router-dom';
+import { Sidebar } from '../sidebar';
 
 
 /**
@@ -10,13 +10,13 @@ import { Sidebar } from '../sidebar/Sidebar';
  */
 export function Layout(): JSX.Element {
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className='flex h-screen bg-gray-50'>
       {/* Sidebar */}
       <Sidebar />
-      
+
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
-        <div className="h-full">
+      <main className='flex-1 overflow-auto'>
+        <div className='h-full'>
           <Outlet />
         </div>
       </main>
