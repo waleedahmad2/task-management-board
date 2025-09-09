@@ -22,7 +22,6 @@ const Layout = (): JSX.Element => {
       </main>
     </div>
   );
-}
+};
 
 export default Layout;
-
