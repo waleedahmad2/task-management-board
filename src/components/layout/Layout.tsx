@@ -1,8 +1,8 @@
 import { JSX } from 'react';
 
 import { Outlet } from 'react-router-dom';
-import { Sidebar } from '../sidebar';
 
+import { Sidebar } from '../sidebar';
 
 /**
  * Main layout component that wraps the application
