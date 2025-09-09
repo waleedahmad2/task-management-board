@@ -36,7 +36,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
       const storedToken = getLocalStorageItem(ACCESS_TOKEN) as string | null;
-      
+
       if (storedToken) {
         try {
           const userData = await AuthService.validateToken(storedToken);
