@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '#/constants';
 import { useAuth } from '#/context';
+import { Button } from '#/components/ui/Button';
 
 /**
  * Sidebar footer component with user info and logout
@@ -35,13 +36,14 @@ const SidebarFooter = (): JSX.Element => {
       </div>
 
       {/* Logout Button */}
-      <button
+      <Button
         onClick={handleLogout}
-        className='w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left text-gray-700 hover:bg-red-50 hover:text-red-700 transition-colors duration-200'
+        variant='ghost'
+        className='w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left text-gray-700 hover:bg-red-50 hover:text-red-700 transition-colors duration-200 cursor-pointer'
       >
         <LogOut className='h-5 w-5' />
         <span className='text-sm font-medium'>Logout</span>
-      </button>
+      </Button>
     </div>
   );
 };
