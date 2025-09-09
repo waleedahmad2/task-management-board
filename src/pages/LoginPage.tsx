@@ -8,7 +8,7 @@ import { LoginForm } from '#/components/forms/LoginForm';
  */
 export default function LoginPage(): JSX.Element {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className='min-h-screen bg-gray-50'>
       <LoginForm />
     </div>
   );

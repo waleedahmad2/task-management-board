@@ -1,9 +1,8 @@
-import { useForm, UseFormReturn, FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, UseFormReturn, FieldValues } from 'react-hook-form';
 import { z } from 'zod';
 
 import { DynamicFormField } from '#/types/forms';
-
 import { useGenerateSchema } from './useGenerateSchema';
 
 /**
@@ -22,10 +21,9 @@ export function useDynamicForm<T extends FieldValues = FieldValues>(
 
   const form = useForm<T>({
     resolver: zodResolver(finalSchema),
-    defaultValues: defaultValues as any,
+    defaultValues: defaultValues as Partial<T>,
     mode: 'onBlur',
   });
 
   return form as unknown as UseFormReturn<T>;
 }
-

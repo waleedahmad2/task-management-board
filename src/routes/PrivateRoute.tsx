@@ -1,8 +1,8 @@
 import { Navigate } from 'react-router-dom';
 
+import { LoadingFallback } from '#/components/common/LoadingFallback';
 import { ROUTES } from '#/constants';
 import { useAuth } from '#/context';
-import { LoadingFallback } from '#/components/common/LoadingFallback';
 import type { PrivateRouteProps } from '#/types/routes.types';
 
 /**

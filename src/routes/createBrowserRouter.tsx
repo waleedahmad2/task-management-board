@@ -2,15 +2,14 @@ import React, { lazy, Suspense, JSX } from 'react';
 
 import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 
+import { LoadingFallback } from '#/components/common/LoadingFallback';
 import { ROUTES } from '#/constants';
 import { PrivateRoute } from '#/routes/PrivateRoute';
-import { LoadingFallback } from '#/components/common/LoadingFallback';
 
 const Home = lazy(() => import('#/pages/Home'));
 const LoginPage = lazy(() => import('#/pages/LoginPage'));
 const Unauthorized = lazy(() => import('#/pages/Unauthorized'));
 const NotFoundPage = lazy(() => import('#/pages/NotFoundPage'));
-
 
 export const createPrivateRoute = (Component: React.ComponentType): JSX.Element => {
   return (
@@ -43,7 +42,7 @@ export const router = createBrowserRouter(
         }
       />
       <Route
-        path="*"
+        path='*'
         element={
           <Suspense fallback={<LoadingFallback />}>
             <NotFoundPage />

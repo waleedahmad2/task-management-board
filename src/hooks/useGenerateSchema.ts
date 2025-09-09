@@ -1,22 +1,20 @@
-import { z } from 'zod';
 import { FieldValues } from 'react-hook-form';
+import { z } from 'zod';
 
-import { DynamicFormField } from '#/types/forms';
 import { MESSAGES } from '#/constants';
+import { DynamicFormField } from '#/types/forms';
 
 /**
  * Hook for generating Zod schemas from dynamic form fields
  * @param fields - Array of form field configurations
  */
-export function useGenerateSchema<T extends FieldValues = FieldValues>(
-  fields: DynamicFormField<T>[]
-): z.ZodSchema<T> {
+export function useGenerateSchema<T extends FieldValues = FieldValues>(fields: DynamicFormField<T>[]): z.ZodSchema<T> {
   const { VALIDATION } = MESSAGES;
   const { EMAIL_INVALID, REQUIRED } = VALIDATION;
-  
+
   const schemaObject: Record<string, z.ZodTypeAny> = {};
 
-  fields.forEach((field) => {
+  fields.forEach(field => {
     let fieldSchema: z.ZodTypeAny;
 
     switch (field.type) {

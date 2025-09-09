@@ -1,4 +1,5 @@
-import { LoginRequest, LoginResponse, MockUser, UserRole } from '#/types/auth.types';
+import { REGEX } from '#/constants';
+import { LoginRequest, LoginResponse, MockUser } from '#/types/auth/auth.types';
 
 /**
  * Mock users for development - in a real app, this would come from an API
@@ -30,7 +31,7 @@ const MOCK_USERS: MockUser[] = [
  * Simulates API delay for realistic authentication flow
  */
 const simulateApiDelay = (): Promise<void> => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(resolve, 1000 + Math.random() * 1000); // 1-2 seconds delay
   });
 };
@@ -39,8 +40,7 @@ const simulateApiDelay = (): Promise<void> => {
  * Validates email format
  */
 const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+  return REGEX.EMAIL.test(email);
 };
 
 /**
@@ -59,7 +59,7 @@ export class AuthService {
     }
 
     // Find user by email
-    const user = MOCK_USERS.find((u) => u.email.toLowerCase() === request.email.toLowerCase());
+    const user = MOCK_USERS.find(u => u.email.toLowerCase() === request.email.toLowerCase());
 
     if (!user) {
       throw new Error('User not found. Please check your email address');
@@ -91,7 +91,7 @@ export class AuthService {
     }
 
     const userId = tokenParts[2];
-    const user = MOCK_USERS.find((u) => u.id === userId);
+    const user = MOCK_USERS.find(u => u.id === userId);
 
     if (!user) {
       return null;
@@ -128,7 +128,7 @@ export class AuthService {
   /**
    * Checks if user can perform create/update operations
    */
-  static canCreateOrUpdate(user: LoginResponse['user']): boolean {
+  static canCreateOrUpdate(): boolean {
     return true; // Both admin and member can create/update
   }
 }

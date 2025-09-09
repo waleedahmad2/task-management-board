@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 
-import { useAuth } from '#/context';
 import { LoadingFallback } from '#/components/common/LoadingFallback';
+import { useAuth } from '#/context';
 
 /**
  * Home page — minimal welcome screen
@@ -14,12 +14,10 @@ const Home = (): JSX.Element => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900">Welcome to Kanban Board</h1>
-        {user?.email && (
-          <p className="mt-2 text-gray-600">{user.email}</p>
-        )}
+    <div className='min-h-screen flex items-center justify-center bg-white px-4'>
+      <div className='text-center'>
+        <h1 className='text-3xl font-bold text-gray-900'>Welcome to Kanban Board</h1>
+        {user?.email && <p className='mt-2 text-gray-600'>{user.email}</p>}
       </div>
     </div>
   );

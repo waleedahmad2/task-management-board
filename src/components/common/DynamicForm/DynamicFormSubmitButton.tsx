@@ -18,7 +18,7 @@ export function DynamicFormSubmitButton({
 }: DynamicFormSubmitButtonProps): JSX.Element {
   return (
     <Button
-      type="submit"
+      type='submit'
       disabled={disabled || isLoading}
       className={className}
       variant={variant}
@@ -26,8 +26,8 @@ export function DynamicFormSubmitButton({
       {...props}
     >
       {isLoading ? (
-        <div className="flex items-center space-x-2">
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+        <div className='flex items-center space-x-2'>
+          <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-white' />
           <span>Loading...</span>
         </div>
       ) : (

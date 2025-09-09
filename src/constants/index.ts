@@ -3,3 +3,4 @@ export * from './queryKeys';
 export * from './routes';
 export * from './generic';
 export * from './messages';
+export * from './regex';

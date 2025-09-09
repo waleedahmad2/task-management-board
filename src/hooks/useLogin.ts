@@ -1,17 +1,15 @@
 import { useState } from 'react';
 
-import { useAuth } from '#/context';
-import { AuthService } from '#/services/authService';
-import { LoginFormData } from '#/schemas/authSchema';
 import { showToast } from '#/components/common';
 import { MESSAGES } from '#/constants';
-
+import { useAuth } from '#/context';
+import { LoginFormData } from '#/schemas/authSchema';
+import { AuthService } from '#/services/authService';
 
 export function useLogin() {
+  const { AUTH } = MESSAGES;
 
-const { AUTH } = MESSAGES;
-
-const { LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT_SUCCESS } = AUTH;
+  const { LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT_SUCCESS } = AUTH;
 
   const { login, logout } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);

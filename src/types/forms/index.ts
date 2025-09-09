@@ -1,2 +1,2 @@
 // Export all form-related types
-export * from './dynamicForm.types';
+export type * from './dynamicForm.types';

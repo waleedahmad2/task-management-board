@@ -35,10 +35,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const login = (newToken: string): void => {
     setToken(newToken);
     setLocalStorageItem(ACCESS_TOKEN, newToken);
-    
+
     AuthService.validateToken(newToken)
-      .then((userData) => userData && setUser(userData))
-      .catch((error) => {
+      .then(userData => userData && setUser(userData))
+      .catch(error => {
         console.error('Token validation failed during login:', error);
         logout();
       });
@@ -52,10 +52,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const isAuthenticated = user !== null && token !== null;
 
-  const isAdmin = (): boolean => user ? AuthService.isAdmin(user) : false;
-  const isMember = (): boolean => user ? AuthService.isMember(user) : false;
-  const canDelete = (): boolean => user ? AuthService.canDelete(user) : false;
-  const canCreateOrUpdate = (): boolean => user ? AuthService.canCreateOrUpdate(user) : false;
+  const isAdmin = (): boolean => (user ? AuthService.isAdmin(user) : false);
+  const isMember = (): boolean => (user ? AuthService.isMember(user) : false);
+  const canDelete = (): boolean => (user ? AuthService.canDelete(user) : false);
+  const canCreateOrUpdate = (): boolean => AuthService.canCreateOrUpdate();
   const getUserRole = (): string | null => user?.role || null;
   const getUserEmail = (): string | null => user?.email || null;
   const getUserId = (): string | null => user?.id || null;

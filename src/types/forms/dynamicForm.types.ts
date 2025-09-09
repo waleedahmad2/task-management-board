@@ -1,14 +1,11 @@
 import { ReactNode } from 'react';
+
 import { FieldValues, Path, UseFormReturn } from 'react-hook-form';
 
 /**
  * Supported field types for dynamic forms (simplified for now)
  */
-export type FieldType = 
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'number';
+export type FieldType = 'text' | 'email' | 'password' | 'number';
 
 /**
  * Dynamic form field configuration
@@ -23,12 +20,12 @@ export interface DynamicFormField<T extends FieldValues = FieldValues> {
   disabled?: boolean;
   defaultValue?: unknown;
   validation?: Record<string, unknown>;
-  
+
   // Field-specific properties
   min?: number; // for number input
   max?: number; // for number input
   step?: number; // for number input
-  
+
   // Custom rendering
   render?: (props: DynamicFormFieldProps<T>) => ReactNode;
 }
