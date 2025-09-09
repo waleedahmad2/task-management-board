@@ -4,3 +4,4 @@ export * from './routes';
 export * from './generic';
 export * from './messages';
 export * from './regex';
+export * from './navigation';
