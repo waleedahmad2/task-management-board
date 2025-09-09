@@ -1,24 +1,16 @@
 import React, { lazy, Suspense, JSX } from 'react';
 
-import { Route, createBrowserRouter, createRoutesFromElements, Navigate } from 'react-router-dom';
+import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 
 import { ROUTES } from '#/constants';
-import { useAuth } from '#/context';
 import { PrivateRoute } from '#/routes/PrivateRoute';
+import { LoadingFallback } from '#/components/common/LoadingFallback';
 
 const Home = lazy(() => import('#/pages/Home'));
+const LoginPage = lazy(() => import('#/pages/LoginPage'));
 const Unauthorized = lazy(() => import('#/pages/Unauthorized'));
+const NotFoundPage = lazy(() => import('#/pages/NotFoundPage'));
 
-// replace this with your own loading component
-const LoadingFallback = (): JSX.Element => (
-  <div className='flex items-center justify-center h-screen'>
-    <div className='animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary' />
-  </div>
-);
-const RedirectHandler = () => {
-  const { token } = useAuth();
-  return token ? <Navigate to={ROUTES.HOME} replace /> : <Navigate to={ROUTES.AUTH} replace />;
-};
 
 export const createPrivateRoute = (Component: React.ComponentType): JSX.Element => {
   return (
@@ -35,6 +27,14 @@ export const router = createBrowserRouter(
     <>
       <Route path={ROUTES.HOME} element={createPrivateRoute(Home)} />
       <Route
+        path={ROUTES.AUTH}
+        element={
+          <Suspense fallback={<LoadingFallback />}>
+            <LoginPage />
+          </Suspense>
+        }
+      />
+      <Route
         path={ROUTES.UN_AUTHORIZED}
         element={
           <Suspense fallback={<LoadingFallback />}>
@@ -42,7 +42,14 @@ export const router = createBrowserRouter(
           </Suspense>
         }
       />
-      <Route path='*' element={<RedirectHandler />} />
+      <Route
+        path="*"
+        element={
+          <Suspense fallback={<LoadingFallback />}>
+            <NotFoundPage />
+          </Suspense>
+        }
+      />
     </>
   ),
   { basename: '/app' }
