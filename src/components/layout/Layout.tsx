@@ -8,7 +8,7 @@ import { Sidebar } from '../sidebar';
  * Main layout component that wraps the application
  * Provides sidebar navigation and main content area using Outlet
  */
-export function Layout(): JSX.Element {
+const Layout = (): JSX.Element => {
   return (
     <div className='flex h-screen bg-gray-50'>
       {/* Sidebar */}
@@ -23,3 +23,6 @@ export function Layout(): JSX.Element {
     </div>
   );
 }
+
+export default Layout;
+

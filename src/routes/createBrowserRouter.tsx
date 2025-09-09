@@ -3,10 +3,10 @@ import React, { lazy, Suspense, JSX } from 'react';
 import { Route, createBrowserRouter, createRoutesFromElements, Navigate } from 'react-router-dom';
 
 import { LoadingFallback } from '#/components/common/LoadingFallback';
-import { Layout } from '#/components/layout/Layout';
 import { ROUTES } from '#/constants';
 import { appSidebarRoutes } from '#/routes/appSidebarRoutes';
 import { PrivateRoute } from '#/routes/PrivateRoute';
+import { Layout } from '#/components/layout';
 
 const LoginPage = lazy(() => import('#/pages/LoginPage'));
 const Unauthorized = lazy(() => import('#/pages/UnauthorizedPage'));

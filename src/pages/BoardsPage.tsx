@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 
-export default function Boards(): JSX.Element {
+export default function BoardsPage(): JSX.Element {
   return (
     <div className='p-8'>
       <h1 className='text-2xl font-bold text-gray-900'>Boards</h1>
