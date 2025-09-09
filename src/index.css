@@ -95,6 +95,9 @@
   --color-sidebar-border: var(--sidebar-border);
 
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-blue: var(--blue);
+  --color-blue-foreground: var(--blue-foreground);
 }
 
 /* ---break---
@@ -165,6 +168,9 @@
   --sidebar-border: oklch(0.922 0 0);
 
   --sidebar-ring: oklch(0.708 0 0);
+
+  --blue: oklch(0.6 0.2 240);
+  --blue-foreground: oklch(0.98 0 0);
 }
 
 /* ---break---
@@ -233,6 +239,9 @@
   --sidebar-border: oklch(1 0 0 / 10%);
 
   --sidebar-ring: oklch(0.556 0 0);
+
+  --blue: oklch(0.7 0.25 240);
+  --blue-foreground: oklch(0.98 0 0);
 }
 
 /* ---break---
@@ -244,5 +253,52 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Blue color utilities */
+  .text-blue {
+    color: var(--blue);
+  }
+  
+  .bg-blue {
+    background-color: var(--blue);
+  }
+  
+  .bg-blue-50 {
+    background-color: oklch(from var(--blue) 0.95 l c h);
+  }
+  
+  .bg-blue-100 {
+    background-color: oklch(from var(--blue) 0.9 l c h);
+  }
+  
+  .bg-blue-200 {
+    background-color: oklch(from var(--blue) 0.8 l c h);
+  }
+  
+  .text-blue-600 {
+    color: oklch(from var(--blue) 0.6 l c h);
+  }
+  
+  .text-blue-700 {
+    color: oklch(from var(--blue) 0.5 l c h);
+  }
+  
+  .text-blue-800 {
+    color: oklch(from var(--blue) 0.4 l c h);
+  }
+  
+  .border-blue-200 {
+    border-color: oklch(from var(--blue) 0.8 l c h);
+  }
+  
+  .hover\:bg-blue-50:hover {
+    background-color: oklch(from var(--blue) 0.95 l c h);
+  }
+  
+  .hover\:text-blue-600:hover {
+    color: oklch(from var(--blue) 0.6 l c h);
   }
 }
