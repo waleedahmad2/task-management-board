@@ -22,28 +22,33 @@ interface KanbanGroupedBoardProps<T> {
 const DefaultEmpty = ({ label }: { label: string }): JSX.Element => <KanbanEmpty label={label} />;
 
 const KanbanGroupedBoard = <T,>({
-  sections,
+  sections = [],
   renderItem,
   emptyRender,
   className = '',
 }: KanbanGroupedBoardProps<T>): JSX.Element => (
   <KanbanBoard className={className}>
-    {sections.map(section => (
-      <KanbanColumn
-        key={section.key}
-        title={section.title}
-        count={section.items.length}
-        dotColorClass={cn('w-3 h-3 rounded-full', section.dotColorClass)}
-      >
-        {section.items.length > 0 ? (
-          section.items.map((item, index) => renderItem(item, index))
-        ) : emptyRender ? (
-          emptyRender(section.key)
-        ) : (
-          <DefaultEmpty label={section.title.toLowerCase()} />
-        )}
-      </KanbanColumn>
-    ))}
+    {sections.map(section => {
+      const { key, title, items = [], dotColorClass } = section || {};
+      const itemsCount = items?.length || 0;
+      
+      return (
+        <KanbanColumn
+          key={key}
+          title={title}
+          count={itemsCount}
+          dotColorClass={cn('w-3 h-3 rounded-full', dotColorClass)}
+        >
+          {itemsCount > 0 ? (
+            items.map((item, index) => renderItem(item, index))
+          ) : emptyRender ? (
+            emptyRender(key)
+          ) : (
+            <DefaultEmpty label={title?.toLowerCase()} />
+          )}
+        </KanbanColumn>
+      );
+    })}
   </KanbanBoard>
 );
 

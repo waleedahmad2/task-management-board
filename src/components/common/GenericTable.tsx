@@ -9,7 +9,6 @@ import { cn } from '#/utils';
  * Generic table component for displaying data in a structured format
  */
 const GenericTable = <T extends Record<string, unknown>>({
-  data,
   columns,
   sections,
   onRowClick,
@@ -108,16 +107,13 @@ const GenericTable = <T extends Record<string, unknown>>({
   }
 
   // Render simple table if no sections and no data
-    return (
-      <div className={cn('overflow-hidden', className)}>
-        <div className='p-8 text-center text-gray-500'>
-          <p>{emptyMessage}</p>
-        </div>
+  return (
+    <div className={cn('overflow-hidden', className)}>
+      <div className='p-8 text-center text-gray-500'>
+        <p>{emptyMessage}</p>
       </div>
-    );
-
-
- 
+    </div>
+  );
 };
 
 export default GenericTable;
