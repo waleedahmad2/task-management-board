@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 
-import TooltipWrapper from '#/components/ui/TooltipWrapper';
+import { TooltipWrapper } from '#/components/common';
 import { getSizeClasses } from '#/lib/utils';
 import { MemberAvatarProps } from '#/types';
 import { cn } from '#/utils';

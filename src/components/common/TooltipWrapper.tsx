@@ -1,6 +1,6 @@
 import { JSX, ReactNode } from 'react';
 
-import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 /**
  * Props for TooltipWrapper component

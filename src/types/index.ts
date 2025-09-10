@@ -16,3 +16,9 @@ export type * from './home/api.types';
 export type * from './home/post.types';
 export type * from './projects';
 export type * from './genericTable';
+
+// Export hooks types
+export type * from './hooks';
+
+// Export component types
+export type * from './components';

@@ -1,9 +1,8 @@
-import { JSX, useState, useMemo, useEffect, useRef } from 'react';
+import { JSX, useState, useRef } from 'react';
 
-import { AppHeader, ViewType, Pagination } from '#/components/common';
+import { AppHeader, PaginationFooter, ViewType } from '#/components/common';
 import { TableSkeleton, KanbanColumnsSkeleton } from '#/components/skeletons';
-import { dummyProjects } from '#/data/projects/dummyData';
-import { usePagination } from '#/hooks/usePagination';
+import { useProjects } from '#/hooks';
 import ProjectsTable from './ProjectsTable';
 import ProjectStatusColumns from './ProjectStatusColumns';
 
@@ -11,44 +10,26 @@ import ProjectStatusColumns from './ProjectStatusColumns';
  * Projects component that displays the projects list with search functionality
  */
 const Projects = (): JSX.Element => {
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [projects] = useState(dummyProjects);
-  const [isLoading] = useState<boolean>(false);
   const [currentView, setCurrentView] = useState<ViewType>('table');
 
-  // Debounced search value to control skeleton visibility and expensive filtering
-  const [debouncedSearch, setDebouncedSearch] = useState<string>('');
-  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
-    searchDebounceRef.current = setTimeout(() => {
-      setDebouncedSearch(searchValue);
-    }, 250);
-    return () => {
-      if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
-    };
-  }, [searchValue]);
-
-  const filteredProjects = useMemo(() => {
-    const term = debouncedSearch.trim().toLowerCase();
-    if (!term) return projects;
-    return projects.filter(
-      project =>
-        project.name.toLowerCase().includes(term) ||
-        project.description.toLowerCase().includes(term) ||
-        project.owner.name.toLowerCase().includes(term)
-    );
-  }, [debouncedSearch]);
-
-  // Pagination hook
-  const { paginatedData, currentPage, totalPages, goToPage, totalItems } = usePagination(filteredProjects, {
+  // Use the custom projects hook
+  const {
+    projects,
+    totalItems,
+    currentPage,
+    pageSize,
+    isLoading,
+    isSearching,
+    goToPage,
+    setSearchTerm,
+    setPageSize,
+  } = useProjects({
     pageSize: 10,
+    searchDebounceMs: 300,
   });
 
   const handleSearch = (searchValue: string): void => {
-    setSearchValue(searchValue);
-    goToPage(1);
+    setSearchTerm(searchValue);
   };
 
   const handleProjectClick = (): void => {
@@ -66,10 +47,8 @@ const Projects = (): JSX.Element => {
     switchTimerRef.current = setTimeout(() => setIsSwitchingView(false), 250);
   };
 
-  const isSearching = searchValue !== debouncedSearch;
-
   return (
-    <div>
+    <div className='flex flex-col h-full'>
       <AppHeader
         title='Projects'
         description={`${totalItems} projects found. Click on a project to open its board.`}
@@ -81,32 +60,37 @@ const Projects = (): JSX.Element => {
         onViewChange={handleViewChange}
       />
 
-      <div className='px-8 pb-8'>
+      <div className='flex-1 overflow-y-auto px-8 pb-20'>
         {currentView === 'table' ? (
           <>
-            {isSwitchingView || isSearching || isLoading ? (
+            {isSwitchingView || isLoading || isSearching ? (
               <TableSkeleton rows={6} columns={6} />
             ) : (
-              <ProjectsTable projects={paginatedData} onProjectClick={handleProjectClick} loading={isLoading} />
-            )}
-
-            {totalPages > 1 && !isSearching && !isSwitchingView && (
-              <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={goToPage} />
+              <ProjectsTable projects={projects} onProjectClick={handleProjectClick} loading={isLoading} />
             )}
           </>
         ) : (
           <>
-            {isSwitchingView || isSearching || isLoading ? (
+            {isSwitchingView || isLoading || isSearching ? (
               <KanbanColumnsSkeleton columns={3} cardsPerColumn={3} />
             ) : (
-              <ProjectStatusColumns projects={paginatedData} onProjectClick={handleProjectClick} />
-            )}
-
-            {totalPages > 1 && !isSearching && !isSwitchingView && (
-              <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={goToPage} />
+              <ProjectStatusColumns projects={projects} onProjectClick={handleProjectClick} />
             )}
           </>
         )}
+      </div>
+
+      <div className='sticky bottom-0'>
+        <PaginationFooter
+          pageSizes={['10', '20', '50', '100']}
+          pageSize={pageSize.toString()}
+          setPageSize={(value: string) => setPageSize(parseInt(value))}
+          currentPage={currentPage}
+          handlePageChange={goToPage}
+          totalCount={totalItems}
+          isActionsDisabled={isSwitchingView}
+          isLoading={isLoading || isSwitchingView}
+        />
       </div>
     </div>
   );
