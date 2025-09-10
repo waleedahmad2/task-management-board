@@ -1,14 +1,15 @@
 import React, { lazy, Suspense, JSX } from 'react';
 
-import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import { Route, createBrowserRouter, createRoutesFromElements, Navigate } from 'react-router-dom';
 
-import { LoadingFallback } from '#/components/common/LoadingFallback';
+import { LoadingFallback } from '#/components/common';
+import { Layout } from '#/components/layout';
 import { ROUTES } from '#/constants';
+import { appSidebarRoutes } from '#/routes/appSidebarRoutes';
 import { PrivateRoute } from '#/routes/PrivateRoute';
 
-const Home = lazy(() => import('#/pages/Home'));
 const LoginPage = lazy(() => import('#/pages/LoginPage'));
-const Unauthorized = lazy(() => import('#/pages/Unauthorized'));
+const Unauthorized = lazy(() => import('#/pages/UnauthorizedPage'));
 const NotFoundPage = lazy(() => import('#/pages/NotFoundPage'));
 
 export const createPrivateRoute = (Component: React.ComponentType): JSX.Element => {
@@ -24,7 +25,7 @@ export const createPrivateRoute = (Component: React.ComponentType): JSX.Element 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path={ROUTES.HOME} element={createPrivateRoute(Home)} />
+      {/* Auth routes */}
       <Route
         path={ROUTES.AUTH}
         element={
@@ -33,6 +34,25 @@ export const router = createBrowserRouter(
           </Suspense>
         }
       />
+
+      {/* Protected app routes with layout */}
+      <Route path={ROUTES.HOME} element={createPrivateRoute(Layout)}>
+        {/* Default redirect to Projects */}
+        <Route index element={<Navigate to={ROUTES.PROJECTS} replace />} />
+        {appSidebarRoutes.map(({ path, Component }) => (
+          <Route
+            key={path}
+            path={path}
+            element={
+              <Suspense fallback={<LoadingFallback />}>
+                <Component />
+              </Suspense>
+            }
+          />
+        ))}
+      </Route>
+
+      {/* Unauthorized */}
       <Route
         path={ROUTES.UN_AUTHORIZED}
         element={
@@ -41,6 +61,8 @@ export const router = createBrowserRouter(
           </Suspense>
         }
       />
+
+      {/* 404 */}
       <Route
         path='*'
         element={

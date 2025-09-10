@@ -6,6 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
+import { TooltipProvider } from '#/components/ui/tooltip';
 import { AuthProvider } from '#/context';
 import { router } from '#/routes';
 import ErrorFallback from './components/errorFallback/ErrorFallback';
@@ -22,9 +23,11 @@ function AppContent(): JSX.Element {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <ToastContainer />
-      <ReactQueryDevtools />
+      <TooltipProvider>
+        <RouterProvider router={router} />
+        <ToastContainer />
+        <ReactQueryDevtools />
+      </TooltipProvider>
     </QueryClientProvider>
   );
 }
