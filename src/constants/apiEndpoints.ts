@@ -1,3 +1,5 @@
 export const apiEndpoints = {
-  POSTS: '/posts',
+  PROJECTS: {
+    LIST: '/projects',
+  },
 };
