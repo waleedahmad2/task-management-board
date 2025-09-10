@@ -302,3 +302,30 @@
     color: oklch(from var(--blue) 0.6 l c h);
   }
 }
+
+/* Skeleton loading classes */
+@layer components {
+  .skeleton-base {
+    @apply bg-gray-200 animate-pulse;
+  }
+  
+  .skeleton-rounded {
+    @apply skeleton-base rounded;
+  }
+  
+  .skeleton-rounded-full {
+    @apply skeleton-base rounded-full;
+  }
+  
+  .skeleton-border {
+    @apply border-gray-200;
+  }
+  
+  .skeleton-border-light {
+    @apply border-gray-100;
+  }
+  
+  .skeleton-border-white {
+    @apply border-white;
+  }
+}

@@ -46,3 +46,13 @@ export const PROJECT_TABLE_COLUMNS = [
   { key: 'updatedAt', header: 'Last Updated', width: '15%' },
   { key: 'status', header: 'Status', width: '10%' },
 ] as const;
+
+/**
+ * View type constants
+ */
+export const VIEW_TYPES = {
+  TABLE: 'table',
+  CARD: 'card',
+} as const;
+
+export type ViewType = (typeof VIEW_TYPES)[keyof typeof VIEW_TYPES];

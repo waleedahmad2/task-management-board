@@ -1,7 +1,7 @@
 import { JSX, useMemo } from 'react';
 
 import GenericTable from '#/components/common/GenericTable';
-import { PROJECT_STATUSES, STATUS_LABELS, getStatusDotColor, PROJECT_TABLE_COLUMNS } from '#/constants';
+import { PROJECT_STATUSES, STATUS_LABELS, getStatusDotColor, PROJECT_TABLE_COLUMNS, HOVER_COLORS } from '#/constants';
 import { ProjectsTableProps, Project, ProjectStatus } from '#/types';
 import { cn } from '#/utils';
 import ProjectTableColumn, { ColumnType } from './ProjectTableColumn';
@@ -60,7 +60,7 @@ const ProjectsTable = ({
       loading={loading}
       emptyMessage='No projects found. Create your first project to get started.'
       className={className}
-      rowClassName='hover:bg-indigo-50'
+      rowClassName={HOVER_COLORS.indigo50}
     />
   );
 };

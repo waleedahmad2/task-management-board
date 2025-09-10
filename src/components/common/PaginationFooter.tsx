@@ -28,7 +28,7 @@ const PaginationFooter = memo<PaginationFooterProps>(
     const isHidePagination = totalCount === 0;
 
     return (
-      <div className=' px-3 py-4 flex justify-between border-t border-gray-200'>
+      <div className='px-3 py-4 flex justify-between border-t border-gray-200'>
         <CustomSelect
           value={pageSize}
           dropdownItemsList={pageSizes}

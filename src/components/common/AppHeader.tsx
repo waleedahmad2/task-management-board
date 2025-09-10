@@ -1,5 +1,6 @@
 import { JSX, ReactNode } from 'react';
 
+import { cn } from '#/utils';
 import SearchInput from './SearchInput';
 import ViewToggle, { ViewType } from './ViewToggle';
 
@@ -34,7 +35,7 @@ const AppHeader = ({
   rightContent,
   className = '',
 }: AppHeaderProps): JSX.Element => (
-  <div className={`flex items-center justify-between p-8 ${className}`}>
+  <div className={cn('flex items-center justify-between p-8', className)}>
     <div className='flex-1'>
       <h1 className='text-2xl font-bold text-gray-900'>{title}</h1>
       {description && <p className='text-gray-600 mt-2'>{description}</p>}

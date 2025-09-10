@@ -52,3 +52,13 @@ export const STATUS_DOT_COLORS = {
   draft: 'bg-yellow-500',
   archived: 'bg-gray-500',
 } as const;
+
+/**
+ * Generic hover color classes
+ */
+export const HOVER_COLORS = {
+  indigo50: 'hover:bg-indigo-50',
+  blue50: 'hover:bg-blue-50',
+  gray50: 'hover:bg-gray-50',
+  white: 'hover:bg-white',
+} as const;

@@ -1,8 +1,8 @@
 import { JSX, useState, useRef } from 'react';
 
-import { AppHeader, PaginationFooter, ViewType } from '#/components/common';
+import { AppHeader, PaginationFooter } from '#/components/common';
 import { TableSkeleton, KanbanColumnsSkeleton } from '#/components/skeletons';
-import { PAGE_SIZES } from '#/constants';
+import { PAGE_SIZES, VIEW_TYPES, ViewType } from '#/constants';
 import { useProjects } from '#/hooks';
 import ProjectsTable from './ProjectsTable';
 import ProjectStatusColumns from './ProjectStatusColumns';
@@ -11,7 +11,7 @@ import ProjectStatusColumns from './ProjectStatusColumns';
  * Projects component that displays the projects list with search functionality
  */
 const Projects = (): JSX.Element => {
-  const [currentView, setCurrentView] = useState<ViewType>('table');
+  const [currentView, setCurrentView] = useState<ViewType>(VIEW_TYPES.TABLE);
 
   // Use the custom projects hook
   const { projects, totalItems, currentPage, pageSize, isLoading, isSearching, goToPage, setSearchTerm, setPageSize } =
@@ -53,7 +53,7 @@ const Projects = (): JSX.Element => {
       />
 
       <div className='flex-1 overflow-y-auto px-8 pb-20'>
-        {currentView === 'table' ? (
+        {currentView === VIEW_TYPES.TABLE ? (
           <>
             {isSwitchingView || isLoading || isSearching ? (
               <TableSkeleton rows={6} columns={6} />

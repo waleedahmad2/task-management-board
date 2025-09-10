@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 
-import { range } from '#/utils';
+import { range, cn } from '#/utils';
 
 interface TableSkeletonProps {
   rows?: number;
@@ -9,7 +9,7 @@ interface TableSkeletonProps {
 }
 
 const TableSkeleton = ({ rows = 6, columns = 6, className = '' }: TableSkeletonProps): JSX.Element => (
-  <div className={`bg-white rounded-lg overflow-hidden ${className}`}>
+  <div className={cn('bg-white rounded-lg overflow-hidden', className)}>
     <div className='w-full'>
       <div className='bg-gray-50 border-b border-gray-200'>
         <div className='grid grid-cols-6 gap-0'>

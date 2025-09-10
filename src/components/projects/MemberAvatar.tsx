@@ -6,10 +6,6 @@ import { MemberAvatarProps } from '#/types';
 import { cn } from '#/utils';
 
 /**
- * Get size classes
- */
-
-/**
  * Member avatar component with role indicator and tooltip
  */
 const MemberAvatar = ({ member, index, showTooltip = true, size = 'md' }: MemberAvatarProps): JSX.Element => {

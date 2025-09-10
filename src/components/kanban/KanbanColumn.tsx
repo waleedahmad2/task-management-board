@@ -26,7 +26,7 @@ const KanbanColumn = ({
       <span className='text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full'>{count}</span>
     </div>
 
-    <div className='space-y-3 min-h-[400px]'>{children}</div>
+    <div className='space-y-3 min-h-[25rem]'>{children}</div>
   </div>
 );
 

@@ -61,7 +61,7 @@ src/
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
+- Node.js (v24 or higher)
 - Yarn package manager
 
 ### Installation
