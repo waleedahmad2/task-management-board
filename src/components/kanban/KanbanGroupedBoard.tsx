@@ -31,7 +31,7 @@ const KanbanGroupedBoard = <T,>({
     {sections.map(section => {
       const { key, title, items = [], dotColorClass } = section || {};
       const itemsCount = items?.length || 0;
-      
+
       return (
         <KanbanColumn
           key={key}
