@@ -43,3 +43,12 @@ export const STATUS_COLORS = {
   archived: 'bg-gray-100 text-gray-800 border-gray-200',
   draft: 'bg-yellow-100 text-yellow-800 border-yellow-200',
 } as const;
+
+/**
+ * Status dot color classes for Kanban columns
+ */
+export const STATUS_DOT_COLORS = {
+  active: 'bg-green-500',
+  draft: 'bg-yellow-500',
+  archived: 'bg-gray-500',
+} as const;

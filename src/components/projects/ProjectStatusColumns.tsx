@@ -1,49 +1,24 @@
 import { JSX, useMemo } from 'react';
 
 import KanbanGroupedBoard, { KanbanSection } from '#/components/kanban/KanbanGroupedBoard';
+import { STATUS_CONFIG, STATUS_DOT_COLORS } from '#/constants';
 import { ProjectStatusColumnsProps, Project, ProjectStatus } from '#/types';
-import { cn } from '#/utils';
 import ProjectCard from './ProjectCard';
 
-/**
- * Status configuration
- */
-const STATUS_CONFIG = {
-  active: {
-    label: 'Active Projects',
-    description: 'Currently active projects',
-    color: 'green',
-  },
-  draft: {
-    label: 'Draft Projects',
-    description: 'Projects in draft status',
-    color: 'yellow',
-  },
-  archived: {
-    label: 'Archived Projects',
-    description: 'Archived projects',
-    color: 'gray',
-  },
-} as const;
-
-/**
- * Project status columns component that groups projects by status
- */
-const ProjectStatusColumns = ({ projects, onProjectClick, className = '' }: ProjectStatusColumnsProps): JSX.Element => {
-  // Group projects by status
+const ProjectStatusColumns = ({ projects = [], onProjectClick, className = '' }: ProjectStatusColumnsProps): JSX.Element => {
   const projectsByStatus = useMemo(() => {
     const grouped = projects.reduce(
       (acc, project) => {
-        if (!acc[project.status]) {
-          acc[project.status] = [];
+        const { status } = project || {};
+        if (!acc[status]) {
+          acc[status] = [];
         }
-        acc[project.status].push(project);
+        acc[status].push(project);
         return acc;
       },
       {} as Record<ProjectStatus, Project[]>
     );
 
-    // Ensure all statuses are present
     const allStatuses: ProjectStatus[] = ['active', 'draft', 'archived'];
     allStatuses.forEach(status => {
       if (!grouped[status]) {
@@ -56,29 +31,35 @@ const ProjectStatusColumns = ({ projects, onProjectClick, className = '' }: Proj
 
   const statusOrder: ProjectStatus[] = ['active', 'draft', 'archived'];
 
-  const sections: KanbanSection<Project>[] = statusOrder.map(status => ({
-    key: status,
-    title: STATUS_CONFIG[status].label,
-    items: projectsByStatus[status],
-    dotColorClass: cn(
-      status === 'active' && 'bg-green-500',
-      status === 'draft' && 'bg-yellow-500',
-      status === 'archived' && 'bg-gray-500'
-    ),
-  }));
+  const sections: KanbanSection<Project>[] = statusOrder.map(status => {
+    const { label } = STATUS_CONFIG[status] || {};
+    const dotColor = STATUS_DOT_COLORS[status] || '';
+    return {
+      key: status,
+      title: label,
+      items: projectsByStatus[status] || [],
+      dotColorClass: dotColor,
+    };
+  });
 
   return (
     <KanbanGroupedBoard
       sections={sections}
       className={className}
-      renderItem={project => <ProjectCard key={project.id} project={project} onClick={onProjectClick} />}
-      emptyRender={key => (
-        <div className='bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center'>
-          <p className='text-sm text-gray-500'>
-            No {STATUS_CONFIG[key as keyof typeof STATUS_CONFIG].label.toLowerCase()}
-          </p>
-        </div>
-      )}
+      renderItem={project => {
+        const { id } = project || {};
+        return <ProjectCard key={id} project={project} onClick={onProjectClick} />;
+      }}
+      emptyRender={key => {
+        const { label } = STATUS_CONFIG[key as keyof typeof STATUS_CONFIG] || {};
+        return (
+          <div className='bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center'>
+            <p className='text-sm text-gray-500'>
+              No {label?.toLowerCase()}
+            </p>
+          </div>
+        );
+      }}
     />
   );
 };

@@ -13,6 +13,7 @@ import { cn } from '#/utils';
  * Member avatar component with role indicator and tooltip
  */
 const MemberAvatar = ({ member, index, showTooltip = true, size = 'md' }: MemberAvatarProps): JSX.Element => {
+  const { name, avatar, role } = member || {};
   const { avatar: avatarSize } = getSizeClasses(size);
   const zIndex = 10 - index;
 
@@ -24,10 +25,10 @@ const MemberAvatar = ({ member, index, showTooltip = true, size = 'md' }: Member
           avatarSize
         )}
       >
-        {member.avatar ? (
-          <img src={member.avatar} alt={member.name} className='w-full h-full rounded-full object-cover' />
+        {avatar ? (
+          <img src={avatar} alt={name} className='w-full h-full rounded-full object-cover' />
         ) : (
-          member.name.charAt(0).toUpperCase()
+          name?.charAt(0).toUpperCase()
         )}
       </div>
     </div>
@@ -35,7 +36,7 @@ const MemberAvatar = ({ member, index, showTooltip = true, size = 'md' }: Member
 
   if (showTooltip) {
     return (
-      <TooltipWrapper content={`${member.name} (${member.role})`} side='top' align='center'>
+      <TooltipWrapper content={`${name} (${role})`} side='top' align='center'>
         {avatarElement}
       </TooltipWrapper>
     );
