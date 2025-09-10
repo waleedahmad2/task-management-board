@@ -29,11 +29,7 @@ const STATUS_CONFIG = {
 /**
  * Project status columns component that groups projects by status
  */
-const ProjectStatusColumns = ({
-  projects,
-  onProjectClick,
-  className = '',
-}: ProjectStatusColumnsProps): JSX.Element => {
+const ProjectStatusColumns = ({ projects, onProjectClick, className = '' }: ProjectStatusColumnsProps): JSX.Element => {
   // Group projects by status
   const projectsByStatus = useMemo(() => {
     const grouped = projects.reduce(
