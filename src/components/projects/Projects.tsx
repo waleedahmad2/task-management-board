@@ -13,20 +13,11 @@ const Projects = (): JSX.Element => {
   const [currentView, setCurrentView] = useState<ViewType>('table');
 
   // Use the custom projects hook
-  const {
-    projects,
-    totalItems,
-    currentPage,
-    pageSize,
-    isLoading,
-    isSearching,
-    goToPage,
-    setSearchTerm,
-    setPageSize,
-  } = useProjects({
-    pageSize: 10,
-    searchDebounceMs: 300,
-  });
+  const { projects, totalItems, currentPage, pageSize, isLoading, isSearching, goToPage, setSearchTerm, setPageSize } =
+    useProjects({
+      pageSize: 10,
+      searchDebounceMs: 300,
+    });
 
   const handleSearch = (searchValue: string): void => {
     setSearchTerm(searchValue);
