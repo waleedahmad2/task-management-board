@@ -1,7 +1,6 @@
 import { JSX, useState, useMemo, useEffect, useRef } from 'react';
 
-import { AppHeader, ViewType } from '#/components/common';
-import Pagination from '#/components/common/Pagination';
+import { AppHeader, ViewType, Pagination } from '#/components/common';
 import { TableSkeleton, KanbanColumnsSkeleton } from '#/components/skeletons';
 import { dummyProjects } from '#/data/projects/dummyData';
 import { usePagination } from '#/hooks/usePagination';

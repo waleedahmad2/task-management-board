@@ -5,5 +5,5 @@ export { default as SearchInput } from './SearchInput';
 export { default as AppHeader } from './AppHeader';
 export { default as NoData } from './NoData';
 export { default as GenericTable } from './GenericTable';
-export { default as Pagination } from './Pagination';
+export * from './Pagination';
 export { default as ViewToggle, type ViewType } from './ViewToggle';

@@ -1,4 +1,4 @@
-import type { Project } from '#/components/projects/ProjectCard';
+import type { Project } from '#/types';
 
 /**
  * Dummy project data for development and testing

@@ -4,58 +4,9 @@ import { Calendar, User } from 'lucide-react';
 
 import GenericTable from '#/components/common/GenericTable';
 import { STATUS_COLORS } from '#/constants';
+import { ProjectsTableProps, Project, ProjectStatus } from '#/types';
 import { cn, formatDate } from '#/utils';
 import MemberAvatar from './MemberAvatar';
-
-/**
- * Project status type
- */
-type ProjectStatus = 'active' | 'archived' | 'draft';
-
-/**
- * Member role type
- */
-type MemberRole = 'admin' | 'editor' | 'viewer';
-
-/**
- * Project member interface
- */
-interface ProjectMember {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-  role: MemberRole;
-}
-
-/**
- * Project interface
- */
-interface Project {
-  id: string;
-  name: string;
-  description: string;
-  status: ProjectStatus;
-  createdAt: string;
-  updatedAt: string;
-  owner: {
-    id: string;
-    name: string;
-    email: string;
-    avatar?: string;
-  };
-  members: ProjectMember[];
-}
-
-/**
- * Props for ProjectsTable component
- */
-interface ProjectsTableProps {
-  projects: Project[];
-  onProjectClick: (project: Project) => void;
-  loading?: boolean;
-  className?: string;
-}
 
 /**
  * Get status color classes

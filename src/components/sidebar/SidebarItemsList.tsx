@@ -3,6 +3,7 @@ import { JSX, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { NAVIGATION_ITEMS } from '#/constants';
+import { getLocalStorageItem, setLocalStorageItem } from '#/utils';
 import SidebarListItem from './SidebarListItem';
 
 const SELECTED_KEY = 'sidebar:selected:path';
@@ -15,17 +16,11 @@ const SidebarItemsList = (): JSX.Element => {
   const { pathname } = useLocation();
 
   const handleNavigation = (path: string): void => {
-    localStorage.setItem(SELECTED_KEY, path);
+    setLocalStorageItem(SELECTED_KEY, path);
     navigate(path);
   };
 
-  const persistedSelectedPath = useMemo<string | null>(() => {
-    try {
-      return localStorage.getItem(SELECTED_KEY);
-    } catch {
-      return null;
-    }
-  }, []);
+  const persistedSelectedPath = getLocalStorageItem<string>(SELECTED_KEY);
 
   const selectedPath = pathname && pathname !== '' ? pathname : persistedSelectedPath || '';
 

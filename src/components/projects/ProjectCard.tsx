@@ -2,60 +2,12 @@ import { JSX } from 'react';
 
 import { Users } from 'lucide-react';
 
+import { ProjectCardProps } from '#/types';
 import { cn } from '#/utils';
 import MemberAvatar from './MemberAvatar';
 import ProjectCardFooter from './ProjectCardFooter';
 import ProjectCardHeader from './ProjectCardHeader';
 import ProjectCardOwner from './ProjectCardOwner';
-
-/**
- * Project status type
- */
-type ProjectStatus = 'active' | 'archived' | 'draft';
-
-/**
- * Member role type
- */
-type MemberRole = 'admin' | 'editor' | 'viewer';
-
-/**
- * Project member interface
- */
-interface ProjectMember {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-  role: MemberRole;
-}
-
-/**
- * Project interface
- */
-interface Project {
-  id: string;
-  name: string;
-  description: string;
-  status: ProjectStatus;
-  createdAt: string;
-  updatedAt: string;
-  owner: {
-    id: string;
-    name: string;
-    email: string;
-    avatar?: string;
-  };
-  members: ProjectMember[];
-}
-
-/**
- * Props for ProjectCard component
- */
-interface ProjectCardProps {
-  project: Project;
-  onClick?: (project: Project) => void;
-  className?: string;
-}
 
 /**
  * Project card component displaying project information and members

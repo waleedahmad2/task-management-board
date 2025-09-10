@@ -1,45 +1,9 @@
-import React, { JSX, ReactNode } from 'react';
+import React, { JSX } from 'react';
 
+import TableSkeleton from '#/components/skeletons/TableSkeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '#/components/ui/table';
+import { TableSection, GenericTableProps } from '#/types';
 import { cn } from '#/utils';
-
-/**
- * Column definition interface
- */
-interface Column<T> {
-  key: keyof T | string;
-  header: string;
-  render?: (item: T, index: number) => ReactNode;
-  sortable?: boolean;
-  width?: string;
-  className?: string;
-}
-
-/**
- * Section definition interface for grouped tables
- */
-interface TableSection<T> {
-  title: string;
-  data: T[];
-  icon?: ReactNode;
-  color?: string;
-  count?: number;
-}
-
-/**
- * Props for GenericTable component
- */
-interface GenericTableProps<T> {
-  data?: T[];
-  columns: Column<T>[];
-  sections?: TableSection<T>[];
-  onRowClick?: (item: T, index: number) => void;
-  loading?: boolean;
-  emptyMessage?: string;
-  className?: string;
-  rowClassName?: string | ((item: T, index: number) => string);
-  showBorders?: boolean;
-}
 
 /**
  * Generic table component for displaying data in a structured format
@@ -88,16 +52,7 @@ const GenericTable = <T extends Record<string, unknown>>({
   );
 
   if (loading) {
-    return (
-      <div className={cn('overflow-hidden', className)}>
-        <div className='p-8 text-center text-gray-500'>
-          <div className='animate-pulse'>
-            <div className='h-4 bg-gray-200 rounded w-1/4 mx-auto mb-4'></div>
-            <div className='h-4 bg-gray-200 rounded w-1/2 mx-auto'></div>
-          </div>
-        </div>
-      </div>
-    );
+    return <TableSkeleton rows={10} columns={10} />;
   }
 
   if (sections) {
@@ -152,7 +107,7 @@ const GenericTable = <T extends Record<string, unknown>>({
     );
   }
 
-  // Render simple table
+  // Render simple table if no sections and no data
   if (!data || data.length === 0) {
     return (
       <div className={cn('overflow-hidden', className)}>

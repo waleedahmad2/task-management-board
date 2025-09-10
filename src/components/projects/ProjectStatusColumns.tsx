@@ -1,55 +1,9 @@
 import { JSX, useMemo } from 'react';
 
 import KanbanGroupedBoard, { KanbanSection } from '#/components/kanban/KanbanGroupedBoard';
+import { ProjectStatusColumnsProps, Project, ProjectStatus } from '#/types';
 import { cn } from '#/utils';
 import ProjectCard from './ProjectCard';
-
-/**
- * Project status type
- */
-type ProjectStatus = 'active' | 'archived' | 'draft';
-
-/**
- * Project member interface
- */
-interface ProjectMember {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-  role: 'admin' | 'editor' | 'viewer';
-}
-
-/**
- * Project interface
- */
-interface Project {
-  id: string;
-  name: string;
-  description: string;
-  status: ProjectStatus;
-  createdAt: string;
-  updatedAt: string;
-  owner: {
-    id: string;
-    name: string;
-    email: string;
-    avatar?: string;
-  };
-  members: ProjectMember[];
-}
-
-/**
- * Props for ProjectStatusColumns component
- */
-interface ProjectStatusColumnsProps {
-  projects: Project[];
-  onProjectClick: (project: Project) => void;
-  onProjectEdit?: (project: Project) => void;
-  onProjectDelete?: (project: Project) => void;
-  onProjectView?: (project: Project) => void;
-  className?: string;
-}
 
 /**
  * Status configuration
@@ -78,9 +32,6 @@ const STATUS_CONFIG = {
 const ProjectStatusColumns = ({
   projects,
   onProjectClick,
-  onProjectEdit,
-  onProjectDelete,
-  onProjectView,
   className = '',
 }: ProjectStatusColumnsProps): JSX.Element => {
   // Group projects by status
@@ -124,16 +75,7 @@ const ProjectStatusColumns = ({
     <KanbanGroupedBoard
       sections={sections}
       className={className}
-      renderItem={project => (
-        <ProjectCard
-          key={project.id}
-          project={project}
-          onClick={onProjectClick}
-          onEdit={onProjectEdit}
-          onDelete={onProjectDelete}
-          onView={onProjectView}
-        />
-      )}
+      renderItem={project => <ProjectCard key={project.id} project={project} onClick={onProjectClick} />}
       emptyRender={key => (
         <div className='bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center'>
           <p className='text-sm text-gray-500'>
