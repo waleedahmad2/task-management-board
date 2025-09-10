@@ -50,7 +50,7 @@ const AppHeader = ({
         />
       )}
 
-      {showViewToggle && <ViewToggle currentView={currentView} onViewChange={onViewChange || (() => undefined)} />}
+      {showViewToggle && onViewChange && <ViewToggle currentView={currentView} onViewChange={onViewChange} />}
 
       {rightContent}
     </div>
