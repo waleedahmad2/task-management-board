@@ -1,5 +1,6 @@
 import { JSX } from 'react';
 
+import { range } from '#/utils';
 import ProjectCardSkeleton from './ProjectCardSkeleton';
 
 interface KanbanColumnsSkeletonProps {
@@ -15,7 +16,7 @@ const KanbanColumnsSkeleton = ({
 }: KanbanColumnsSkeletonProps): JSX.Element => (
   <div className={`px-6 pb-6 ${className}`}>
     <div className='flex gap-6 overflow-x-auto pb-4'>
-      {Array.from({ length: columns }).map((_, colIdx) => (
+      {range(columns).map(colIdx => (
         <div key={colIdx} className='flex-shrink-0 w-80'>
           <div className='flex items-center justify-between mb-3'>
             <div className='flex items-center space-x-2'>
@@ -26,7 +27,7 @@ const KanbanColumnsSkeleton = ({
           </div>
 
           <div className='space-y-3 min-h-[400px]'>
-            {Array.from({ length: cardsPerColumn }).map((__, cardIdx) => (
+            {range(cardsPerColumn).map(cardIdx => (
               <ProjectCardSkeleton key={cardIdx} />
             ))}
           </div>

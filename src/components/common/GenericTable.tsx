@@ -108,7 +108,6 @@ const GenericTable = <T extends Record<string, unknown>>({
   }
 
   // Render simple table if no sections and no data
-  if (!data || data.length === 0) {
     return (
       <div className={cn('overflow-hidden', className)}>
         <div className='p-8 text-center text-gray-500'>
@@ -116,37 +115,9 @@ const GenericTable = <T extends Record<string, unknown>>({
         </div>
       </div>
     );
-  }
 
-  return (
-    <div className={cn('overflow-hidden', className)}>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {columns.map((column, index) => (
-              <TableHead
-                key={index}
-                className={cn('h-10 px-2 text-left align-middle font-medium text-muted-foreground', column.className)}
-                style={{ width: column.width }}
-              >
-                <div className='flex items-center space-x-1'>
-                  <span>{column.header}</span>
-                  {column.sortable && (
-                    <div className='flex flex-col'>
-                      <svg className='w-3 h-3 text-gray-400' fill='currentColor' viewBox='0 0 20 20'>
-                        <path d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>{data.map((item, index) => renderRow(item, index))}</TableBody>
-      </Table>
-    </div>
-  );
+
+ 
 };
 
 export default GenericTable;

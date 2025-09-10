@@ -10,7 +10,6 @@ const ProjectStatusColumns = ({
   onProjectClick,
   className = '',
 }: ProjectStatusColumnsProps): JSX.Element => {
-  
   const projectsByStatus = useMemo(() => {
     const grouped = projects.reduce(
       (acc, project) => {

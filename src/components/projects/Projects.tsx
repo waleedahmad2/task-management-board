@@ -2,6 +2,7 @@ import { JSX, useState, useRef } from 'react';
 
 import { AppHeader, PaginationFooter, ViewType } from '#/components/common';
 import { TableSkeleton, KanbanColumnsSkeleton } from '#/components/skeletons';
+import { PAGE_SIZES } from '#/constants';
 import { useProjects } from '#/hooks';
 import ProjectsTable from './ProjectsTable';
 import ProjectStatusColumns from './ProjectStatusColumns';
@@ -73,7 +74,7 @@ const Projects = (): JSX.Element => {
 
       <div className='sticky bottom-0'>
         <PaginationFooter
-          pageSizes={['10', '20', '50', '100']}
+          pageSizes={[...PAGE_SIZES]}
           pageSize={pageSize.toString()}
           setPageSize={(value: string) => setPageSize(parseInt(value))}
           currentPage={currentPage}
