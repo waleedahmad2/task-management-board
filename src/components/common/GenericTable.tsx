@@ -31,7 +31,7 @@ const GenericTable = <T extends Record<string, unknown>>({
   const renderSectionHeader = (section: TableSection<T>): JSX.Element => {
     const { icon, title, count } = section || {};
     const columnsLength = columns?.length || 0;
-    
+
     return (
       <TableRow className='bg-gray-50 hover:bg-gray-50'>
         <TableCell colSpan={columnsLength} className='font-semibold text-gray-700 py-3'>
@@ -47,13 +47,13 @@ const GenericTable = <T extends Record<string, unknown>>({
 
   const renderRow = (item: T, index: number): JSX.Element => {
     const columnsList = columns || [];
-    
+
     return (
       <TableRow key={index} className={getRowClassName(item, index)} onClick={() => onRowClick?.(item, index)}>
         {columnsList.map((column, colIndex) => {
           const { render, key, className: columnClassName } = column || {};
           const cellValue = item?.[key] || '';
-          
+
           return (
             <TableCell key={colIndex} className={cn('p-2 align-middle', columnClassName)}>
               {render ? render(item, index) : String(cellValue)}
@@ -94,11 +94,14 @@ const GenericTable = <T extends Record<string, unknown>>({
             <TableRow>
               {columnsList.map((column, index) => {
                 const { header, className: columnClassName, sortable, width } = column || {};
-                
+
                 return (
                   <TableHead
                     key={index}
-                    className={cn('h-10 px-2 text-left align-middle font-medium text-muted-foreground', columnClassName)}
+                    className={cn(
+                      'h-10 px-2 text-left align-middle font-medium text-muted-foreground',
+                      columnClassName
+                    )}
                     style={{ width }}
                   >
                     <div className='flex items-center space-x-1'>
@@ -119,7 +122,7 @@ const GenericTable = <T extends Record<string, unknown>>({
           <TableBody>
             {sectionsList.map((section, sectionIndex) => {
               const { data = [] } = section || {};
-              
+
               return (
                 <React.Fragment key={sectionIndex}>
                   {renderSectionHeader(section)}
