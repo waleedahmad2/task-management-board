@@ -3,7 +3,7 @@ export * from './queryKeys';
 export * from './routes';
 export * from './generic';
 export * from './messages';
-export * from './projectStatus';
+export * from './project';
 export * from './regex';
 export * from './navigation';
 export * from './colors';

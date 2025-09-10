@@ -1,7 +1,7 @@
 import { JSX, useMemo } from 'react';
 
 import KanbanGroupedBoard, { KanbanSection } from '#/components/kanban/KanbanGroupedBoard';
-import { STATUS_CONFIG, STATUS_DOT_COLORS } from '#/constants';
+import { STATUS_CONFIG, STATUS_DOT_COLORS, PROJECT_STATUSES } from '#/constants';
 import { ProjectStatusColumnsProps, Project, ProjectStatus } from '#/types';
 import ProjectCard from './ProjectCard';
 
@@ -23,8 +23,7 @@ const ProjectStatusColumns = ({
       {} as Record<ProjectStatus, Project[]>
     );
 
-    const allStatuses: ProjectStatus[] = ['active', 'draft', 'archived'];
-    allStatuses.forEach(status => {
+    PROJECT_STATUSES.forEach(status => {
       if (!grouped[status]) {
         grouped[status] = [];
       }
@@ -33,9 +32,7 @@ const ProjectStatusColumns = ({
     return grouped;
   }, [projects]);
 
-  const statusOrder: ProjectStatus[] = ['active', 'draft', 'archived'];
-
-  const sections: KanbanSection<Project>[] = statusOrder.map(status => {
+  const sections: KanbanSection<Project>[] = PROJECT_STATUSES.map(status => {
     const { label } = STATUS_CONFIG[status] || {};
     const dotColor = STATUS_DOT_COLORS[status] || '';
     return {

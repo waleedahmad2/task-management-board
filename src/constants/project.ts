@@ -34,3 +34,15 @@ export const STATUS_LABELS = {
 export const getStatusDotColor = (status: keyof typeof STATUS_DOT_COLORS): string => {
   return STATUS_DOT_COLORS[status] || STATUS_DOT_COLORS.archived;
 };
+
+/**
+ * Projects table columns configuration
+ */
+export const PROJECT_TABLE_COLUMNS = [
+  { key: 'name', header: 'Project Name', width: '25%' },
+  { key: 'owner', header: 'Owner', width: '20%' },
+  { key: 'members', header: 'Team Members', width: '15%' },
+  { key: 'createdAt', header: 'Created', width: '15%' },
+  { key: 'updatedAt', header: 'Last Updated', width: '15%' },
+  { key: 'status', header: 'Status', width: '10%' },
+] as const;
