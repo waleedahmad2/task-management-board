@@ -39,7 +39,7 @@ const Projects = (): JSX.Element => {
         project.description.toLowerCase().includes(term) ||
         project.owner.name.toLowerCase().includes(term)
     );
-  }, [ debouncedSearch]);
+  }, [debouncedSearch]);
 
   // Pagination hook
   const { paginatedData, currentPage, totalPages, goToPage, totalItems } = usePagination(filteredProjects, {
