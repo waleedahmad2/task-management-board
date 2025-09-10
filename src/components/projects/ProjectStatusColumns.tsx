@@ -5,7 +5,12 @@ import { STATUS_CONFIG, STATUS_DOT_COLORS } from '#/constants';
 import { ProjectStatusColumnsProps, Project, ProjectStatus } from '#/types';
 import ProjectCard from './ProjectCard';
 
-const ProjectStatusColumns = ({ projects = [], onProjectClick, className = '' }: ProjectStatusColumnsProps): JSX.Element => {
+const ProjectStatusColumns = ({
+  projects = [],
+  onProjectClick,
+  className = '',
+}: ProjectStatusColumnsProps): JSX.Element => {
+  
   const projectsByStatus = useMemo(() => {
     const grouped = projects.reduce(
       (acc, project) => {
@@ -54,9 +59,7 @@ const ProjectStatusColumns = ({ projects = [], onProjectClick, className = '' }:
         const { label } = STATUS_CONFIG[key as keyof typeof STATUS_CONFIG] || {};
         return (
           <div className='bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center'>
-            <p className='text-sm text-gray-500'>
-              No {label?.toLowerCase()}
-            </p>
+            <p className='text-sm text-gray-500'>No {label?.toLowerCase()}</p>
           </div>
         );
       }}
