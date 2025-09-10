@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { GET } from '#/constants';
 import { InfiniteQueryConfig } from '#/types/services.types';
@@ -65,3 +65,28 @@ export function useInfiniteScrollQuery<TData, TParams extends Record<string, unk
     ...options,
   });
 }
+
+/**
+ * General hook for GET requests using React Query
+ */
+export const useGetQuery = ({
+  key,
+  url,
+  params = {},
+  options = {},
+}: {
+  key: string;
+  url: string;
+  params?: Record<string, unknown>;
+  options?: Record<string, unknown>;
+}) => {
+  return useQuery({
+    queryKey: [key, params],
+    queryFn: () => performRequest({ method: GET, url, params }),
+    refetchOnReconnect: true,
+    networkMode: 'online',
+    retry: false,
+    refetchOnWindowFocus: false,
+    ...options,
+  });
+};

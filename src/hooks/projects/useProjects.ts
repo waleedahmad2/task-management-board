@@ -1,138 +1,53 @@
-import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
-import { dummyProjects } from '#/data/projects/dummyData';
-import { Project, UseProjectsConfig, UseProjectsReturn } from '#/types';
+import { useGetProjects } from '#/data/projects/queries/getProjects';
 
 /**
- * Custom hook for managing projects data with pagination and search
- * Simulates API behavior with dummy data
+ * Clean hook for managing projects data with filters and pagination
+ * Uses data layer query following the same pattern as getPosts
  */
-const useProjects = (config: UseProjectsConfig = {}): UseProjectsReturn => {
-  const { pageSize: initialPageSize = 10, searchDebounceMs = 300 } = config;
+export const useProjectsListing = () => {
+  const [filters, setFilters] = useState({
+    search: '',
+    page: 1,
+    pageSize: 10,
+  });
 
-  // State
-  const [allProjects] = useState<Project[]>(dummyProjects);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageSize, setPageSizeState] = useState<number>(initialPageSize);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isSearching, setIsSearching] = useState<boolean>(false);
-  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { search, page, pageSize } = filters;
 
-  // Debounce search term
-  useEffect(() => {
-    setIsSearching(true);
+  const queryParams = useMemo(() => ({ search, page, pageSize }), [search, page, pageSize]);
 
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
+  const { data: projectsData, isLoading: isProjectsFetching } = useGetProjects({
+    params: queryParams,
+  });
 
-    searchTimeoutRef.current = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-      setIsSearching(false);
-    }, searchDebounceMs);
-
-    return () => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-    };
-  }, [searchTerm, searchDebounceMs]);
-
-  // Filter projects based on search term
-  const filteredProjects = useMemo(() => {
-    if (!debouncedSearchTerm.trim()) {
-      return allProjects;
-    }
-
-    const term = debouncedSearchTerm.toLowerCase();
-    return allProjects.filter(
-      project =>
-        project.name.toLowerCase().includes(term) ||
-        project.description.toLowerCase().includes(term) ||
-        project.owner.name.toLowerCase().includes(term) ||
-        project.members.some(
-          member => member.name.toLowerCase().includes(term) || member.email.toLowerCase().includes(term)
-        )
-    );
-  }, [allProjects, debouncedSearchTerm]);
-
-  // Calculate pagination
-  const totalItems = filteredProjects.length;
-  const totalPages = Math.ceil(totalItems / pageSize);
-
-  // Get paginated projects
-  const projects = useMemo(() => {
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    return filteredProjects.slice(startIndex, endIndex);
-  }, [filteredProjects, currentPage, pageSize]);
-
-  // Actions
-  const goToPage = useCallback(
-    (page: number) => {
-      if (page >= 1 && page <= totalPages) {
-        setIsLoading(true);
-
-        // Simulate API delay
-        setTimeout(() => {
-          setCurrentPage(page);
-          setIsLoading(false);
-        }, 150);
-      }
-    },
-    [totalPages]
-  );
-
-  const setPageSize = useCallback((size: number) => {
-    setIsLoading(true);
-    setPageSizeState(size);
-    setCurrentPage(1); // Reset to first page when page size changes
-
-    // Simulate API delay
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 150);
+  const handlePageChange = useCallback((page: number) => {
+    setFilters(prev => ({ ...prev, page }));
   }, []);
 
-  const refreshProjects = useCallback(() => {
-    setIsLoading(true);
-
-    // Simulate API refresh
-    setTimeout(() => {
-      setCurrentPage(1);
-      setIsLoading(false);
-    }, 200);
+  const handleSearchChange = useCallback((search: string) => {
+    setFilters(prev => ({ ...prev, search, page: 1 }));
   }, []);
 
-  // Reset to first page when search changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [debouncedSearchTerm]);
+  const handlePageSizeChange = useCallback((pageSize: number) => {
+    setFilters(prev => ({ ...prev, pageSize, page: 1 }));
+  }, []);
+
+  const projects = projectsData?.data || [];
+  const totalItems = projectsData?.pagination.totalCount || 0;
+  const totalPages = projectsData?.pagination.totalPages || 0;
 
   return {
-    // Data
-    projects,
-    totalItems,
-    currentPage,
-    totalPages,
+    filters,
     pageSize,
-
-    // Loading states
-    isLoading,
-    isSearching,
-
-    // Actions
-    goToPage,
-    setSearchTerm,
-    setPageSize,
-    refreshProjects,
-
-    // Search
-    searchTerm,
-    debouncedSearchTerm,
+    handleSearchChange,
+    handlePageChange,
+    handlePageSizeChange,
+    projects,
+    isProjectsFetching,
+    totalItems,
+    totalPages,
   };
 };
 
-export default useProjects;
+export default useProjectsListing;

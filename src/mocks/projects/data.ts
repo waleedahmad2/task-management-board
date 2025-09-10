@@ -1,9 +1,9 @@
-import type { Project } from '#/types';
+import { Project } from '#/types';
 
 /**
- * Dummy project data for development and testing
+ * Mock project data
  */
-export const dummyProjects: Project[] = [
+export const ProjectsData: Project[] = [
   {
     id: '1',
     name: 'E-commerce Platform',

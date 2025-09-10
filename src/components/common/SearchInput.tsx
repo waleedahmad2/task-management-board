@@ -43,7 +43,7 @@ const SearchInput = ({
 
   useEffect(() => {
     onDebounce(debouncedSearch);
-  }, [debouncedSearch, onDebounce]);
+  }, [debouncedSearch]);
 
   return (
     <div className='relative' data-testid='search-input'>

@@ -3,7 +3,7 @@ import { JSX, useState, useRef } from 'react';
 import { AppHeader, PaginationFooter } from '#/components/common';
 import { TableSkeleton, KanbanColumnsSkeleton } from '#/components/skeletons';
 import { PAGE_SIZES, VIEW_TYPES, ViewType } from '#/constants';
-import { useProjects } from '#/hooks';
+import { useProjectsListing } from '#/hooks';
 import ProjectsTable from './ProjectsTable';
 import ProjectStatusColumns from './ProjectStatusColumns';
 
@@ -14,14 +14,22 @@ const Projects = (): JSX.Element => {
   const [currentView, setCurrentView] = useState<ViewType>(VIEW_TYPES.TABLE);
 
   // Use the custom projects hook
-  const { projects, totalItems, currentPage, pageSize, isLoading, isSearching, goToPage, setSearchTerm, setPageSize } =
-    useProjects({
-      pageSize: 10,
-      searchDebounceMs: 300,
-    });
+  const {
+    projects,
+    totalItems,
+    filters,
+    isProjectsFetching,
+    handleSearchChange,
+    handlePageChange,
+    handlePageSizeChange,
+  } = useProjectsListing();
 
   const handleSearch = (searchValue: string): void => {
-    setSearchTerm(searchValue);
+    handleSearchChange(searchValue);
+  };
+
+  const handlePageSizeSelect = (value: string) => {
+    handlePageSizeChange(parseInt(value));
   };
 
   const handleProjectClick = (): void => {
@@ -55,15 +63,15 @@ const Projects = (): JSX.Element => {
       <div className='flex-1 overflow-y-auto px-8 pb-20'>
         {currentView === VIEW_TYPES.TABLE ? (
           <>
-            {isSwitchingView || isLoading || isSearching ? (
+            {isSwitchingView || isProjectsFetching ? (
               <TableSkeleton rows={6} columns={6} />
             ) : (
-              <ProjectsTable projects={projects} onProjectClick={handleProjectClick} loading={isLoading} />
+              <ProjectsTable projects={projects} onProjectClick={handleProjectClick} loading={isProjectsFetching} />
             )}
           </>
         ) : (
           <>
-            {isSwitchingView || isLoading || isSearching ? (
+            {isSwitchingView || isProjectsFetching ? (
               <KanbanColumnsSkeleton columns={3} cardsPerColumn={3} />
             ) : (
               <ProjectStatusColumns projects={projects} onProjectClick={handleProjectClick} />
@@ -75,13 +83,13 @@ const Projects = (): JSX.Element => {
       <div className='sticky bottom-0'>
         <PaginationFooter
           pageSizes={[...PAGE_SIZES]}
-          pageSize={pageSize.toString()}
-          setPageSize={(value: string) => setPageSize(parseInt(value))}
-          currentPage={currentPage}
-          handlePageChange={goToPage}
+          pageSize={filters.pageSize.toString()}
+          setPageSize={handlePageSizeSelect}
+          currentPage={filters.page}
+          handlePageChange={handlePageChange}
           totalCount={totalItems}
           isActionsDisabled={isSwitchingView}
-          isLoading={isLoading || isSwitchingView}
+          isLoading={isProjectsFetching || isSwitchingView}
         />
       </div>
     </div>
