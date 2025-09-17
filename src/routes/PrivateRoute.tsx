@@ -11,12 +11,7 @@ import type { PrivateRouteProps } from '#/types/routes.types';
  * Redirects to auth page if not authenticated
  */
 export function PrivateRoute({ children }: PrivateRouteProps) {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  // Show loading state while checking authentication
-  if (isLoading) {
-    return <LoadingFallback />;
-  }
+  const { isAuthenticated } = useAuth();
 
   // Redirect to auth page if not authenticated
   if (!isAuthenticated) {

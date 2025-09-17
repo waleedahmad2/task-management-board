@@ -3,8 +3,8 @@ import { useCallback, useMemo, useState } from 'react';
 import { useGetProjects } from '#/data/projects/queries/getProjects';
 
 /**
- * Clean hook for managing projects data with filters and pagination
- * Uses data layer query following the same pattern as getPosts
+ * Manages projects data with search, pagination, and filtering capabilities.
+ * @returns Projects data, loading state, and filter handlers
  */
 export const useProjectsListing = () => {
   const [filters, setFilters] = useState({

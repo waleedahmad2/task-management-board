@@ -32,9 +32,11 @@ export function DynamicForm<T extends FieldValues = FieldValues>({
 
       {/* Submit button */}
       {showSubmitButton && (
-        <DynamicFormSubmitButton isLoading={isLoading} disabled={isLoading} {...submitButtonProps}>
-          {submitLabel}
-        </DynamicFormSubmitButton>
+        <div className='flex justify-end'>
+          <DynamicFormSubmitButton isLoading={isLoading} disabled={isLoading} {...submitButtonProps}>
+            {submitLabel}
+          </DynamicFormSubmitButton>
+        </div>
       )}
     </form>
   );

@@ -2,7 +2,7 @@ import { JSX, useMemo } from 'react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 
-import { NAVIGATION_ITEMS } from '#/constants';
+import { NAVIGATION_ITEMS, ROUTES } from '#/constants';
 import { getLocalStorageItem, setLocalStorageItem } from '#/utils';
 import SidebarListItem from './SidebarListItem';
 
@@ -22,7 +22,17 @@ const SidebarItemsList = (): JSX.Element => {
 
   const persistedSelectedPath = getLocalStorageItem<string>(SELECTED_KEY);
 
-  const selectedPath = pathname && pathname !== '' ? pathname : persistedSelectedPath || '';
+  // Determine the selected path, considering project board routes as Boards
+  const selectedPath = useMemo(() => {
+    if (pathname && pathname !== '') {
+      // If we're on a project board route, consider Boards as selected
+      if (pathname.startsWith('/projects/') && pathname.endsWith('/board')) {
+        return ROUTES.BOARDS;
+      }
+      return pathname;
+    }
+    return persistedSelectedPath || '';
+  }, [pathname, persistedSelectedPath]);
 
   const handlersByPath: Record<string, () => void> = useMemo(() => {
     const map: Record<string, () => void> = {};

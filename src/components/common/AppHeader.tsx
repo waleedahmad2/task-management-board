@@ -1,5 +1,7 @@
 import { JSX, ReactNode } from 'react';
 
+import { Keyboard } from 'lucide-react';
+
 import { cn } from '#/utils';
 import SearchInput from './SearchInput';
 import ViewToggle, { ViewType } from './ViewToggle';
@@ -53,7 +55,13 @@ const AppHeader = ({
 
       {showViewToggle && onViewChange && <ViewToggle currentView={currentView} onViewChange={onViewChange} />}
 
-      {rightContent}
+      <div className='flex items-center space-x-2'>
+        <div className='flex items-center space-x-1 text-xs text-gray-500'>
+          <Keyboard className='w-3 h-3' />
+          <span>Press ⌘+? for shortcuts</span>
+        </div>
+        {rightContent}
+      </div>
     </div>
   </div>
 );

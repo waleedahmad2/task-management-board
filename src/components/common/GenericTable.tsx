@@ -1,4 +1,4 @@
-import React, { JSX } from 'react';
+import React, { JSX, useCallback } from 'react';
 
 import TableSkeleton from '#/components/skeletons/TableSkeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '#/components/ui/table';
@@ -6,7 +6,8 @@ import { TableSection, GenericTableProps } from '#/types';
 import { cn } from '#/utils';
 
 /**
- * Generic table component for displaying data in a structured format
+ * Reusable table component that displays data in rows and columns.
+ * Supports sections, loading states, click handlers, and custom styling.
  */
 const GenericTable = <T extends Record<string, unknown>>({
   columns,
@@ -17,12 +18,19 @@ const GenericTable = <T extends Record<string, unknown>>({
   className = '',
   rowClassName = '',
 }: GenericTableProps<T>): JSX.Element => {
+  const handleRowClick = useCallback(
+    (item: T, index: number) => (): void => {
+      onRowClick?.(item, index);
+    },
+    [onRowClick]
+  );
+
   const getRowClassName = (item: T, index: number): string => {
     const baseClasses = 'hover:bg-gray-50 transition-colors duration-150';
     const clickableClasses = onRowClick ? 'cursor-pointer' : '';
 
     if (typeof rowClassName === 'function') {
-      return cn(baseClasses, clickableClasses, rowClassName(item, index));
+      return cn(baseClasses, clickableClasses, rowClassName?.(item, index));
     }
 
     return cn(baseClasses, clickableClasses, rowClassName);
@@ -37,7 +45,7 @@ const GenericTable = <T extends Record<string, unknown>>({
         <TableCell colSpan={columnsLength} className='font-semibold text-gray-700 py-3'>
           <div className='flex items-center space-x-2'>
             {icon && <div>{icon}</div>}
-            <span>{title}</span>
+            <span>{title || ''}</span>
             {count !== undefined && <span className='text-sm text-gray-500 font-normal'>({count})</span>}
           </div>
         </TableCell>
@@ -49,14 +57,14 @@ const GenericTable = <T extends Record<string, unknown>>({
     const columnsList = columns || [];
 
     return (
-      <TableRow key={index} className={getRowClassName(item, index)} onClick={() => onRowClick?.(item, index)}>
+      <TableRow key={index} className={getRowClassName(item, index)} onClick={handleRowClick(item, index)}>
         {columnsList.map((column, colIndex) => {
-          const { render, key, className: columnClassName } = column || {};
+          const { render, key, className: columnClassName = '' } = column || {};
           const cellValue = item?.[key] || '';
 
           return (
             <TableCell key={colIndex} className={cn('p-2 align-middle', columnClassName)}>
-              {render ? render(item, index) : String(cellValue)}
+              {render ? render?.(item, index) : String(cellValue || '')}
             </TableCell>
           );
         })}
@@ -72,7 +80,7 @@ const GenericTable = <T extends Record<string, unknown>>({
     const sectionsList = sections || [];
     const hasData = sectionsList.some(section => {
       const { data = [] } = section || {};
-      return data.length > 0;
+      return data?.length > 0;
     });
 
     if (!hasData) {
@@ -93,7 +101,7 @@ const GenericTable = <T extends Record<string, unknown>>({
           <TableHeader>
             <TableRow>
               {columnsList.map((column, index) => {
-                const { header, className: columnClassName, sortable, width } = column || {};
+                const { header = '', className: columnClassName = '', sortable = false, width } = column || {};
 
                 return (
                   <TableHead

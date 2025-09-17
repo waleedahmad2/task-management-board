@@ -5,8 +5,9 @@ import { MESSAGES } from '#/constants';
 import { DynamicFormField } from '#/types/forms';
 
 /**
- * Hook for generating Zod schemas from dynamic form fields
- * @param fields - Array of form field configurations
+ * Generates Zod validation schemas from dynamic form field configurations.
+ * @param fields - Array of form field definitions
+ * @returns Zod schema object for form validation
  */
 export function useGenerateSchema<T extends FieldValues = FieldValues>(fields: DynamicFormField<T>[]): z.ZodSchema<T> {
   const { VALIDATION } = MESSAGES;

@@ -1,5 +1,7 @@
 export { Button } from './Button';
 export { Input } from './Input';
+export { Textarea } from './textarea';
+export { DatePicker } from './datePicker';
 export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './table';
 export {
   Pagination,
@@ -22,3 +24,14 @@ export {
   SelectScrollUpButton,
   SelectScrollDownButton,
 } from './select';
+
+export { Switch } from './switch';
+export {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
+} from './breadcrumb';

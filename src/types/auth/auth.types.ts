@@ -8,6 +8,7 @@ export type UserRole = 'admin' | 'member';
  */
 export interface User {
   id: string;
+  name: string;
   email: string;
   role: UserRole;
 }
@@ -26,7 +27,7 @@ export interface AuthContextType {
 /**
  * Login request interface
  */
-export interface LoginRequest {
+export interface LoginRequest extends Record<string, unknown> {
   email: string;
 }
 
@@ -43,6 +44,7 @@ export interface LoginResponse {
  */
 export interface MockUser {
   id: string;
+  name: string;
   email: string;
   role: UserRole;
   password?: never; // No password needed for email-only auth

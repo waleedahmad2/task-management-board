@@ -16,6 +16,11 @@ export type * from './home/api.types';
 export type * from './home/post.types';
 export type * from './projects';
 export type * from './genericTable';
+export type * from './task.types';
+export type * from './comment.types';
+export type * from './form.types';
+export type * from '../schemas/taskFormSchema';
+export type * from '../schemas/commentFormSchema';
 
 // Export hooks types
 export type * from './hooks';

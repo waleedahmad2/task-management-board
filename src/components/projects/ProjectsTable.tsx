@@ -19,10 +19,11 @@ const ProjectsTable = ({
   const projectsByStatus = useMemo(() => {
     const grouped = projects.reduce(
       (acc, project) => {
-        if (!acc[project.status]) {
-          acc[project.status] = [];
+        const { status } = project;
+        if (!acc[status]) {
+          acc[status] = [];
         }
-        acc[project.status].push(project);
+        acc[status].push(project);
         return acc;
       },
       {} as Record<ProjectStatus, Project[]>
@@ -39,9 +40,10 @@ const ProjectsTable = ({
   }, [projects]);
 
   // Define table columns with render functions
-  const columns = PROJECT_TABLE_COLUMNS.map(column => ({
-    ...column,
-    render: (project: Project) => <ProjectTableColumn project={project} columnType={column.key as ColumnType} />,
+  const columns = PROJECT_TABLE_COLUMNS.map(({ key, ...rest }) => ({
+    ...rest,
+    key,
+    render: (project: Project) => <ProjectTableColumn project={project} columnType={key as ColumnType} />,
   }));
 
   // Create sections for grouped display
@@ -53,7 +55,7 @@ const ProjectsTable = ({
   }));
 
   return (
-    <GenericTable
+    <GenericTable<Project>
       columns={columns}
       sections={sections}
       onRowClick={onProjectClick}

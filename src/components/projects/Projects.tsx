@@ -1,9 +1,12 @@
 import { JSX, useState, useRef } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import { AppHeader, PaginationFooter } from '#/components/common';
 import { TableSkeleton, KanbanColumnsSkeleton } from '#/components/skeletons';
-import { PAGE_SIZES, VIEW_TYPES, ViewType } from '#/constants';
+import { PAGE_SIZES, VIEW_TYPES, ViewType, ROUTES } from '#/constants';
 import { useProjectsListing } from '#/hooks';
+import { Project } from '#/types';
 import ProjectsTable from './ProjectsTable';
 import ProjectStatusColumns from './ProjectStatusColumns';
 
@@ -12,6 +15,7 @@ import ProjectStatusColumns from './ProjectStatusColumns';
  */
 const Projects = (): JSX.Element => {
   const [currentView, setCurrentView] = useState<ViewType>(VIEW_TYPES.TABLE);
+  const navigate = useNavigate();
 
   // Use the custom projects hook
   const {
@@ -32,9 +36,8 @@ const Projects = (): JSX.Element => {
     handlePageSizeChange(parseInt(value));
   };
 
-  const handleProjectClick = (): void => {
-    // TODO: Navigate to project board
-    // navigate(`/projects/${project.id}/board`);
+  const handleProjectClick = (project: Project): void => {
+    navigate(ROUTES.PROJECT_BOARD.replace(':projectId', project.id));
   };
 
   const [isSwitchingView, setIsSwitchingView] = useState<boolean>(false);

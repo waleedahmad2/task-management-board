@@ -7,3 +7,7 @@ export * from './project';
 export * from './regex';
 export * from './navigation';
 export * from './colors';
+export * from './task';
+export * from './taskForm';
+export * from './commentForm';
+export * from './formFields';

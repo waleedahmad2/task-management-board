@@ -2,23 +2,19 @@ import { JSX } from 'react';
 
 import { FieldValues } from 'react-hook-form';
 
-import { Input } from '#/components/ui/Input';
 import { DynamicFormFieldProps } from '#/types/forms';
+import { renderField } from './fieldRenderers';
 
 /**
  * DynamicFormField component that renders input fields
- * Uses shadcn Input component for consistent styling
+ * Uses modular render functions for better maintainability
  */
 export function DynamicFormField<T extends FieldValues = FieldValues>({
   field,
   form,
   className = '',
 }: DynamicFormFieldProps<T>): JSX.Element {
-  const {
-    register,
-    formState: { errors },
-  } = form;
-  const fieldError = errors[field.name];
+  const fieldError = form.formState.errors[field.name];
 
   // Custom render function
   if (field.render) {
@@ -43,16 +39,7 @@ export function DynamicFormField<T extends FieldValues = FieldValues>({
           {field.required && <span className='text-red-500 ml-1'>*</span>}
         </label>
       )}
-      <Input
-        {...register(field.name, field.validation)}
-        type={field.type}
-        placeholder={field.placeholder}
-        disabled={field.disabled}
-        min={field.min}
-        max={field.max}
-        step={field.step}
-        className={fieldError ? 'border-red-500' : ''}
-      />
+      {renderField(field, form, fieldError ? { message: (fieldError.message as string) || '' } : undefined)}
 
       {/* Error message */}
       {fieldError && (

@@ -6,12 +6,12 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
+import { ErrorFallback } from '#/components';
 import { TooltipProvider } from '#/components/ui/tooltip';
-import { AuthProvider } from '#/context';
 import { router } from '#/routes';
-import ErrorFallback from './components/errorFallback/ErrorFallback';
+import { AuthProvider, FeatureFlagProvider } from './context';
 
-function AppContent(): JSX.Element {
+function App(): JSX.Element {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -22,22 +22,18 @@ function AppContent(): JSX.Element {
   });
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <RouterProvider router={router} />
-        <ToastContainer />
-        <ReactQueryDevtools />
-      </TooltipProvider>
-    </QueryClientProvider>
-  );
-}
-
-function App(): JSX.Element {
-  return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <FeatureFlagProvider>
+            <TooltipProvider>
+              <RouterProvider router={router} />
+              <ToastContainer />
+              {/* <ReactQueryDevtools /> */}
+            </TooltipProvider>
+          </FeatureFlagProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </ErrorBoundary>
   );
 }

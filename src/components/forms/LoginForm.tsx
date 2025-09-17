@@ -2,11 +2,10 @@ import { JSX } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { DynamicForm } from '#/components/common';
+import { DynamicForm } from '#/components';
 import { ROUTES } from '#/constants';
-import { useLogin } from '#/hooks';
-import { useDynamicForm } from '#/hooks';
-import { loginSchema, LoginFormData } from '#/schemas/authSchema';
+import { useLogin, useDynamicForm } from '#/hooks';
+import { loginSchema, LoginFormData } from '#/schemas';
 import type { DynamicFormField as DynamicFormFieldDef } from '#/types/forms';
 
 /**
@@ -48,9 +47,9 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps): JSX.Element {
       await handleLogin(data, () => {
         form.reset();
         onLoginSuccess?.();
+        // Navigate after successful login and state update
+        navigate(ROUTES.HOME, { replace: true });
       });
-      // Navigate after successful login
-      navigate(ROUTES.HOME, { replace: true });
     } catch (error) {
       console.error('Login error:', error);
     }
@@ -75,6 +74,10 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps): JSX.Element {
             submitLabel='Sign in'
             isLoading={isSubmitting}
             className='space-y-4'
+            inlineSubmit={true}
+            submitButtonProps={{
+              className: 'ml-2',
+            }}
           />
         </div>
         <p className='mt-4 text-center text-xs text-gray-500'>

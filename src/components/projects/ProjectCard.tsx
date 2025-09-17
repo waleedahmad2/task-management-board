@@ -9,6 +9,10 @@ import ProjectCardFooter from './ProjectCardFooter';
 import ProjectCardHeader from './ProjectCardHeader';
 import ProjectCardOwner from './ProjectCardOwner';
 
+/**
+ * Displays a project card with team members, owner info, and creation dates.
+ * Shows project details in a card format with hover effects and member avatars.
+ */
 const ProjectCard = ({ project, onClick, className = '' }: ProjectCardProps): JSX.Element => {
   const { name, description, createdAt, updatedAt, owner, members = [] } = project || {};
 
