@@ -2,11 +2,9 @@ import { JSX, ReactNode } from 'react';
 
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { Plus } from 'lucide-react';
 
-import { Button } from '#/components/ui/button';
-import { useAuth } from '#/context';
-import { cn, canCreate } from '#/utils';
+import { cn } from '#/utils';
+import KanbanColumnHeader from './KanbanColumnHeader';
 
 interface KanbanColumnProps {
   title: string;
@@ -31,8 +29,6 @@ const KanbanColumn = ({
   onScroll,
   items = [],
 }: KanbanColumnProps): JSX.Element => {
-  const { user } = useAuth();
-  const canUserCreate = canCreate(user?.role);
   const { setNodeRef, isOver } = useDroppable({
     id: droppableId || title,
   });
@@ -46,27 +42,13 @@ const KanbanColumn = ({
         className
       )}
     >
-      {/* Fixed Header - matching GenericTable design */}
-      <div className='flex items-center justify-between mb-3 flex-shrink-0 bg-white rounded-t-lg border border-gray-200 px-4 py-3'>
-        <div className='flex items-center space-x-2'>
-          <div className={cn('w-3 h-3 rounded-full', dotColorClass)} />
-          <h3 className='text-sm font-semibold text-gray-700 uppercase tracking-wide'>{title}</h3>
-        </div>
-        <div className='flex items-center space-x-2'>
-          <span className='text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full'>{count}</span>
-          {onAddItem && canUserCreate && (
-            <Button
-              onClick={onAddItem}
-              variant='ghost'
-              size='sm'
-              className='h-8 w-8 p-0 hover:bg-gray-200 transition-colors cursor-pointer'
-              title={`Add task to ${title}`}
-            >
-              <Plus className='w-4 h-4 text-gray-500' />
-            </Button>
-          )}
-        </div>
-      </div>
+      {/* Fixed Header - using reusable component */}
+      <KanbanColumnHeader
+        title={title}
+        count={count}
+        dotColorClass={dotColorClass}
+        onAddItem={onAddItem}
+      />
 
       <div
         className={cn(

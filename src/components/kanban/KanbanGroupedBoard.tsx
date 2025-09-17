@@ -1,6 +1,7 @@
 import { JSX, ReactNode } from 'react';
 
 import { cn } from '#/utils';
+import DragPlaceholder from './DragPlaceholder';
 import KanbanBoard from './KanbanBoard';
 import KanbanColumn from './KanbanColumn';
 
@@ -17,18 +18,23 @@ export interface KanbanSection<T> {
   onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
 }
 
-interface KanbanGroupedBoardProps<T> {
+interface DragTask {
+  id: string;
+  title: string;
+}
+
+interface KanbanGroupedBoardProps<T extends { id: string }> {
   sections: KanbanSection<T>[];
   renderItem: (item: T, index: number) => ReactNode;
   onAddItem?: (sectionKey: string) => void;
   isFetchingNextPage?: boolean;
   className?: string;
   onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
-  activeTask?: unknown;
+  activeTask?: DragTask | null;
   overColumn?: string | null;
 }
 
-const KanbanGroupedBoard = <T,>({
+const KanbanGroupedBoard = <T extends { id: string }>({
   sections = [],
   renderItem,
   onAddItem,
@@ -59,7 +65,7 @@ const KanbanGroupedBoard = <T,>({
           dotColorClass={cn('w-3 h-3 rounded-full', dotColorClass)}
           droppableId={key}
           onAddItem={onAddItem ? () => onAddItem(key) : undefined}
-          items={items?.map((item: { id: string }) => item.id) || []}
+          items={items?.map(item => item.id) || []}
           onScroll={onScroll}
         >
           {isLoading ? (
@@ -75,9 +81,10 @@ const KanbanGroupedBoard = <T,>({
               {items.map((item, index) => renderItem(item, index))}
               {/* Show placeholder at the end when dragging over a column with tasks */}
               {activeTask && overColumn === key && (
-                <div className='opacity-50 border-2 border-dashed border-blue-400 bg-blue-50 rounded-lg p-3 mb-4'>
-                  <div className='text-sm text-blue-600 font-medium'>Drop "{activeTask.title}" at the end</div>
-                </div>
+                <DragPlaceholder 
+                  taskTitle={activeTask.title} 
+                  message="Drop at the end" 
+                />
               )}
               {sectionFetching && (
                 <div className='flex items-center justify-center py-4'>
@@ -89,9 +96,10 @@ const KanbanGroupedBoard = <T,>({
             <>
               {/* Show placeholder when dragging over empty column */}
               {activeTask && overColumn === key && (
-                <div className='opacity-50 border-2 border-dashed border-blue-400 bg-blue-50 rounded-lg p-3 mb-4'>
-                  <div className='text-sm text-blue-600 font-medium'>Drop "{activeTask.title}" here</div>
-                </div>
+                <DragPlaceholder 
+                  taskTitle={activeTask.title} 
+                  message="Drop here" 
+                />
               )}
             </>
           )}

@@ -37,7 +37,6 @@ const CommentsDrawer = ({ isOpen, onClose, task }: CommentsDrawerProps): JSX.Ele
   // Extra effect: when opening the drawer, scroll once after mount
   useEffect(() => {
     if (isOpen) {
-      // Delay to allow content to render
       const timer = setTimeout(() => {
         scrollAnchorRef.current?.scrollIntoView({ behavior: 'auto' });
       }, 50);

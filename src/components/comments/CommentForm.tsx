@@ -5,6 +5,7 @@ import { Send } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 import { DynamicForm } from '#/components/common/';
+import { Button } from '#/components/ui/button';
 import { COMMENT_FORM_FIELDS } from '#/constants';
 import { commentFormSchema, CommentFormData } from '#/schemas';
 import type { DynamicFormField } from '#/types/forms';
@@ -43,15 +44,15 @@ const CommentForm = ({ onSubmit, isLoading = false }: CommentFormProps): JSX.Ele
         showSubmitButton={false}
       />
       <div className='flex justify-end mt-2'>
-        <button
+        <Button
           type='button'
           onClick={handleButtonClick}
           disabled={isLoading || !form.watch('content')?.trim()}
-          className='flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+          className='flex items-center space-x-2'
         >
           <Send className='w-4 h-4' />
           <span>Comment</span>
-        </button>
+        </Button>
       </div>
     </div>
   );
