@@ -13,9 +13,7 @@ export interface UseTasksPerColumnReturn {
   hasNextPage: Record<TaskStatus, boolean>;
   isCommentsDrawerOpen: boolean;
   selectedTask: Task | null;
-  handleAddTask: (status: TaskStatus) => void;
   handleTaskSubmit: (data: unknown, modalMode: 'create' | 'edit', editingTask: Task | null) => Promise<void>;
-  handleTaskEdit: (task: Task) => void;
   handleTaskDelete: (task: Task) => Promise<void>;
   handleTaskMove: (result: TaskDragResult) => Promise<void>;
   handleSelectTask: (task: Task) => void;

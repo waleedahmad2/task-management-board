@@ -81,9 +81,6 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
     {} as Record<TaskStatus, boolean>
   );
 
-  const handleAddTask = useCallback((): void => {
-    // This is handled by the parent component
-  }, []);
 
   const handleTaskSubmit = useCallback(
     async (data: unknown, modalMode: 'create' | 'edit', editingTask: Task | null): Promise<void> => {
@@ -159,9 +156,6 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
     [projectId, statusQueries]
   );
 
-  const handleTaskEdit = useCallback((): void => {
-    // This is handled by the parent component
-  }, []);
 
   const handleTaskDelete = useCallback(
     async (task: Task): Promise<void> => {
@@ -300,9 +294,7 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
     hasNextPage,
     isCommentsDrawerOpen,
     selectedTask,
-    handleAddTask,
     handleTaskSubmit,
-    handleTaskEdit,
     handleTaskDelete,
     handleTaskMove,
     handleSelectTask,
