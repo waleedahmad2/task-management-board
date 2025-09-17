@@ -51,7 +51,12 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
     if (hasData) {
       setTasksByStatus(serverTasksByStatus);
     }
-  }, [statusQueries[TASK_STATUSES[0]].data, statusQueries[TASK_STATUSES[1]].data, statusQueries[TASK_STATUSES[2]].data, statusQueries[TASK_STATUSES[3]].data]);
+  }, [
+    statusQueries[TASK_STATUSES[0]].data,
+    statusQueries[TASK_STATUSES[1]].data,
+    statusQueries[TASK_STATUSES[2]].data,
+    statusQueries[TASK_STATUSES[3]].data,
+  ]);
 
   const allTasks = useMemo(() => Object.values(tasksByStatus).flat(), [tasksByStatus]);
 
