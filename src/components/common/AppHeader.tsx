@@ -9,7 +9,6 @@ import ViewToggle, { ViewType } from './ViewToggle';
  */
 interface AppHeaderProps {
   title: string;
-  description?: string;
   showSearch?: boolean;
   searchPlaceholder?: string;
   onSearch?: (value: string) => void;
@@ -25,20 +24,17 @@ interface AppHeaderProps {
  */
 const AppHeader = ({
   title,
-  description,
   showSearch = false,
   searchPlaceholder = 'Search...',
   onSearch,
   showViewToggle = false,
   currentView = 'table',
   onViewChange,
-  rightContent,
   className = '',
 }: AppHeaderProps): JSX.Element => (
   <div className={cn('flex items-center justify-between p-8', className)}>
     <div className='flex-1'>
       <h1 className='text-2xl font-bold text-gray-900'>{title}</h1>
-      {description && <p className='text-gray-600 mt-2'>{description}</p>}
     </div>
 
     <div className='flex items-center space-x-4'>
@@ -47,13 +43,11 @@ const AppHeader = ({
           placeholder={searchPlaceholder}
           onDebounce={onSearch || (() => undefined)}
           showClearButton={true}
-          className='w-60'
+          className='w-60 h-9'
         />
       )}
 
       {showViewToggle && onViewChange && <ViewToggle currentView={currentView} onViewChange={onViewChange} />}
-
-      {rightContent}
     </div>
   </div>
 );

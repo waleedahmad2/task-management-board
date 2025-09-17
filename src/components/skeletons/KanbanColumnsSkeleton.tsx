@@ -26,7 +26,7 @@ const KanbanColumnsSkeleton = ({
             <div className='h-4 w-8 bg-gray-200 rounded animate-pulse' />
           </div>
 
-          <div className='space-y-3 min-h-[400px]'>
+          <div className='space-y-3 min-h-[25rem]'>
             {range(cardsPerColumn).map(cardIdx => (
               <ProjectCardSkeleton key={cardIdx} />
             ))}

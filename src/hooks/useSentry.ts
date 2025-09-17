@@ -6,6 +6,10 @@ import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType }
 
 import env from '#env';
 
+/**
+ * Initializes Sentry error tracking and performance monitoring.
+ * @returns void
+ */
 const useSentry = (): void => {
   const enableSentry = Boolean(Number(env.VITE_SENTRY)) && Boolean(env.VITE_SENTRY_DSN);
 

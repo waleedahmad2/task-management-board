@@ -1,4 +1,4 @@
-import Unauthorized from '#/components/unauthorized';
+import { Unauthorized } from '#/components';
 
 export default function UnauthorizedPage() {
   return <Unauthorized />;

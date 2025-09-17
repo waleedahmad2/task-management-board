@@ -1,10 +1,10 @@
-import { JSX } from 'react';
+import { JSX, useCallback } from 'react';
 
 import { Table, Grid3X3 } from 'lucide-react';
 
-import { Button } from '#/components/ui/Button';
 import { VIEW_TYPES } from '#/constants';
 import { cn } from '#/utils';
+import { Button } from '../ui';
 
 /**
  * View type options
@@ -27,7 +27,7 @@ interface ViewToggleProps {
 const ViewToggle = ({ currentView, onViewChange, className = '', showLabels = true }: ViewToggleProps): JSX.Element => {
   const currentViewType = currentView;
 
-  const views = [
+  const VIEW_OPTIONS = [
     {
       type: VIEW_TYPES.TABLE,
       icon: Table,
@@ -40,37 +40,45 @@ const ViewToggle = ({ currentView, onViewChange, className = '', showLabels = tr
       label: 'Card View',
       description: 'View as cards',
     },
-  ];
+  ] as const;
 
-  const handleViewChange = (viewType: ViewType): void => {
-    onViewChange?.(viewType);
-  };
+  const handleViewChange = useCallback(
+    (viewType: ViewType): void => {
+      onViewChange?.(viewType);
+    },
+    [onViewChange]
+  );
+
+  const renderViewButton = useCallback(
+    (view: (typeof VIEW_OPTIONS)[number]): JSX.Element => {
+      const { type, icon: Icon, label, description } = view;
+      const isActive = currentViewType === type;
+
+      return (
+        <Button
+          key={type}
+          variant={isActive ? 'default' : 'ghost'}
+          size='sm'
+          onClick={() => handleViewChange(type)}
+          className={cn(
+            'flex items-center space-x-2 px-3 py-2 transition-all duration-200 cursor-pointer',
+            isActive
+              ? 'bg-white text-indigo-600 shadow-sm hover:bg-white hover:text-indigo-700'
+              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+          )}
+          title={description}
+        >
+          <Icon className='w-4 h-4' />
+          {showLabels && <span className='text-sm font-medium'>{label}</span>}
+        </Button>
+      );
+    },
+    [currentViewType, handleViewChange, showLabels]
+  );
 
   return (
     <div className={cn('flex items-center bg-gray-100 rounded-lg p-1 cursor-pointer', className)}>
-      {views.map(view => {
-        const { type, icon: Icon, label, description } = view || {};
-        const isActive = currentViewType === type;
-
-        return (
-          <Button
-            key={type}
-            variant={isActive ? 'default' : 'ghost'}
-            size='sm'
-            onClick={() => handleViewChange(type)}
-            className={cn(
-              'flex items-center space-x-2 px-3 py-2 transition-all duration-200 cursor-pointer',
-              isActive
-                ? 'bg-white text-indigo-600 shadow-sm hover:bg-white hover:text-indigo-700'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-            )}
-            title={description}
-          >
-            <Icon className='w-4 h-4' />
-            {showLabels && <span className='text-sm font-medium'>{label}</span>}
-          </Button>
-        );
-      })}
+      {VIEW_OPTIONS.map(renderViewButton)}
     </div>
   );
 };

@@ -1,1 +1,9 @@
-yarn lint --fix
+echo "🔍 Running lint-staged..."
+yarn lint-staged
+
+if [ $? -ne 0 ]; then
+  echo "❌ Lint-staged failed! Commit aborted."
+  exit 1
+fi
+
+echo "✅ Code formatting and linting passed! Proceeding with commit..."

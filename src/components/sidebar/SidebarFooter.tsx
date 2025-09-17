@@ -3,9 +3,10 @@ import { JSX } from 'react';
 import { LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-import { Button } from '#/components/ui/Button';
-import { ROUTES } from '#/constants';
+import { showToast } from '#/components/common/showToast';
+import { ROUTES, MESSAGES } from '#/constants';
 import { useAuth } from '#/context';
+import { Button } from '../ui';
 
 /**
  * Sidebar footer component with user info and logout
@@ -19,6 +20,7 @@ const SidebarFooter = (): JSX.Element => {
    */
   const handleLogout = (): void => {
     logout();
+    showToast('success', MESSAGES.AUTH.LOGOUT_SUCCESS);
     navigate(ROUTES.AUTH);
   };
 

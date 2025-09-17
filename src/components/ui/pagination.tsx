@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import { MoreHorizontalIcon } from 'lucide-react';
 
-import { buttonVariants } from '#/components/ui/Button';
 import { cn } from '#/utils';
+import { buttonVariants } from './button';
 
 function Pagination({ className, ...props }) {
   return (

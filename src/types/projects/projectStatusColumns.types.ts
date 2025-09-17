@@ -10,4 +10,5 @@ export interface ProjectStatusColumnsProps {
   onProjectDelete?: (project: Project) => void;
   onProjectView?: (project: Project) => void;
   className?: string;
+  onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
 }

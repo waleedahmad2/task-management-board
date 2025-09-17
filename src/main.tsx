@@ -7,7 +7,7 @@ import './index.css';
 
 // Start MSW worker in development
 if (import.meta.env.DEV) {
-  const { worker } = await import('./mocks/browser');
+  const { worker } = await import('#/mocks');
   worker.start();
 }
 

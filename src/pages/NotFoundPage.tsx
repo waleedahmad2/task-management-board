@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 
-import NotFound from '#/components/notFound/NotFound';
+import { NotFound } from '#/components';
 
 /**
  * 404 Not Found page component

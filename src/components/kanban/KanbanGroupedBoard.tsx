@@ -1,50 +1,99 @@
 import { JSX, ReactNode } from 'react';
 
 import { cn } from '#/utils';
+import DragPlaceholder from './DragPlaceholder';
 import KanbanBoard from './KanbanBoard';
 import KanbanColumn from './KanbanColumn';
-import KanbanEmpty from './KanbanEmpty';
 
 export interface KanbanSection<T> {
   key: string;
   title: string;
   items: T[];
+  count?: number;
   dotColorClass?: string;
+  isLoading?: boolean;
+  isFetchingNextPage?: boolean;
+  hasNextPage?: boolean;
+  error?: Error | null;
+  onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
 }
 
-interface KanbanGroupedBoardProps<T> {
+interface DragTask {
+  id: string;
+  title: string;
+}
+
+interface KanbanGroupedBoardProps<T extends { id: string }> {
   sections: KanbanSection<T>[];
   renderItem: (item: T, index: number) => ReactNode;
-  emptyRender?: (sectionKey: string) => ReactNode;
+  onAddItem?: (sectionKey: string) => void;
+  isFetchingNextPage?: boolean;
   className?: string;
+  onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
+  activeTask?: DragTask | null;
+  overColumn?: string | null;
 }
 
-const DefaultEmpty = ({ label }: { label: string }): JSX.Element => <KanbanEmpty label={label} />;
-
-const KanbanGroupedBoard = <T,>({
+const KanbanGroupedBoard = <T extends { id: string }>({
   sections = [],
   renderItem,
-  emptyRender,
+  onAddItem,
   className = '',
+  activeTask,
+  overColumn,
 }: KanbanGroupedBoardProps<T>): JSX.Element => (
   <KanbanBoard className={className}>
     {sections.map(section => {
-      const { key, title, items = [], dotColorClass } = section || {};
+      const {
+        key,
+        title,
+        items = [],
+        count,
+        dotColorClass,
+        isLoading = false,
+        isFetchingNextPage: sectionFetching = false,
+        error = null,
+        onScroll,
+      } = section || {};
       const itemsCount = items?.length || 0;
 
       return (
         <KanbanColumn
           key={key}
           title={title}
-          count={itemsCount}
+          count={count ?? itemsCount}
           dotColorClass={cn('w-3 h-3 rounded-full', dotColorClass)}
+          droppableId={key}
+          onAddItem={onAddItem ? () => onAddItem(key) : undefined}
+          items={items?.map(item => item.id) || []}
+          onScroll={onScroll}
         >
-          {itemsCount > 0 ? (
-            items.map((item, index) => renderItem(item, index))
-          ) : emptyRender ? (
-            emptyRender(key)
+          {isLoading ? (
+            <div className='flex items-center justify-center py-8'>
+              <div className='text-gray-500'>Loading {title.toLowerCase()}...</div>
+            </div>
+          ) : error ? (
+            <div className='flex items-center justify-center py-8'>
+              <div className='text-red-500'>Error loading {title.toLowerCase()}</div>
+            </div>
+          ) : itemsCount > 0 ? (
+            <>
+              {items.map((item, index) => renderItem(item, index))}
+              {/* Show placeholder at the end when dragging over a column with tasks */}
+              {activeTask && overColumn === key && (
+                <DragPlaceholder taskTitle={activeTask.title} message='Drop at the end' />
+              )}
+              {sectionFetching && (
+                <div className='flex items-center justify-center py-4'>
+                  <div className='text-gray-500'>Loading more...</div>
+                </div>
+              )}
+            </>
           ) : (
-            <DefaultEmpty label={title?.toLowerCase()} />
+            <>
+              {/* Show placeholder when dragging over empty column */}
+              {activeTask && overColumn === key && <DragPlaceholder taskTitle={activeTask.title} message='Drop here' />}
+            </>
           )}
         </KanbanColumn>
       );

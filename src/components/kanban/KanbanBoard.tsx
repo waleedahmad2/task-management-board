@@ -8,8 +8,8 @@ interface KanbanBoardProps {
 }
 
 const KanbanBoard = ({ children, className = '' }: KanbanBoardProps): JSX.Element => (
-  <div className={cn('px-6 pb-6', className)}>
-    <div className='flex gap-6 overflow-x-auto pb-4'>{children}</div>
+  <div className={cn('px-6 pb-6 h-full bg-gray-50', className)}>
+    <div className='flex gap-6 h-full'>{children}</div>
   </div>
 );
 

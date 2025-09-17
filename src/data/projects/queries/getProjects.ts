@@ -17,6 +17,11 @@ export interface ProjectsResponse {
     hasNextPage: boolean;
     hasPreviousPage: boolean;
   };
+  statusCounts?: Record<string, number>;
+}
+
+export interface ProjectsInfiniteResponse {
+  pages: ProjectsResponse[];
 }
 
 /**
@@ -36,7 +41,7 @@ export interface UseGetProjectsProps {
  * Follows the same pattern as getPosts for data layer separation.
  */
 export const useGetProjects = ({ params = {}, options = {} }: UseGetProjectsProps = {}): UseQueryResult<
-  ProjectsResponse,
+  unknown,
   Error
 > => {
   return useGetQuery({
@@ -44,7 +49,6 @@ export const useGetProjects = ({ params = {}, options = {} }: UseGetProjectsProp
     url: apiEndpoints.PROJECTS.LIST,
     params,
     options: {
-      keepPreviousData: true,
       ...options,
     },
   });

@@ -1,4 +1,5 @@
 import { clsx, ClassValue } from 'clsx';
+import { isBefore, startOfDay } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]): string {
@@ -15,36 +16,46 @@ export const range = (length: number): number[] => {
 };
 
 /**
- * Date utility functions
+ * Scrolls an element to the bottom
+ * @param element - The element to scroll
+ * @param logMessage - Optional log message for debugging
  */
-
-/**
- * Format date to readable string
- * @param dateString - ISO date string
- * @returns Formatted date string (e.g., "Jan 15, 2024")
- */
-export const formatDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
+export const scrollToBottom = (element: HTMLElement | null): void => {
+  if (!element) {
+    return;
+  }
+  // Use smooth scrolling for better UX
+  element.scrollTo({
+    top: element.scrollHeight,
+    behavior: 'smooth',
   });
 };
 
 /**
- * Format date to relative time (e.g., "2 days ago")
- * @param dateString - ISO date string
- * @returns Relative time string
+ * Scrolls an element to the bottom with a delay
+ * @param element - The element to scroll
+ * @param delay - Delay in milliseconds (default: 100)
+ * @param logMessage - Optional log message for debugging
  */
-export const formatRelativeTime = (dateString: string): string => {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+export const scrollToBottomDelayed = (element: HTMLElement | null, delay: number = 100): void => {
+  if (!element) return;
 
-  if (diffInSeconds < 60) return 'Just now';
-  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
-  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
-  if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)}d ago`;
+  setTimeout(() => {
+    if (element) {
+      element.scrollTo({
+        top: element.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, delay);
+};
 
-  return formatDate(dateString);
+export const isTaskOverdue = (dueDate?: string | null): boolean => {
+  if (!dueDate) return false;
+
+  const due = new Date(dueDate);
+  if (isNaN(due.getTime())) return false;
+
+  const today = startOfDay(new Date());
+  return isBefore(due, today); // overdue if strictly before today
 };
