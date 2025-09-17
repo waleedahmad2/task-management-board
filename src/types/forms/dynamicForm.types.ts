@@ -13,6 +13,7 @@ export interface DynamicFormField<T extends FieldValues = FieldValues> {
   label?: string;
   placeholder?: string;
   description?: string;
+  helpText?: string;
   required?: boolean;
   disabled?: boolean;
   defaultValue?: unknown;
@@ -52,6 +53,7 @@ export interface DynamicFormProps<T extends FieldValues = FieldValues> {
   showSubmitButton?: boolean;
   submitButtonProps?: Record<string, unknown>;
   inlineSubmit?: boolean;
+  onCancel?: () => void;
 }
 
 /**

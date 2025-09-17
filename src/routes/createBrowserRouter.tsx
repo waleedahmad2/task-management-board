@@ -13,7 +13,7 @@ const LoginPage = lazy(() => import('#/pages/LoginPage'));
 const Unauthorized = lazy(() => import('#/pages/UnauthorizedPage'));
 const NotFoundPage = lazy(() => import('#/pages/NotFoundPage'));
 const ProjectBoardPage = lazy(() => import('#/pages/ProjectBoardPage'));
-const TaskDetailPage = lazy(() => import('#/pages/TaskDetailPage'));
+const TaskDetailPage = lazy(() => import('#/components/taskDetails/TaskDetailPage'));
 
 export const createPrivateRoute = (Component: React.ComponentType): JSX.Element => {
   return (
@@ -39,10 +39,7 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       {/* Auth routes */}
-      <Route
-        path={ROUTES.AUTH}
-        element={createPublicRoute(LoginPage)}
-      />
+      <Route path={ROUTES.AUTH} element={createPublicRoute(LoginPage)} />
 
       {/* Protected app routes with layout */}
       <Route path={ROUTES.HOME} element={createPrivateRoute(Layout)}>
@@ -62,7 +59,7 @@ export const router = createBrowserRouter(
 
         {/* Project Board Route */}
         <Route path={ROUTES.PROJECT_BOARD} element={createPrivateRoute(ProjectBoardPage)} />
-        
+
         {/* Task Detail Route */}
         <Route path={ROUTES.TASK_DETAIL} element={createPrivateRoute(TaskDetailPage)} />
       </Route>

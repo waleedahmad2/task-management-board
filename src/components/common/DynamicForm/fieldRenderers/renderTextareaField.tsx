@@ -2,10 +2,9 @@ import { JSX } from 'react';
 
 import { FieldValues } from 'react-hook-form';
 
-import { Textarea } from '#/components/ui';
+import { Textarea } from '#/components/ui/textarea';
 import { FormFieldError } from '#/types/form.types';
 import { DynamicFormFieldProps } from '#/types/forms';
-import { cn } from '#/utils';
 
 /**
  * Render textarea field
@@ -20,8 +19,7 @@ const renderTextareaField = <T extends FieldValues>(
     placeholder={field.placeholder}
     disabled={field.disabled}
     rows={field.rows || 4}
-    defaultValue={(field.defaultValue as string) || ''}
-    className={cn('resize-none', fieldError && 'border-red-500 focus-visible:ring-red-500')}
+    className={fieldError ? 'border-red-500' : ''}
   />
 );
 

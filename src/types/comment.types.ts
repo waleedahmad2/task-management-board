@@ -28,3 +28,7 @@ export interface CommentsResponse {
     hasPreviousPage: boolean;
   };
 }
+
+export interface CommentsInfiniteResponse {
+  pages: CommentsResponse[];
+}

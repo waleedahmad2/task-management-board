@@ -12,7 +12,7 @@ export interface CreateCommentParams {
 }
 
 export const createComment = async ({ formData, taskId, sender }: CreateCommentParams): Promise<Comment> => {
-  return performRequest<Comment, Record<string, unknown>>({
+  const result = await performRequest<Comment, Record<string, unknown>>({
     method: 'POST',
     url: '/comments',
     payload: {
@@ -21,4 +21,6 @@ export const createComment = async ({ formData, taskId, sender }: CreateCommentP
       sender,
     } as Record<string, unknown>,
   });
+
+  return result;
 };

@@ -7,7 +7,8 @@ import { FormFieldError } from '#/types/form.types';
 import { DynamicFormFieldProps } from '#/types/forms';
 
 /**
- * Render default input field
+ * Enhanced default input field with better micro-interactions
+ * Clear focus states, better error handling, and visual feedback
  */
 const renderDefaultField = <T extends FieldValues>(
   field: DynamicFormFieldProps<T>['field'],
@@ -22,7 +23,15 @@ const renderDefaultField = <T extends FieldValues>(
     min={field.min}
     max={field.max}
     step={field.step}
-    className={fieldError ? 'border-red-500' : ''}
+    className={`
+      w-full transition-all duration-200
+      ${
+        fieldError
+          ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
+          : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500/20'
+      }
+      hover:border-gray-400
+    `}
   />
 );
 

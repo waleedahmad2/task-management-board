@@ -2,9 +2,9 @@ import { JSX, useCallback } from 'react';
 
 import { Table, Grid3X3 } from 'lucide-react';
 
-import { Button } from '#/components/ui/Button';
 import { VIEW_TYPES } from '#/constants';
 import { cn } from '#/utils';
+import { Button } from '../ui';
 
 /**
  * View type options

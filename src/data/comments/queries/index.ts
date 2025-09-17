@@ -1,0 +1,1 @@
+export { useGetCommentsInfinite } from './getCommentsInfinite';

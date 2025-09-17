@@ -32,7 +32,6 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps): JSX.Element {
       label: 'Email Address',
       placeholder: 'Enter your email address',
       required: true,
-      description: 'Enter your email to access your workspace',
     },
   ];
 
@@ -76,7 +75,7 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps): JSX.Element {
             className='space-y-4'
             inlineSubmit={true}
             submitButtonProps={{
-              className: 'ml-2',
+              className: 'w-full justify-center',
             }}
           />
         </div>

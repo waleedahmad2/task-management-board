@@ -2,9 +2,9 @@ import { JSX, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { AppHeader, PaginationFooter, ProjectBoardCard, TableSkeleton } from '#/components';
-import { PAGE_SIZES, ROUTES } from '#/constants';
-import { useProjectsListing } from '#/hooks';
+import { AppHeader, ProjectBoardCard, TableSkeleton } from '#/components';
+import { ROUTES } from '#/constants';
+import { useProjects } from '#/hooks';
 import { Project } from '#/types';
 
 /**
@@ -16,23 +16,11 @@ export default function BoardsPage(): JSX.Element {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Use the custom projects hook
-  const {
-    projects,
-    totalItems,
-    filters,
-    isProjectsFetching,
-    handleSearchChange,
-    handlePageChange,
-    handlePageSizeChange,
-  } = useProjectsListing();
+  const { projects, isLoading: isProjectsFetching, handleSearchChange } = useProjects();
 
   const handleSearch = (searchValue: string): void => {
     setSearchTerm(searchValue);
     handleSearchChange(searchValue);
-  };
-
-  const handlePageSizeSelect = (value: string) => {
-    handlePageSizeChange(parseInt(value));
   };
 
   const handleProjectClick = (project: Project): void => {
@@ -48,13 +36,7 @@ export default function BoardsPage(): JSX.Element {
   if (isProjectsFetching) {
     return (
       <div className='flex flex-col h-full'>
-        <AppHeader
-          title='Project Boards'
-          subtitle='Access all your project boards'
-          onSearchChange={handleSearch}
-          searchValue={searchTerm}
-          showSearch={true}
-        />
+        <AppHeader title='Project Boards' onSearch={handleSearch} showSearch={true} />
         <div className='flex-1 p-6'>
           <TableSkeleton />
         </div>
@@ -64,13 +46,7 @@ export default function BoardsPage(): JSX.Element {
 
   return (
     <div className='flex flex-col h-full'>
-      <AppHeader
-        title='Project Boards'
-        subtitle='Access all your project boards'
-        onSearchChange={handleSearch}
-        searchValue={searchTerm}
-        showSearch={true}
-      />
+      <AppHeader title='Project Boards' onSearch={handleSearch} showSearch={true} />
 
       <div className='flex-1 p-6'>
         {filteredProjects.length === 0 ? (
@@ -89,18 +65,6 @@ export default function BoardsPage(): JSX.Element {
           </div>
         )}
       </div>
-
-      {filteredProjects.length > 0 && (
-        <PaginationFooter
-          currentPage={filters.page}
-          totalPages={Math.ceil(totalItems / filters.pageSize)}
-          totalItems={totalItems}
-          pageSize={filters.pageSize}
-          pageSizeOptions={PAGE_SIZES}
-          onPageChange={handlePageChange}
-          onPageSizeChange={handlePageSizeSelect}
-        />
-      )}
     </div>
   );
 }

@@ -58,21 +58,13 @@ const KeyboardShortcutsHelp = ({ className = '' }: KeyboardShortcutsHelpProps): 
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'>
-      <div
-        className={cn(
-          'bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6',
-          className
-        )}
-      >
+      <div className={cn('bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6', className)}>
         <div className='flex items-center justify-between mb-4'>
           <div className='flex items-center space-x-2'>
             <Keyboard className='w-5 h-5 text-gray-600' />
             <h2 className='text-lg font-semibold text-gray-900'>Keyboard Shortcuts</h2>
           </div>
-          <button
-            onClick={() => setIsOpen(false)}
-            className='p-1 hover:bg-gray-100 rounded-md transition-colors'
-          >
+          <button onClick={() => setIsOpen(false)} className='p-1 hover:bg-gray-100 rounded-md transition-colors'>
             <X className='w-4 h-4 text-gray-500' />
           </button>
         </div>
@@ -84,12 +76,8 @@ const KeyboardShortcutsHelp = ({ className = '' }: KeyboardShortcutsHelpProps): 
               <div className='flex items-center space-x-1'>
                 {shortcut.keys.map((key, keyIndex) => (
                   <span key={keyIndex}>
-                    <kbd className='px-2 py-1 text-xs font-mono bg-gray-100 text-gray-700 rounded border'>
-                      {key}
-                    </kbd>
-                    {keyIndex < shortcut.keys.length - 1 && (
-                      <span className='mx-1 text-gray-400'>+</span>
-                    )}
+                    <kbd className='px-2 py-1 text-xs font-mono bg-gray-100 text-gray-700 rounded border'>{key}</kbd>
+                    {keyIndex < shortcut.keys.length - 1 && <span className='mx-1 text-gray-400'>+</span>}
                   </span>
                 ))}
               </div>
@@ -99,7 +87,8 @@ const KeyboardShortcutsHelp = ({ className = '' }: KeyboardShortcutsHelpProps): 
 
         <div className='mt-4 pt-4 border-t border-gray-200'>
           <p className='text-xs text-gray-500'>
-            Press <kbd className='px-1 py-0.5 text-xs font-mono bg-gray-100 rounded'>⌘</kbd> + <kbd className='px-1 py-0.5 text-xs font-mono bg-gray-100 rounded'>?</kbd> to toggle this help
+            Press <kbd className='px-1 py-0.5 text-xs font-mono bg-gray-100 rounded'>⌘</kbd> +{' '}
+            <kbd className='px-1 py-0.5 text-xs font-mono bg-gray-100 rounded'>?</kbd> to toggle this help
           </p>
         </div>
       </div>

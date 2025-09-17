@@ -9,9 +9,6 @@ import './index.css';
 if (import.meta.env.DEV) {
   const { worker } = await import('#/mocks');
   worker.start();
-
-  // Note: Using localStorage-based communication for development
-  // No mock WebSocket server needed - each tab communicates via localStorage
 }
 
 const rootElement = document.getElementById('root');

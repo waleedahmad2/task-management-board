@@ -8,6 +8,7 @@ export * from './notFound';
 export * from './projects';
 export * from './sidebar';
 export * from './skeletons';
+export * from './taskDetails';
 export * from './tasks';
 export * from './ui';
 export * from './unauthorized';

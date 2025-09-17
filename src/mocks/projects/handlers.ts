@@ -9,18 +9,21 @@ import { mockTasks } from '../tasks/data';
  * Projects MSW handlers - backend logic
  */
 export const projectsHandlers = [
-  // Get projects list with pagination and search
+  // Get projects list with pagination, search, and status filtering
   http.get(apiEndpoints.PROJECTS.LIST, async ({ request }) => {
     const url = new URL(request.url);
     const page = parseInt(url.searchParams.get('page') || '1');
     const pageSize = parseInt(url.searchParams.get('pageSize') || '10');
     const search = url.searchParams.get('search') || '';
+    const status = url.searchParams.get('status') || '';
 
     // Backend handles filtering and pagination
     let filteredProjects = ProjectsData;
+
+    // Filter by search term
     if (search.trim()) {
       const searchTerm = search.toLowerCase();
-      filteredProjects = ProjectsData.filter(
+      filteredProjects = filteredProjects.filter(
         project =>
           project.name.toLowerCase().includes(searchTerm) ||
           project.description.toLowerCase().includes(searchTerm) ||
@@ -29,6 +32,11 @@ export const projectsHandlers = [
             member => member.name.toLowerCase().includes(searchTerm) || member.email.toLowerCase().includes(searchTerm)
           )
       );
+    }
+
+    // Filter by status if provided
+    if (status) {
+      filteredProjects = filteredProjects.filter(project => project.status === status);
     }
 
     // Calculate pagination
@@ -41,8 +49,27 @@ export const projectsHandlers = [
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 200));
 
+    // Calculate counts by status for the filtered projects
+    const statusCounts = filteredProjects.reduce(
+      (acc, project) => {
+        const status = project.status;
+        acc[status] = (acc[status] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
+    // Support both pagination and infinite scroll formats
     const result = {
       data: projects,
+      hasNext: page < totalPages,
+      total: totalCount,
+      page,
+      pageSize,
+      totalPages,
+      hasPreviousPage: page > 1,
+      statusCounts, // Add status counts to response
+      // Keep old pagination format for backward compatibility
       pagination: {
         page,
         pageSize,
@@ -135,15 +162,6 @@ export const projectsHandlers = [
   }),
 
   // Create new comment
-  http.post(apiEndpoints.COMMENTS.LIST, async ({ request }) => {
-    const body = await request.json();
-    const { content, taskId, sender } = body;
-
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    // Broadcast comment added event to all connected clients
-
-    return HttpResponse.json(newComment, { status: 201 });
-  }),
+  // This endpoint should be handled by comments handlers, not projects handlers
+  // Removed duplicate comment creation endpoint
 ];

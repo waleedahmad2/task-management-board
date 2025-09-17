@@ -8,6 +8,6 @@ export const COMMENT_FORM_FIELDS = [
     placeholder: 'Write a comment...',
     required: true,
     rows: 3,
-    className: 'w-full resize-none',
+    className: 'w-full resize-none focus:ring-0 focus:ring-offset-0 border-0 shadow-none',
   },
-] as const;
+];

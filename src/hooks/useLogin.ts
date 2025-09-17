@@ -10,7 +10,7 @@ import { LoginFormData } from '#/schemas';
  */
 export function useLogin() {
   const { AUTH } = MESSAGES;
-  const { LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT_SUCCESS } = AUTH;
+  const { LOGIN_SUCCESS, LOGOUT_SUCCESS, EMAIL_NOT_FOUND } = AUTH;
 
   const { login, logout } = useAuth();
 
@@ -25,8 +25,7 @@ export function useLogin() {
       showToast('success', LOGIN_SUCCESS);
       onSuccess?.();
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : LOGIN_ERROR;
-      showToast('error', errorMessage);
+      showToast('error', EMAIL_NOT_FOUND);
       throw error;
     }
   };

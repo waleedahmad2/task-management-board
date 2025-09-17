@@ -4,6 +4,7 @@ export const apiEndpoints = {
   },
   TASKS: {
     LIST: '/tasks',
+    DETAIL: '/tasks',
   },
   COMMENTS: {
     LIST: '/comments',

@@ -1,6 +1,6 @@
 import { JSX } from 'react';
 
-import { Comment } from '#/types/comment.types';
+import { Comment } from '#/types';
 import { formatDate } from '#/utils';
 
 interface CommentItemProps {

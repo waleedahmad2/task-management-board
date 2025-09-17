@@ -22,11 +22,15 @@ const SidebarItemsList = (): JSX.Element => {
 
   const persistedSelectedPath = getLocalStorageItem<string>(SELECTED_KEY);
 
-  // Determine the selected path, considering project board routes as Boards
+  // Determine the selected path, considering project board routes and task details as Boards
   const selectedPath = useMemo(() => {
     if (pathname && pathname !== '') {
       // If we're on a project board route, consider Boards as selected
       if (pathname.startsWith('/projects/') && pathname.endsWith('/board')) {
+        return ROUTES.BOARDS;
+      }
+      // If we're on a task detail route, consider Boards as selected
+      if (pathname.startsWith('/tasks/')) {
         return ROUTES.BOARDS;
       }
       return pathname;

@@ -91,12 +91,7 @@ const GenericSearch = <T extends SearchItem>({
 
   return (
     <div className='fixed inset-0 z-50 flex items-start justify-center pt-20 bg-black/50'>
-      <div
-        className={cn(
-          'bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-96 overflow-hidden',
-          className
-        )}
-      >
+      <div className={cn('bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-96 overflow-hidden', className)}>
         <div className='p-4 border-b border-gray-200'>
           <div className='flex items-center space-x-3'>
             <Search className='w-5 h-5 text-gray-400' />
@@ -108,10 +103,7 @@ const GenericSearch = <T extends SearchItem>({
               onChange={e => setQuery(e.target.value)}
               className='flex-1 text-lg outline-none placeholder-gray-400'
             />
-            <button
-              onClick={onClose}
-              className='p-1 hover:bg-gray-100 rounded-md transition-colors'
-            >
+            <button onClick={onClose} className='p-1 hover:bg-gray-100 rounded-md transition-colors'>
               <X className='w-4 h-4 text-gray-500' />
             </button>
           </div>
@@ -139,9 +131,7 @@ const GenericSearch = <T extends SearchItem>({
                 >
                   <div>
                     <div className='font-medium text-gray-900'>{item.title}</div>
-                    {item.description && (
-                      <div className='text-sm text-gray-500'>{item.description}</div>
-                    )}
+                    {item.description && <div className='text-sm text-gray-500'>{item.description}</div>}
                   </div>
                   <ArrowRight className='w-4 h-4 text-gray-400' />
                 </button>

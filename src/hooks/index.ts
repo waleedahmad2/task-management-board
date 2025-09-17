@@ -1,6 +1,7 @@
-export * from './common';
-export * from './home';
+// export * from './common'; // Commented out - no exports in common/index.ts
 export * from './projects';
+export * from './comments';
+export * from './tasks';
 
 export { default as useSentry } from './useSentry';
 export { useLogin } from './useLogin';

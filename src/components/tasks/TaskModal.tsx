@@ -1,8 +1,7 @@
 import { JSX } from 'react';
 
-import { Modal } from '#/components/common';
-import { TASK_MODAL_MODES, TASK_MODAL_TITLES, TASK_MODAL_DESCRIPTIONS } from '#/constants/task';
-import { TaskFormData } from '#/schemas/taskFormSchema';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '#/components/ui/dialog';
+import { TaskFormData } from '#/schemas';
 import { TaskStatus } from '#/types/task.types';
 import TaskForm from './TaskForm';
 
@@ -13,10 +12,13 @@ interface TaskModalProps {
   isLoading?: boolean;
   initialData?: Partial<TaskFormData>;
   defaultStatus?: TaskStatus;
-  title?: string;
-  description?: string;
+  isEditMode?: boolean;
 }
 
+/**
+ * Modal component for creating and editing tasks
+ * Shows different titles and descriptions based on mode
+ */
 const TaskModal = ({
   isOpen,
   onClose,
@@ -24,22 +26,37 @@ const TaskModal = ({
   isLoading = false,
   initialData = {},
   defaultStatus = 'backlog',
-  title = TASK_MODAL_TITLES[TASK_MODAL_MODES.CREATE],
-  description = TASK_MODAL_DESCRIPTIONS[TASK_MODAL_MODES.CREATE],
+  isEditMode = false,
 }: TaskModalProps): JSX.Element => {
+  // Determine if we're in edit mode
+  const editMode = isEditMode || (initialData && Object.keys(initialData).length > 0);
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={title} description={description} maxWidth='2xl'>
-      <div className='max-h-[70vh] overflow-y-auto'>
-        <TaskForm
-          onSubmit={onSubmit}
-          onCancel={onClose}
-          isLoading={isLoading}
-          initialData={initialData}
-          defaultStatus={defaultStatus}
-          submitLabel={title}
-        />
-      </div>
-    </Modal>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className='sm:max-w-[600px] h-[80vh] flex flex-col'>
+        {/* Fixed Header */}
+        <DialogHeader className='flex-shrink-0'>
+          <DialogTitle>{editMode ? 'Edit Task' : 'Create New Task'}</DialogTitle>
+          <DialogDescription>
+            {editMode
+              ? 'Update the task details below. All fields are required.'
+              : 'Fill in the details to create a new task. All fields are required.'}
+          </DialogDescription>
+        </DialogHeader>
+
+        {/* Scrollable Content */}
+        <div className='flex-1 overflow-y-auto min-h-0'>
+          <TaskForm
+            onSubmit={onSubmit}
+            onCancel={onClose}
+            isLoading={isLoading}
+            initialData={initialData}
+            defaultStatus={defaultStatus}
+            isEditMode={editMode}
+          />
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

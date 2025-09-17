@@ -3,7 +3,6 @@ export { default as TaskCardHeader } from './TaskCardHeader';
 export { default as TaskCardFooter } from './TaskCardFooter';
 export { default as TaskCardActions } from './TaskCardActions';
 export { default as TaskCardPriority } from './TaskCardPriority';
-export { default as TaskCardStatus } from './TaskCardStatus';
 export { default as TaskForm } from './TaskForm';
 export { default as TaskModal } from './TaskModal';
 export { default as TaskBoard } from './TaskBoard';

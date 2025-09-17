@@ -1,69 +1,87 @@
-import { JSX, useMemo, useState, useCallback } from 'react';
+import { JSX, useMemo, useCallback } from 'react';
 
 import {
   DndContext,
-  DragEndEvent,
-  DragStartEvent,
   PointerSensor,
   useSensor,
   useSensors,
   DragOverlay,
-  closestCorners,
+  closestCenter,
+  rectIntersection,
 } from '@dnd-kit/core';
 
 import KanbanGroupedBoard, { KanbanSection } from '#/components/kanban/KanbanGroupedBoard';
 import { TASK_STATUS_ORDER, TASK_STATUS_LABELS, TASK_STATUS_DOT_COLORS } from '#/constants/task';
+import { useTaskDragDrop } from '#/hooks/tasks/useTaskDragDrop';
 import { Task, TaskStatus, TaskDragResult } from '#/types/task.types';
 import SortableTaskCard from './SortableTaskCard';
 import TaskCard from './TaskCard';
 
 interface TaskBoardProps {
-  tasks: Task[];
+  tasksByStatus: Record<TaskStatus, Task[]>;
   onTaskClick?: (task: Task) => void;
   onAddTask?: (status: TaskStatus) => void;
   onTaskMove?: (result: TaskDragResult) => void;
   onTaskEdit?: (task: Task) => void;
   onTaskDelete?: (task: Task) => void;
+  isFetchingNextPage?: Record<TaskStatus, boolean>;
+  hasNextPage?: Record<TaskStatus, boolean>;
+  columnScrollHandlers?: Record<TaskStatus, (e: React.UIEvent<HTMLDivElement>) => void>;
   className?: string;
 }
 
-const createKanbanSections = (tasks: Task[]): KanbanSection<Task>[] => {
-  const grouped = tasks.reduce(
-    (acc, task) => {
-      const { status } = task;
-      if (!acc[status]) {
-        acc[status] = [];
-      }
-      acc[status].push(task);
-      return acc;
-    },
-    {} as Record<TaskStatus, Task[]>
-  );
-
+const createKanbanSections = (
+  tasksByStatus: Record<TaskStatus, Task[]>,
+  isFetchingNextPage?: Record<TaskStatus, boolean>,
+  hasNextPage?: Record<TaskStatus, boolean>,
+  columnScrollHandlers?: Record<TaskStatus, (e: React.UIEvent<HTMLDivElement>) => void>
+): KanbanSection<Task>[] => {
   return TASK_STATUS_ORDER.map(status => {
     const label = TASK_STATUS_LABELS[status];
     const dotColor = TASK_STATUS_DOT_COLORS[status] || '';
+    const tasks = tasksByStatus[status] || [];
+
+    // Sort tasks by order to ensure consistent positioning
+    const sortedTasks = tasks.sort((a, b) => a.order - b.order);
 
     return {
       key: status,
       title: label,
-      items: grouped[status] || [],
+      items: sortedTasks,
       dotColorClass: dotColor,
+      isFetchingNextPage: isFetchingNextPage?.[status] || false,
+      hasNextPage: hasNextPage?.[status] || false,
+      onScroll: columnScrollHandlers?.[status],
     };
   });
 };
 
+// Custom collision detection for better vertical list handling
+const customCollisionDetection = (args: unknown) => {
+  // First, try to find intersections with sortable items
+  const sortableIntersections = rectIntersection(args);
+
+  // If we have intersections with sortable items, return them
+  if (sortableIntersections.length > 0) {
+    return sortableIntersections;
+  }
+
+  // Otherwise, fall back to closest center for droppable areas
+  return closestCenter(args);
+};
+
 const TaskBoard = ({
-  tasks,
+  tasksByStatus,
   onTaskClick,
   onAddTask,
   onTaskMove,
   onTaskEdit,
   onTaskDelete,
+  isFetchingNextPage,
+  hasNextPage,
+  columnScrollHandlers,
   className = '',
 }: TaskBoardProps): JSX.Element => {
-  const [activeTask, setActiveTask] = useState<Task | null>(null);
-
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -72,81 +90,51 @@ const TaskBoard = ({
     })
   );
 
-  const sections = useMemo(() => createKanbanSections(tasks), [tasks]);
-
-  const handleDragStart = useCallback((event: DragStartEvent): void => {
-    const { active } = event;
-    const task = active.data.current?.task;
-    if (task) {
-      setActiveTask(task);
-    }
-  }, []);
-
-  const handleDragEnd = useCallback(
-    (event: DragEndEvent): void => {
-      const { active, over } = event;
-      setActiveTask(null);
-
-      if (!over || !active.data.current) {
-        return;
-      }
-
-      const activeTask = active.data.current.task as Task;
-      const activeStatus = active.data.current.status as TaskStatus;
-      const activeIndex = active.data.current.index as number;
-
-      let targetStatus: TaskStatus;
-      let targetIndex: number;
-
-      const overTask = tasks.find(task => task.id === over.id);
-
-      if (overTask) {
-        const { status } = overTask;
-        targetStatus = status;
-        const sectionTasks = sections.find(s => s.key === targetStatus)?.items || [];
-        const sortedTasks = sectionTasks.sort((a, b) => a.order - b.order);
-        targetIndex = sortedTasks.findIndex(task => task.id === over.id);
-      } else {
-        targetStatus = over.id as TaskStatus;
-        targetIndex = sections.find(s => s.key === targetStatus)?.items?.length || 0;
-      }
-
-      if (targetStatus !== activeStatus || targetIndex !== activeIndex) {
-        const dragResult: TaskDragResult = {
-          taskId: activeTask.id,
-          sourceColumn: activeStatus,
-          targetColumn: targetStatus,
-          sourceIndex: activeIndex,
-          targetIndex,
-        };
-
-        onTaskMove?.(dragResult);
-      }
-    },
-    [sections, onTaskMove, tasks]
+  const sections = useMemo(
+    () => createKanbanSections(tasksByStatus, isFetchingNextPage, hasNextPage, columnScrollHandlers),
+    [tasksByStatus, isFetchingNextPage, hasNextPage, columnScrollHandlers]
   );
+
+  const { activeTask, overTask, overColumn, handleDragStart, handleDragOver, handleDragEnd } = useTaskDragDrop({
+    tasksByStatus,
+    sections,
+    onTaskMove,
+  });
 
   const renderTask = useCallback(
     (task: Task, index: number) => {
+      // Check if this task should show a placeholder above it
+      const shouldShowPlaceholder = overTask && overTask.id === task.id && activeTask && activeTask.id !== task.id;
+
+      // Use a composite key that includes order to force re-render when position changes
+      const taskKey = `${task.id}-${task.status}-${task.order}-${index}`;
+
       return (
-        <SortableTaskCard
-          key={task.id}
-          task={task}
-          index={index}
-          onClick={onTaskClick}
-          onEdit={onTaskEdit}
-          onDelete={onTaskDelete}
-        />
+        <div key={taskKey}>
+          {shouldShowPlaceholder && (
+            <div className='opacity-50 border-2 border-dashed border-blue-400 bg-blue-50 rounded-lg p-3 mb-4'>
+              <div className='text-sm text-blue-600 font-medium'>Drop here to place before "{task.title}"</div>
+            </div>
+          )}
+          <SortableTaskCard
+            task={task}
+            index={index}
+            onClick={onTaskClick}
+            onEdit={onTaskEdit}
+            onDelete={onTaskDelete}
+          />
+        </div>
       );
     },
-    [onTaskClick, onTaskEdit, onTaskDelete]
+    [onTaskClick, onTaskEdit, onTaskDelete, overTask, activeTask]
   );
 
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCorners}
+      collisionDetection={customCollisionDetection}
       onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
       <KanbanGroupedBoard
@@ -154,6 +142,8 @@ const TaskBoard = ({
         renderItem={renderTask}
         onAddItem={onAddTask ? (sectionKey: string) => onAddTask(sectionKey as TaskStatus) : undefined}
         className={className}
+        activeTask={activeTask}
+        overColumn={overColumn}
       />
 
       <DragOverlay>

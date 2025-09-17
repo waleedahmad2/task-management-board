@@ -77,3 +77,23 @@ export const TASK_FOOTER_TEXT = {
   OVERDUE: 'Overdue',
   ACTIVE: 'Active Task',
 } as const;
+
+// Task status options for dropdowns
+export const TASK_STATUS_OPTIONS = [
+  { value: 'backlog', label: TASK_STATUS_LABELS.backlog.toUpperCase(), color: TASK_STATUS_DOT_COLORS.backlog },
+  {
+    value: 'in-progress',
+    label: TASK_STATUS_LABELS['in-progress'].toUpperCase(),
+    color: TASK_STATUS_DOT_COLORS['in-progress'],
+  },
+  { value: 'review', label: TASK_STATUS_LABELS.review.toUpperCase(), color: TASK_STATUS_DOT_COLORS.review },
+  { value: 'done', label: TASK_STATUS_LABELS.done.toUpperCase(), color: TASK_STATUS_DOT_COLORS.done },
+] as const;
+
+// Task priority options for dropdowns
+export const TASK_PRIORITY_OPTIONS = [
+  { value: 'low', label: TASK_PRIORITY_LABELS.low, color: 'bg-gray-400' },
+  { value: 'medium', label: TASK_PRIORITY_LABELS.medium, color: 'bg-yellow-500' },
+  { value: 'high', label: TASK_PRIORITY_LABELS.high, color: 'bg-orange-500' },
+  { value: 'urgent', label: TASK_PRIORITY_LABELS.urgent, color: 'bg-red-500' },
+] as const;

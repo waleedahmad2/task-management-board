@@ -1,14 +1,10 @@
-import { JSX, useEffect, useMemo, useState } from 'react';
+import { JSX, useRef, useEffect } from 'react';
 
-import { CommentsSkeleton } from '#/components/skeletons';
+import { NoData } from '#/components/common';
+import { CommentItemSkeleton } from '#/components/skeletons';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '#/components/ui/sheet';
-import { useAuth } from '#/context/AuthContext';
-import { useGetCommentsInfinite } from '#/data/comments/queries/getCommentsInfinite';
-import { createComment } from '#/data/comments/mutations';
-import { useInfiniteScroll } from '#/hooks';
-import { CommentFormData } from '#/schemas/commentFormSchema';
-import { CommentsResponse } from '#/types/comment.types';
-import { Task } from '#/types/task.types';
+import { useComments } from '#/hooks';
+import { Task } from '#/types';
 import CommentForm from './CommentForm';
 import CommentItem from './CommentItem';
 
@@ -19,121 +15,70 @@ interface CommentsDrawerProps {
 }
 
 const CommentsDrawer = ({ isOpen, onClose, task }: CommentsDrawerProps): JSX.Element => {
-  const { user } = useAuth();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollAnchorRef = useRef<HTMLDivElement>(null);
 
-  const {
-    data: commentsData,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    refetch,
-  } = useGetCommentsInfinite({
+  // Use the business logic hook for comments only when drawer is open
+  const { comments, isLoading, isFetchingNextPage, handleScroll, handleCommentSubmit } = useComments({
     params: {
-      taskId: task?.id || '',
-      pageSize: 10,
+      taskId: isOpen ? task?.id || '' : '', // Only fetch when drawer is open
     },
   });
 
-  // Flatten all pages of comments and sort chronologically
-  const serverComments = useMemo(() => {
-    const data = commentsData as { pages?: CommentsResponse[] } | undefined;
-    if (!data?.pages) return [];
-
-    const flattened = data.pages.flatMap(({ data: pageData = [] }) => pageData);
-    return flattened.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-  }, [commentsData]);
-
-  // Use server comments directly
-  const [comments, setComments] = useState(serverComments);
-  const [isPending, setIsPending] = useState(false);
-
-  // Update local comments when server comments change
-  useEffect(() => {
-    setComments(serverComments);
-  }, [serverComments]);
-
-  const handleScroll = useInfiniteScroll({
-    fetchNextPage,
-    hasNextPage: hasNextPage || false,
-    isFetchingNextPage: isFetchingNextPage || false,
-  });
-
-  const handleCommentSubmit = async (data: CommentFormData): Promise<void> => {
-    if (!task?.id || !user) return;
-
-    // Create optimistic comment
-    const optimisticComment = {
-      id: `temp-comment-${Date.now()}`,
-      content: data.content,
-      taskId: task.id,
-      user: {
-        id: user.id || 'current-user',
-        name: user.name || 'Current User',
-        email: user.email || 'user@example.com',
-        role: user.role || 'member',
-      },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    // Add optimistically to local state
-    setComments(prev => [...prev, optimisticComment]);
-    setIsPending(true);
-
-    try {
-      await createComment({
-        formData: { ...data, taskId: task.id },
-        taskId: task.id,
-        user: {
-          id: user.id || 'current-user',
-          name: user.name || 'Current User',
-          email: user.email || 'user@example.com',
-          role: user.role || 'member',
-        },
-      });
-
-      // Refetch comments to get the real comment
-      refetch();
-    } catch (error) {
-      console.error('Failed to create comment:', error);
-      // Remove optimistic comment on error
-      setComments(prev => prev.filter(comment => comment.id !== optimisticComment.id));
-    } finally {
-      setIsPending(false);
-    }
-  };
-
   const { title } = task || {};
+
+  // Auto-scroll when comments update
+  useEffect(() => {
+    if (isOpen && comments.length > 0) {
+      scrollAnchorRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [comments, isOpen]);
+
+  // Extra effect: when opening the drawer, scroll once after mount
+  useEffect(() => {
+    if (isOpen) {
+      // Delay to allow content to render
+      const timer = setTimeout(() => {
+        scrollAnchorRef.current?.scrollIntoView({ behavior: 'auto' });
+      }, 50);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className='w-[400px] sm:w-[540px]'>
+      <SheetContent className='w-[25rem] sm:w-[33.75rem]'>
         <SheetHeader>
           <SheetTitle>Comments</SheetTitle>
           <SheetDescription>{title ? `Comments for "${title}"` : 'Task comments'}</SheetDescription>
         </SheetHeader>
 
         <div className='flex flex-col h-[calc(100vh-120px)]'>
-          {/* Comments List */}
-          <div className='flex-1 overflow-y-auto mt-6 mb-4' onScroll={handleScroll}>
+          <div ref={scrollContainerRef} className='flex-1 overflow-y-auto mt-6 mb-4' onScroll={handleScroll}>
             {isLoading ? (
-              <div className='flex items-center justify-center py-8'>
-                <div className='text-gray-500'>Loading comments...</div>
+              <div className='space-y-0'>
+                <CommentItemSkeleton />
+                <CommentItemSkeleton />
+                <CommentItemSkeleton />
               </div>
             ) : comments.length === 0 ? (
-              <div className='flex items-center justify-center py-8'>
-                <div className='text-center'>
-                  <p className='text-gray-500 mb-2'>No comments yet</p>
-                  <p className='text-sm text-gray-400'>Be the first to comment!</p>
-                </div>
+              <div className='flex items-center justify-center h-full min-h-[25rem]'>
+                <NoData title='No comments yet' message='Be the first to comment on this task!' />
               </div>
             ) : (
               <div className='space-y-0'>
                 {comments.map(comment => (
                   <CommentItem key={comment.id} comment={comment} />
                 ))}
-                {isFetchingNextPage && comments.length > 0 && <CommentsSkeleton count={2} />}
+                {isFetchingNextPage && comments.length > 0 && (
+                  <div className='space-y-0'>
+                    <CommentItemSkeleton />
+                    <CommentItemSkeleton />
+                  </div>
+                )}
+                {/* Anchor div for auto-scrolling */}
+                <div ref={scrollAnchorRef} />
               </div>
             )}
           </div>
@@ -141,11 +86,7 @@ const CommentsDrawer = ({ isOpen, onClose, task }: CommentsDrawerProps): JSX.Ele
           {/* Comment Form - Fixed at bottom */}
           {task && (
             <div className='flex-shrink-0'>
-              <CommentForm
-                onSubmit={handleCommentSubmit}
-                isLoading={isPending}
-                placeholder={`Comment on "${title}"...`}
-              />
+              <CommentForm onSubmit={handleCommentSubmit} isLoading={false} placeholder={`Comment on "${title}"...`} />
             </div>
           )}
         </div>

@@ -32,7 +32,7 @@ export const useGetCurrentUser = (token: string | null) => {
             },
           },
         });
-      } catch (error) {
+      } catch {
         // Don't clear token on network errors during development
         // Only clear on actual authentication failures
         return null;

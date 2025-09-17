@@ -1,4 +1,3 @@
-export { Button } from './Button';
 export { Input } from './Input';
 export { Textarea } from './textarea';
 export { DatePicker } from './datePicker';
@@ -35,3 +34,4 @@ export {
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
 } from './breadcrumb';
+export { Button } from './button';

@@ -20,19 +20,24 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const localStorageToken = getLocalStorageItem(ACCESS_TOKEN) as string | null;
+  const localStorageUser = getLocalStorageItem('USER_DATA') as User | null;
 
   const [token, setToken] = useState<string | null>(localStorageToken);
+  const [user, setUser] = useState<User | null>(localStorageUser);
 
-  const [user, setUser] = useState<User | null>(null);
-
-  const login = (newToken: string, userData: User): void => {
+  const login = (newToken: string, userData?: User): void => {
     setToken(newToken);
     setLocalStorageItem(ACCESS_TOKEN, newToken);
-    setUser(userData);
+
+    if (userData) {
+      setUser(userData);
+      setLocalStorageItem('USER_DATA', userData);
+    }
   };
 
   const logout = (): void => {
     removeLocalStorageItem(ACCESS_TOKEN);
+    removeLocalStorageItem('USER_DATA');
     setToken(null);
     setUser(null);
   };

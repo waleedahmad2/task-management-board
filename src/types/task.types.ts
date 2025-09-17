@@ -29,8 +29,18 @@ export interface TaskFormData {
   status: TaskStatus;
 }
 
+/**
+ * Response type for tasks list - matches projects format exactly
+ */
 export interface TasksResponse {
   data: Task[];
+  hasNext: boolean;
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  hasPreviousPage: boolean;
+  // Keep pagination format for backward compatibility
   pagination: {
     page: number;
     pageSize: number;
@@ -39,6 +49,10 @@ export interface TasksResponse {
     hasNextPage: boolean;
     hasPreviousPage: boolean;
   };
+}
+
+export interface TasksInfiniteResponse {
+  pages: TasksResponse[];
 }
 
 export interface TaskDragResult {

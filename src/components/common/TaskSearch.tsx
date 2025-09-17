@@ -20,7 +20,7 @@ const TaskSearch = ({ isOpen, onClose, onSelectTask, tasks, className = '' }: Ta
     return tasks.map(task => ({
       id: task.id,
       title: task.title,
-      description: task.description,
+      description: task.description?.length > 100 ? `${task.description.substring(0, 100)}...` : task.description,
       status: task.status,
       priority: task.priority,
       assignee: task.assignee?.name,
@@ -29,7 +29,7 @@ const TaskSearch = ({ isOpen, onClose, onSelectTask, tasks, className = '' }: Ta
     }));
   }, [tasks]);
 
-  const handleSelectItem = (item: typeof searchItems[0]): void => {
+  const handleSelectItem = (item: (typeof searchItems)[0]): void => {
     onSelectTask?.(item.originalTask);
   };
 

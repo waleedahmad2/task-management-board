@@ -1,64 +1,41 @@
-import { JSX, useMemo } from 'react';
+import { JSX } from 'react';
 
 import KanbanGroupedBoard, { KanbanSection } from '#/components/kanban/KanbanGroupedBoard';
 import { STATUS_CONFIG, STATUS_DOT_COLORS, PROJECT_STATUSES } from '#/constants';
-import { ProjectStatusColumnsProps, Project, ProjectStatus } from '#/types';
+import { useProjectStatusColumns } from '#/hooks/projects/useProjectStatusColumns';
+import { ProjectStatusColumnsProps, Project } from '#/types';
 import ProjectCard from './ProjectCard';
+import { KanbanColumnsSkeleton } from '../skeletons';
 
 const ProjectStatusColumns = ({
-  projects = [],
   onProjectClick,
   className = '',
-}: ProjectStatusColumnsProps): JSX.Element => {
-  const projectsByStatus = useMemo(() => {
-    const grouped = projects.reduce(
-      (acc, project) => {
-        const { status } = project || {};
-        if (!acc[status]) {
-          acc[status] = [];
-        }
-        acc[status].push(project);
-        return acc;
-      },
-      {} as Record<ProjectStatus, Project[]>
-    );
+  searchQuery = '',
+}: Omit<ProjectStatusColumnsProps, 'projects' | 'onScroll'> & { searchQuery?: string }): JSX.Element => {
+  const { projectsByStatus, statusCounts, statusQueries, isLoading, hasError } = useProjectStatusColumns(searchQuery);
 
-    PROJECT_STATUSES.forEach(status => {
-      if (!grouped[status]) {
-        grouped[status] = [];
-      }
-    });
+  if (isLoading) return <KanbanColumnsSkeleton columns={3} cardsPerColumn={3} />;
+  if (hasError) return <div className='flex items-center justify-center h-64 text-red-500'>Error loading projects</div>;
 
-    return grouped;
-  }, [projects]);
-
-  const sections: KanbanSection<Project>[] = PROJECT_STATUSES.map(status => {
-    const { label } = STATUS_CONFIG[status] || {};
-    const dotColor = STATUS_DOT_COLORS[status] || '';
-    return {
-      key: status,
-      title: label,
-      items: projectsByStatus[status] || [],
-      dotColorClass: dotColor,
-    };
-  });
+  const sections: KanbanSection<Project>[] = PROJECT_STATUSES.map(status => ({
+    key: status,
+    title: STATUS_CONFIG[status]?.label || '',
+    items: projectsByStatus[status] || [],
+    count: statusCounts[status] || 0,
+    dotColorClass: STATUS_DOT_COLORS[status] || '',
+    isLoading: statusQueries[status].isLoading,
+    isFetchingNextPage: statusQueries[status].isFetchingNextPage,
+    hasNextPage: statusQueries[status].hasNextPage,
+    error: statusQueries[status].error,
+    onScroll: statusQueries[status].handleScroll,
+  }));
 
   return (
     <KanbanGroupedBoard
       sections={sections}
       className={className}
-      renderItem={project => {
-        const { id } = project || {};
-        return <ProjectCard key={id} project={project} onClick={onProjectClick} />;
-      }}
-      emptyRender={key => {
-        const { label } = STATUS_CONFIG[key as keyof typeof STATUS_CONFIG] || {};
-        return (
-          <div className='bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center'>
-            <p className='text-sm text-gray-500'>No {label?.toLowerCase()}</p>
-          </div>
-        );
-      }}
+      onScroll={statusQueries.active.handleScroll}
+      renderItem={project => <ProjectCard key={project.id} project={project} onClick={onProjectClick} />}
     />
   );
 };

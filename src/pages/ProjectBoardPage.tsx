@@ -1,4 +1,4 @@
-import { JSX, useCallback, useEffect, useState } from 'react';
+import { JSX, useCallback, useState } from 'react';
 
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -11,207 +11,84 @@ import {
   TaskModal,
   ProjectBoardSkeleton,
 } from '#/components';
-import { TASK_MODAL_MODES, TASK_MODAL_TITLES, TASK_MODAL_DESCRIPTIONS } from '#/constants/task';
-import { ROUTES } from '#/constants/routes';
-import { useGetTasks } from '#/data/tasks/queries/getTasks';
-import { createTask, updateTask, deleteTask } from '#/data/tasks/mutations';
+import { ROUTES, TASK_MODAL_MODES, BREADCRUMB_ITEMS } from '#/constants';
 import { useKeyboardShortcuts } from '#/hooks';
-import { taskFormSchema } from '#/schemas';
-import { Task, TaskStatus, TaskDragResult } from '#/types/task.types';
+import { useTasksPerColumn } from '#/hooks/tasks/useTasksPerColumn';
+import { Task, TaskStatus } from '#/types';
 
 const ProjectBoardPage = (): JSX.Element => {
+  // 1. CONSTANTS
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
 
-  const {
-    data: tasksData,
-    isLoading,
-    error,
-  } = useGetTasks({
-    params: {
-      projectId: projectId || '1', // Default to project 1 for testing
-      page: 1,
-      pageSize: 100,
-    },
-  });
-
-  const [tasks, setTasks] = useState<Task[]>([]);
+  // 2. STATE
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<TaskStatus>('backlog');
-  const [isCommentsDrawerOpen, setIsCommentsDrawerOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
-  const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
+  const [modalMode, setModalMode] = useState<'create' | 'edit'>(TASK_MODAL_MODES.CREATE);
   const [isTaskSearchOpen, setIsTaskSearchOpen] = useState(false);
 
-  useEffect(() => {
-    if (tasksData?.data) {
-      setTasks(tasksData.data);
-    }
-  }, [tasksData]);
+  // 3. HOOKS
+  const {
+    // Data
+    tasksByStatus,
+    allTasks,
+    isLoading,
+    error,
+    isFetchingNextPage,
+    hasNextPage,
 
-  const handleTaskClick = (task: Task): void => {
-    navigate(`/tasks/${task.id}`);
-  };
+    // Comments drawer state
+    isCommentsDrawerOpen,
+    selectedTask,
 
-  const handleAddTask = (status: TaskStatus): void => {
+    // Heavy task operations
+    handleTaskSubmit,
+    handleTaskDelete,
+    handleTaskMove,
+
+    // Comments drawer actions
+    handleSelectTask,
+    handleCloseCommentsDrawer,
+
+    // Per-column scroll handlers
+    columnScrollHandlers,
+  } = useTasksPerColumn({ projectId: projectId || '' });
+
+  // 4. HANDLERS
+  const handleTaskClick = useCallback(
+    (task: Task): void => {
+      navigate(`${ROUTES.TASKS}/${task.id}`);
+    },
+    [navigate]
+  );
+
+  const handleOpenTaskSearch = useCallback((): void => {
+    setIsTaskSearchOpen(true);
+  }, []);
+
+  const handleCloseTaskSearch = useCallback((): void => {
+    setIsTaskSearchOpen(false);
+  }, []);
+
+  const handleAddTask = useCallback((status: TaskStatus): void => {
     setSelectedStatus(status);
-    setModalMode('create');
-    setEditingTask(null);
-    setIsTaskModalOpen(true);
-  };
-
-  const handleTaskSubmit = async (data: unknown): Promise<void> => {
-    try {
-      const validatedData = taskFormSchema.parse(data);
-      
-      if (modalMode === 'create') {
-        // Create optimistic task
-        const optimisticTask: Task = {
-          id: `temp-${Date.now()}`,
-          title: validatedData.title,
-          description: validatedData.description,
-          priority: validatedData.priority,
-          dueDate: validatedData.dueDate,
-          assignee: validatedData.assigneeId ? {
-            id: validatedData.assigneeId,
-            name: 'Loading...',
-            email: '',
-          } : undefined,
-          status: validatedData.status,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          projectId: projectId || '1',
-          order: 0,
-        };
-
-        // Add optimistically
-        setTasks(prev => [...prev, optimisticTask]);
-        setIsTaskModalOpen(false);
-
-        // Create real task
-        const newTask = await createTask({ formData: validatedData, projectId: projectId || '1' });
-        
-        // Replace optimistic with real
-        setTasks(prev => prev.map(task => 
-          task.id === optimisticTask.id ? newTask : task
-        ));
-      } else if (modalMode === 'edit' && editingTask) {
-        // Update optimistically
-        setTasks(prev => prev.map(task => 
-          task.id === editingTask.id 
-            ? { ...task, ...validatedData, updatedAt: new Date().toISOString() }
-            : task
-        ));
-        setIsTaskModalOpen(false);
-        setEditingTask(null);
-
-        // Update real task
-        const updatedTask = await updateTask({ taskId: editingTask.id, updates: validatedData });
-        
-        // Replace optimistic with real
-        setTasks(prev => prev.map(task => 
-          task.id === editingTask.id ? updatedTask : task
-        ));
-      }
-    } catch (error) {
-      console.error(`Failed to ${modalMode} task:`, error);
-      // Revert optimistic changes on error
-      if (modalMode === 'create') {
-        setTasks(prev => prev.filter(task => !task.id.startsWith('temp-')));
-      }
-      // Re-open modal on error
-      setIsTaskModalOpen(true);
-    }
-  };
-
-
-  const handleCloseCommentsDrawer = (): void => {
-    setIsCommentsDrawerOpen(false);
-    setSelectedTask(null);
-  };
-
-  const handleTaskMove = async (result: TaskDragResult): Promise<void> => {
-    const { taskId, sourceColumn, targetColumn, sourceIndex, targetIndex } = result;
-    
-    // Find the task being moved
-    const taskToMove = tasks.find(task => task.id === taskId);
-    if (!taskToMove) return;
-
-    // Update optimistically first
-    setTasks(prev => {
-      const newTasks = [...prev];
-      const taskIndex = newTasks.findIndex(task => task.id === taskId);
-      
-      if (taskIndex !== -1) {
-        // Update the task with new status and order
-        newTasks[taskIndex] = {
-          ...newTasks[taskIndex],
-          status: targetColumn,
-          order: targetIndex,
-          updatedAt: new Date().toISOString(),
-        };
-      }
-      
-      return newTasks;
-    });
-
-    try {
-      // Call the API to persist the change
-      await updateTask({ 
-        taskId, 
-        updates: { 
-          status: targetColumn,
-          order: targetIndex 
-        } 
-      });
-    } catch (error) {
-      console.error('Failed to move task:', error);
-      // Revert on error
-      setTasks(prev => prev.map(task => 
-        task.id === taskId 
-          ? { ...task, status: sourceColumn, order: sourceIndex }
-          : task
-      ));
-    }
-  };
-
-  const handleTaskEdit = (task: Task): void => {
-    setEditingTask(task);
-    setModalMode('edit');
-    setIsTaskModalOpen(true);
-  };
-
-  const handleTaskDelete = async (task: Task): Promise<void> => {
-    // Store original task for rollback
-    const originalTask = task;
-    
-    // Remove optimistically
-    setTasks(prev => prev.filter(t => t.id !== task.id));
-    
-    try {
-      await deleteTask(task.id);
-    } catch (error) {
-      console.error('Failed to delete task:', error);
-      // Revert optimistic change on error
-      setTasks(prev => [...prev, originalTask]);
-    }
-  };
-
-
-  const handleNavigateToBoards = useCallback((): void => {
-    navigate(ROUTES.BOARDS);
-  }, [navigate]);
-
-  const handleCreateTask = useCallback((): void => {
-    setSelectedStatus('backlog');
-    setModalMode('create');
+    setModalMode(TASK_MODAL_MODES.CREATE);
     setEditingTask(null);
     setIsTaskModalOpen(true);
   }, []);
 
-  const handleOpenTaskSearch = useCallback((): void => {
-    setIsTaskSearchOpen(true);
+  const handleTaskEdit = useCallback((task: Task): void => {
+    setEditingTask(task);
+    setModalMode(TASK_MODAL_MODES.EDIT);
+    setIsTaskModalOpen(true);
+  }, []);
+
+  const handleCreateTask = useCallback((): void => {
+    setSelectedStatus('backlog');
+    setModalMode(TASK_MODAL_MODES.CREATE);
+    setEditingTask(null);
+    setIsTaskModalOpen(true);
   }, []);
 
   const handleCloseModal = useCallback((): void => {
@@ -220,18 +97,29 @@ const ProjectBoardPage = (): JSX.Element => {
   }, []);
 
   const handleSaveTask = useCallback((): void => {
-    // This will be handled by the form submission
-    // The keyboard shortcut will trigger the form's submit
     const submitButton = document.querySelector('[type="submit"]') as HTMLButtonElement;
     submitButton?.click();
   }, []);
 
-  const handleSelectTask = useCallback((task: Task): void => {
-    setSelectedTask(task);
-    setIsCommentsDrawerOpen(true);
-  }, []);
+  const handleTaskSubmitWrapper = useCallback(
+    async (data: unknown): Promise<void> => {
+      try {
+        await handleTaskSubmit(data, modalMode, editingTask);
+        setIsTaskModalOpen(false);
+        setEditingTask(null);
+      } catch (error) {
+        // Keep modal open on error
+        console.error('Task submission failed:', error);
+      }
+    },
+    [handleTaskSubmit, modalMode, editingTask]
+  );
 
-  // Keyboard shortcuts
+  const handleNavigateToBoards = useCallback((): void => {
+    navigate(ROUTES.BOARDS);
+  }, [navigate]);
+
+  // 5. EFFECTS & ADDITIONAL HOOKS
   useKeyboardShortcuts({
     onCreateTask: handleCreateTask,
     onOpenSearch: handleOpenTaskSearch,
@@ -241,17 +129,10 @@ const ProjectBoardPage = (): JSX.Element => {
     isSearchOpen: isTaskSearchOpen,
   });
 
-  const breadcrumbItems = [
-    {
-      label: 'Boards',
-      onClick: handleNavigateToBoards,
-    },
-    {
-      label: `Project ${projectId} Board`,
-      isCurrentPage: true,
-    },
-  ] as const;
+  // 6. COMPUTED VALUES
+  const breadcrumbItems = [...BREADCRUMB_ITEMS.PROJECT_BOARD(projectId || '1', handleNavigateToBoards)];
 
+  // 7. CONDITIONAL RENDERS
   if (isLoading) {
     return <ProjectBoardSkeleton />;
   }
@@ -283,22 +164,29 @@ const ProjectBoardPage = (): JSX.Element => {
         </div>
       </div>
 
-      <TaskBoard
-        tasks={tasks}
-        onTaskClick={handleTaskClick}
-        onAddTask={handleAddTask}
-        onTaskMove={handleTaskMove}
-        onTaskEdit={handleTaskEdit}
-        onTaskDelete={handleTaskDelete}
-      />
+      <div className=' overflow-x-auto' data-scroll-container>
+        <div className='relative'>
+          <TaskBoard
+            tasksByStatus={tasksByStatus}
+            onTaskClick={handleTaskClick}
+            onAddTask={handleAddTask}
+            onTaskMove={handleTaskMove}
+            onTaskEdit={handleTaskEdit}
+            onTaskDelete={handleTaskDelete}
+            isFetchingNextPage={isFetchingNextPage}
+            hasNextPage={hasNextPage}
+            columnScrollHandlers={columnScrollHandlers}
+          />
+        </div>
+      </div>
 
       <TaskModal
         isOpen={isTaskModalOpen}
         onClose={handleCloseModal}
-        onSubmit={handleTaskSubmit}
-        defaultStatus={modalMode === 'create' ? selectedStatus : undefined}
+        onSubmit={handleTaskSubmitWrapper}
+        defaultStatus={modalMode === TASK_MODAL_MODES.CREATE ? selectedStatus : undefined}
         initialData={
-          modalMode === 'edit' && editingTask
+          modalMode === TASK_MODAL_MODES.EDIT && editingTask
             ? {
                 title: editingTask.title,
                 description: editingTask.description,
@@ -309,17 +197,16 @@ const ProjectBoardPage = (): JSX.Element => {
               }
             : {}
         }
-        title={TASK_MODAL_TITLES[TASK_MODAL_MODES[modalMode.toUpperCase() as keyof typeof TASK_MODAL_MODES]]}
-        description={TASK_MODAL_DESCRIPTIONS[TASK_MODAL_MODES[modalMode.toUpperCase() as keyof typeof TASK_MODAL_MODES]]}
+        isEditMode={modalMode === TASK_MODAL_MODES.EDIT}
       />
 
       <CommentsDrawer isOpen={isCommentsDrawerOpen} onClose={handleCloseCommentsDrawer} task={selectedTask} />
 
       <TaskSearch
         isOpen={isTaskSearchOpen}
-        onClose={() => setIsTaskSearchOpen(false)}
+        onClose={handleCloseTaskSearch}
         onSelectTask={handleSelectTask}
-        tasks={tasks}
+        tasks={allTasks}
       />
 
       <KeyboardShortcutsHelp />
