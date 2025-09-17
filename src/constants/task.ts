@@ -97,3 +97,51 @@ export const TASK_PRIORITY_OPTIONS = [
   { value: 'high', label: TASK_PRIORITY_LABELS.high, color: 'bg-orange-500' },
   { value: 'urgent', label: TASK_PRIORITY_LABELS.urgent, color: 'bg-red-500' },
 ] as const;
+
+// Professional priority design system for TaskCard components
+export const TASK_PRIORITY_STYLES = {
+  low: {
+    iconColor: 'text-green-500',
+    bgColor: 'bg-green-50',
+    textColor: 'text-green-700',
+    borderColor: 'border-green-200',
+    label: 'Low',
+  },
+  medium: {
+    iconColor: 'text-amber-500',
+    bgColor: 'bg-amber-50',
+    textColor: 'text-amber-700',
+    borderColor: 'border-amber-200',
+    label: 'Medium',
+  },
+  high: {
+    iconColor: 'text-orange-500',
+    bgColor: 'bg-orange-50',
+    textColor: 'text-orange-700',
+    borderColor: 'border-orange-200',
+    label: 'High',
+  },
+  urgent: {
+    iconColor: 'text-red-500',
+    bgColor: 'bg-red-50',
+    textColor: 'text-red-700',
+    borderColor: 'border-red-200',
+    label: 'Urgent',
+  },
+} as const;
+
+// Default style for tasks without priority
+export const TASK_PRIORITY_DEFAULT_STYLE = {
+  iconColor: 'text-gray-400',
+  bgColor: 'bg-gray-50',
+  textColor: 'text-gray-600',
+  borderColor: 'border-gray-200',
+  label: 'No Priority',
+} as const;
+
+// Helper function to get priority style
+export const getTaskPriorityStyle = (priority?: string) => {
+  return priority && priority in TASK_PRIORITY_STYLES 
+    ? TASK_PRIORITY_STYLES[priority as keyof typeof TASK_PRIORITY_STYLES]
+    : TASK_PRIORITY_DEFAULT_STYLE;
+};
