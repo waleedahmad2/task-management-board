@@ -1,3 +1,4 @@
+import { apiEndpoints } from '#/constants';
 import { performRequest } from '../../../services/apiClient';
 
 export interface DeleteCommentParams {
@@ -7,6 +8,6 @@ export interface DeleteCommentParams {
 export const deleteComment = async ({ commentId }: DeleteCommentParams): Promise<void> => {
   return performRequest<void>({
     method: 'DELETE',
-    url: `/comments/${commentId}`,
+    url: apiEndpoints.COMMENTS.DELETE(commentId),
   });
 };

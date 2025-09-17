@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 
 import { showToast } from '#/components/common';
-import { TASK_MODAL_MODES, MESSAGES, TASK_STATUS_ORDER } from '#/constants';
+import { TASK_MODAL_MODES, MESSAGES, TASK_STATUS_ORDER, TASK_STATUSES } from '#/constants';
 import { TASKS_CONFIG } from '#/constants/tasks';
 import { createTask, updateTask, deleteTask } from '#/data/tasks/mutations';
 import { useGetTasksInfinite } from '#/data/tasks/queries/getTasksInfinite';
@@ -38,12 +38,9 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
     ])
   ) as Record<TaskStatus, Task[]>;
 
-  const [tasksByStatus, setTasksByStatus] = useState<Record<TaskStatus, Task[]>>({
-    backlog: [],
-    'in-progress': [],
-    review: [],
-    done: [],
-  });
+  const [tasksByStatus, setTasksByStatus] = useState<Record<TaskStatus, Task[]>>(
+    TASK_STATUSES.reduce((acc, status) => ({ ...acc, [status]: [] }), {} as Record<TaskStatus, Task[]>)
+  );
 
   // Simple sync - only update when we have actual data
   useEffect(() => {
@@ -63,19 +60,21 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
   const error = Object.values(statusQueries).find(query => query.error)?.error as Error | null;
 
   // Simple pagination states - following useProjectStatusColumns pattern
-  const isFetchingNextPage: Record<TaskStatus, boolean> = {
-    backlog: statusQueries.backlog.isFetchingNextPage || false,
-    'in-progress': statusQueries['in-progress'].isFetchingNextPage || false,
-    review: statusQueries.review.isFetchingNextPage || false,
-    done: statusQueries.done.isFetchingNextPage || false,
-  };
+  const isFetchingNextPage: Record<TaskStatus, boolean> = TASK_STATUSES.reduce(
+    (acc, status) => ({
+      ...acc,
+      [status]: statusQueries[status].isFetchingNextPage || false,
+    }),
+    {} as Record<TaskStatus, boolean>
+  );
 
-  const hasNextPage: Record<TaskStatus, boolean> = {
-    backlog: statusQueries.backlog.hasNextPage || false,
-    'in-progress': statusQueries['in-progress'].hasNextPage || false,
-    review: statusQueries.review.hasNextPage || false,
-    done: statusQueries.done.hasNextPage || false,
-  };
+  const hasNextPage: Record<TaskStatus, boolean> = TASK_STATUSES.reduce(
+    (acc, status) => ({
+      ...acc,
+      [status]: statusQueries[status].hasNextPage || false,
+    }),
+    {} as Record<TaskStatus, boolean>
+  );
 
   const handleAddTask = useCallback((): void => {
     // This is handled by the parent component

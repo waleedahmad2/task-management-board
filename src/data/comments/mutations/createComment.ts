@@ -1,3 +1,4 @@
+import { apiEndpoints } from '#/constants';
 import { Comment, CommentFormData } from '#/types/comment.types';
 import { performRequest } from '../../../services/apiClient';
 
@@ -14,7 +15,7 @@ export interface CreateCommentParams {
 export const createComment = async ({ formData, taskId, sender }: CreateCommentParams): Promise<Comment> => {
   const result = await performRequest<Comment, Record<string, unknown>>({
     method: 'POST',
-    url: '/comments',
+    url: apiEndpoints.COMMENTS.CREATE,
     payload: {
       content: formData.content,
       taskId,

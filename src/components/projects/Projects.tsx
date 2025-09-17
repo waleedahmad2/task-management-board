@@ -15,7 +15,6 @@ import ProjectStatusColumns from './ProjectStatusColumns';
  */
 const Projects = (): JSX.Element => {
   const [currentView, setCurrentView] = useState<ViewType>(VIEW_TYPES.TABLE);
-  const [searchQuery, setSearchQuery] = useState<string>('');
   const navigate = useNavigate();
 
   // Use the business logic hook for projects
@@ -26,6 +25,7 @@ const Projects = (): JSX.Element => {
     isFetchingNextPage,
     handleSearchChange,
     handleScroll,
+    search: searchQuery,
   } = useProjects({
     params: {
       pageSize: PROJECTS_CONFIG.INFINITE_SCROLL.PAGE_SIZE,
@@ -35,7 +35,6 @@ const Projects = (): JSX.Element => {
   // Search functionality
   const handleSearch = (searchValue: string): void => {
     handleSearchChange(searchValue);
-    setSearchQuery(searchValue);
   };
 
   const handleProjectClick = (project: Project): void => {
