@@ -10,7 +10,7 @@ export interface UseGetProjectsInfiniteProps {
     search?: string;
     status?: string;
   };
-  options?: any;
+  options?: Record<string, unknown>;
 }
 
 export const useGetProjectsInfinite = ({

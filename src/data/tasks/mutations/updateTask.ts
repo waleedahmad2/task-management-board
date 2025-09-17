@@ -15,5 +15,5 @@ export const updateTask = async ({ taskId, updates }: UpdateTaskParams): Promise
     payload: updates as Record<string, unknown>,
   });
 
-  return transformBackendTask(response as any);
+  return transformBackendTask(response as unknown as Parameters<typeof transformBackendTask>[0]);
 };
