@@ -43,12 +43,7 @@ const KanbanColumn = ({
       )}
     >
       {/* Fixed Header - using reusable component */}
-      <KanbanColumnHeader
-        title={title}
-        count={count}
-        dotColorClass={dotColorClass}
-        onAddItem={onAddItem}
-      />
+      <KanbanColumnHeader title={title} count={count} dotColorClass={dotColorClass} onAddItem={onAddItem} />
 
       <div
         className={cn(

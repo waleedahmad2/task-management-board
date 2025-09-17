@@ -81,10 +81,7 @@ const KanbanGroupedBoard = <T extends { id: string }>({
               {items.map((item, index) => renderItem(item, index))}
               {/* Show placeholder at the end when dragging over a column with tasks */}
               {activeTask && overColumn === key && (
-                <DragPlaceholder 
-                  taskTitle={activeTask.title} 
-                  message="Drop at the end" 
-                />
+                <DragPlaceholder taskTitle={activeTask.title} message='Drop at the end' />
               )}
               {sectionFetching && (
                 <div className='flex items-center justify-center py-4'>
@@ -95,12 +92,7 @@ const KanbanGroupedBoard = <T extends { id: string }>({
           ) : (
             <>
               {/* Show placeholder when dragging over empty column */}
-              {activeTask && overColumn === key && (
-                <DragPlaceholder 
-                  taskTitle={activeTask.title} 
-                  message="Drop here" 
-                />
-              )}
+              {activeTask && overColumn === key && <DragPlaceholder taskTitle={activeTask.title} message='Drop here' />}
             </>
           )}
         </KanbanColumn>

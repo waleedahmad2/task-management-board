@@ -4,8 +4,8 @@ import { Plus } from 'lucide-react';
 
 import { Button } from '#/components/ui/button';
 import { useAuth } from '#/context';
-import { canCreate } from '#/utils';
 import { cn } from '#/lib/utils';
+import { canCreate } from '#/utils';
 
 interface KanbanColumnHeaderProps {
   title: string;
@@ -26,7 +26,12 @@ const KanbanColumnHeader = ({
   const canUserCreate = canCreate(user?.role);
 
   return (
-    <div className={cn('flex items-center justify-between mb-3 flex-shrink-0 bg-white rounded-t-lg border border-gray-200 px-4 py-3', className)}>
+    <div
+      className={cn(
+        'flex items-center justify-between mb-3 flex-shrink-0 bg-white rounded-t-lg border border-gray-200 px-4 py-3',
+        className
+      )}
+    >
       <div className='flex items-center space-x-2'>
         <div className={cn('w-3 h-3 rounded-full', dotColorClass)} />
         <h3 className='text-sm font-semibold text-gray-700 uppercase tracking-wide'>{title}</h3>
