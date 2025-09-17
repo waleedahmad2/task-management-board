@@ -12,6 +12,10 @@ interface ProjectCardOwnerProps {
   className?: string;
 }
 
+/**
+ * Displays the project owner information with avatar and name.
+ * Shows a default user icon if no avatar is provided.
+ */
 const ProjectCardOwner = ({ owner, className = '' }: ProjectCardOwnerProps): JSX.Element => {
   const { name, avatar } = owner || {};
 

@@ -104,8 +104,8 @@ const ProjectBoardPage = (): JSX.Element => {
   const handleTaskSubmitWrapper = useCallback(
     async (data: unknown): Promise<void> => {
       try {
-        await handleTaskSubmit(data, modalMode, editingTask);
         setIsTaskModalOpen(false);
+        await handleTaskSubmit(data, modalMode, editingTask);
         setEditingTask(null);
       } catch (error) {
         // Keep modal open on error

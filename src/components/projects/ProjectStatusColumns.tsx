@@ -7,6 +7,10 @@ import { ProjectStatusColumnsProps, Project } from '#/types';
 import ProjectCard from './ProjectCard';
 import { KanbanColumnsSkeleton } from '../skeletons';
 
+/**
+ * Displays projects organized by status in a kanban board layout.
+ * Fetches projects data and groups them into columns based on their status.
+ */
 const ProjectStatusColumns = ({
   onProjectClick,
   className = '',
@@ -23,11 +27,11 @@ const ProjectStatusColumns = ({
     items: projectsByStatus[status] || [],
     count: statusCounts[status] || 0,
     dotColorClass: STATUS_DOT_COLORS[status] || '',
-    isLoading: statusQueries[status].isLoading,
-    isFetchingNextPage: statusQueries[status].isFetchingNextPage,
-    hasNextPage: statusQueries[status].hasNextPage,
-    error: statusQueries[status].error,
-    onScroll: statusQueries[status].handleScroll,
+    isLoading: statusQueries[status as keyof typeof statusQueries]?.isLoading || false,
+    isFetchingNextPage: statusQueries[status as keyof typeof statusQueries]?.isFetchingNextPage || false,
+    hasNextPage: statusQueries[status as keyof typeof statusQueries]?.hasNextPage || false,
+    error: statusQueries[status as keyof typeof statusQueries]?.error || null,
+    onScroll: statusQueries[status as keyof typeof statusQueries]?.handleScroll,
   }));
 
   return (
