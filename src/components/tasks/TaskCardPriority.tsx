@@ -28,15 +28,15 @@ const TaskCardPriority = ({ priority, className = '' }: TaskCardPriorityProps): 
 
   return (
     <div className={cn('flex items-center gap-2', className)}>
-      <div className={cn(
-        'flex items-center gap-1.5 px-2 py-1 rounded-md border transition-all duration-200',
-        currentStyle.bgColor,
-        currentStyle.borderColor
-      )}>
+      <div
+        className={cn(
+          'flex items-center gap-1.5 px-2 py-1 rounded-md border transition-all duration-200',
+          currentStyle.bgColor,
+          currentStyle.borderColor
+        )}
+      >
         <IconComponent className={cn('w-3 h-3', currentStyle.iconColor)} />
-        <span className={cn('text-xs font-semibold', currentStyle.textColor)}>
-          {currentStyle.label}
-        </span>
+        <span className={cn('text-xs font-semibold', currentStyle.textColor)}>{currentStyle.label}</span>
       </div>
     </div>
   );

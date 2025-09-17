@@ -141,7 +141,7 @@ export const TASK_PRIORITY_DEFAULT_STYLE = {
 
 // Helper function to get priority style
 export const getTaskPriorityStyle = (priority?: string) => {
-  return priority && priority in TASK_PRIORITY_STYLES 
+  return priority && priority in TASK_PRIORITY_STYLES
     ? TASK_PRIORITY_STYLES[priority as keyof typeof TASK_PRIORITY_STYLES]
     : TASK_PRIORITY_DEFAULT_STYLE;
 };
