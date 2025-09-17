@@ -81,7 +81,6 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
     {} as Record<TaskStatus, boolean>
   );
 
-
   const handleTaskSubmit = useCallback(
     async (data: unknown, modalMode: 'create' | 'edit', editingTask: Task | null): Promise<void> => {
       try {
@@ -155,7 +154,6 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
     },
     [projectId, statusQueries]
   );
-
 
   const handleTaskDelete = useCallback(
     async (task: Task): Promise<void> => {
