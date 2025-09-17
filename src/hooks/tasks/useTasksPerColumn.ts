@@ -9,6 +9,19 @@ import { useInfiniteScroll } from '#/hooks';
 import { taskFormSchema } from '#/schemas';
 import { Task, TaskStatus, TaskDragResult, TaskPriority, TaskFormData } from '#/types/task.types';
 import { UseTasksPerColumnProps, UseTasksPerColumnReturn } from '#/types/tasks/useTasksPerColumn.types';
+import { mockAssignees } from '#/mocks/tasks/data';
+
+// Helper function to get assignee data by ID
+const getAssigneeById = (assigneeId: string) => {
+  const foundAssignee = mockAssignees.find(a => a.id === assigneeId);
+  return foundAssignee
+    ? {
+        id: foundAssignee.id,
+        name: foundAssignee.name,
+        email: foundAssignee.email,
+      }
+    : undefined;
+};
 
 export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTasksPerColumnReturn => {
   const pageSize = TASKS_CONFIG.INFINITE_SCROLL.PAGE_SIZE;
@@ -94,13 +107,7 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
             priority: validatedData.priority,
             status: validatedData.status,
             dueDate: validatedData.dueDate,
-            assignee: validatedData.assigneeId
-              ? {
-                  id: validatedData.assigneeId,
-                  name: 'Current User',
-                  email: 'user@example.com',
-                }
-              : undefined,
+            assignee: validatedData.assigneeId ? getAssigneeById(validatedData.assigneeId) : undefined,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
             projectId,
