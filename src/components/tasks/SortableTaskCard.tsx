@@ -3,7 +3,7 @@ import { JSX } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-import { Task } from '#/types/task.types';
+import { Task } from '#/types';
 import TaskCard from './TaskCard';
 
 interface SortableTaskCardProps {

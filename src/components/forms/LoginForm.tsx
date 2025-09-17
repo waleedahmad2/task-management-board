@@ -46,7 +46,6 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps): JSX.Element {
       await handleLogin(data, () => {
         form.reset();
         onLoginSuccess?.();
-        // Navigate after successful login and state update
         navigate(ROUTES.HOME, { replace: true });
       });
     } catch (error) {

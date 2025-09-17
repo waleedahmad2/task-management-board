@@ -80,7 +80,7 @@ export const TASK_FORM_FIELDS = (
     name: 'assigneeId',
     type: FIELD_TYPES.SELECT,
     label: 'Assigned To',
-    required: false,
+    required: true,
     placeholder: 'Who will work on this task?',
     options: assignees.map(({ id, name }) => ({
       value: id,

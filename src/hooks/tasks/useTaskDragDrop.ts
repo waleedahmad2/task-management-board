@@ -106,18 +106,20 @@ export const useTaskDragDrop = ({
         const sortedTasks = sectionTasks.sort((a, b) => a.order - b.order);
         const overIndex = sortedTasks.findIndex(task => task.id === over.id);
 
-        // Calculate target index based on position
         if (targetStatus === activeStatus) {
           // Moving within the same column
           if (activeIndex < overIndex) {
+            // Moving down - place after the target task
             targetIndex = overIndex;
           } else if (activeIndex > overIndex) {
+            // Moving up - place before the target task
             targetIndex = overIndex;
           } else {
+            // Same position - no change
             targetIndex = activeIndex;
           }
         } else {
-          // Moving to a different column
+          // Moving to a different column - place at the position of the target task
           targetIndex = overIndex;
         }
       } else {
@@ -128,7 +130,7 @@ export const useTaskDragDrop = ({
 
         if (targetStatus === activeStatus) {
           // Moving within the same column - place at the end
-          targetIndex = targetTasks.length;
+          targetIndex = targetTasks.length - 1; // -1 because we're removing the active task
         } else {
           // Moving to a different column - place at the end
           targetIndex = targetTasks.length;

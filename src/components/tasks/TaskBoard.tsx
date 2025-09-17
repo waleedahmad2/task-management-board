@@ -57,7 +57,9 @@ const createKanbanSections = (
 };
 
 // Custom collision detection for better vertical list handling
-const customCollisionDetection = (args: unknown) => {
+const customCollisionDetection = (args: { pointerCoordinates?: { x: number; y: number } }) => {
+  const { pointerCoordinates } = args;
+
   // First, try to find intersections with sortable items
   const sortableIntersections = rectIntersection(args);
 
@@ -66,8 +68,25 @@ const customCollisionDetection = (args: unknown) => {
     return sortableIntersections;
   }
 
-  // Otherwise, fall back to closest center for droppable areas
-  return closestCenter(args);
+  // For better cross-column positioning, use closest center but prioritize vertical distance
+  const intersections = closestCenter(args);
+
+  if (intersections.length > 0 && pointerCoordinates) {
+    // Sort by vertical distance from pointer to improve positioning
+    return intersections.sort((a, b) => {
+      const aRect = a.data?.current?.node?.getBoundingClientRect();
+      const bRect = b.data?.current?.node?.getBoundingClientRect();
+
+      if (!aRect || !bRect) return 0;
+
+      const aDistance = Math.abs(pointerCoordinates.y - (aRect.top + aRect.height / 2));
+      const bDistance = Math.abs(pointerCoordinates.y - (bRect.top + bRect.height / 2));
+
+      return aDistance - bDistance;
+    });
+  }
+
+  return intersections;
 };
 
 const TaskBoard = ({
@@ -106,12 +125,30 @@ const TaskBoard = ({
       // Check if this task should show a placeholder above it
       const shouldShowPlaceholder = overTask && overTask.id === task.id && activeTask && activeTask.id !== task.id;
 
+      // Determine if we should show placeholder above or below based on drag direction
+      const activeTaskData = activeTask
+        ? Object.values(tasksByStatus)
+            .flat()
+            .find(t => t.id === activeTask.id)
+        : null;
+      const activeIndex = activeTaskData
+        ? Object.values(tasksByStatus)
+            .flat()
+            .findIndex(t => t.id === activeTask?.id)
+        : -1;
+      const overIndex = overTask
+        ? Object.values(tasksByStatus)
+            .flat()
+            .findIndex(t => t.id === overTask.id)
+        : -1;
+      const shouldShowAbove = activeIndex !== -1 && overIndex !== -1 && activeIndex > overIndex;
+
       // Use a composite key that includes order to force re-render when position changes
       const taskKey = `${task.id}-${task.status}-${task.order}-${index}`;
 
       return (
         <div key={taskKey}>
-          {shouldShowPlaceholder && (
+          {shouldShowPlaceholder && shouldShowAbove && (
             <div className='opacity-50 border-2 border-dashed border-blue-400 bg-blue-50 rounded-lg p-3 mb-4'>
               <div className='text-sm text-blue-600 font-medium'>Drop here to place before "{task.title}"</div>
             </div>
@@ -123,10 +160,15 @@ const TaskBoard = ({
             onEdit={onTaskEdit}
             onDelete={onTaskDelete}
           />
+          {shouldShowPlaceholder && !shouldShowAbove && (
+            <div className='opacity-50 border-2 border-dashed border-blue-400 bg-blue-50 rounded-lg p-3 mt-4'>
+              <div className='text-sm text-blue-600 font-medium'>Drop here to place after "{task.title}"</div>
+            </div>
+          )}
         </div>
       );
     },
-    [onTaskClick, onTaskEdit, onTaskDelete, overTask, activeTask]
+    [onTaskClick, onTaskEdit, onTaskDelete, overTask, activeTask, tasksByStatus]
   );
 
   return (

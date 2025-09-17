@@ -1,6 +1,6 @@
 export { setFieldValue } from './fieldCommands';
-export { default as renderTextareaField } from './renderTextareaField';
-export { default as renderSelectField } from './renderSelectField';
-export { default as renderDateField } from './renderDateField';
-export { default as renderDefaultField } from './renderDefaultField';
+export { default as TextareaField } from './TextareaField';
+export { default as SelectField } from './SelectField';
+export { default as DateField } from './DateField';
+export { default as DefaultField } from './DefaultField';
 export { default as renderField } from './renderField';

@@ -9,7 +9,7 @@ import { DynamicFormFieldProps } from '#/types/forms';
 /**
  * Render textarea field
  */
-const renderTextareaField = <T extends FieldValues>(
+const TextareaField = <T extends FieldValues>(
   field: DynamicFormFieldProps<T>['field'],
   form: DynamicFormFieldProps<T>['form'],
   fieldError: FormFieldError | undefined
@@ -23,4 +23,4 @@ const renderTextareaField = <T extends FieldValues>(
   />
 );
 
-export default renderTextareaField;
+export default TextareaField;

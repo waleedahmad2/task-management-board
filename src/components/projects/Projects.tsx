@@ -2,8 +2,7 @@ import { JSX, useState, useRef } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { AppHeader } from '#/components/common';
-import { TableSkeleton, KanbanColumnsSkeleton } from '#/components/skeletons';
+import { TableSkeleton, KanbanColumnsSkeleton, AppHeader } from '#/components';
 import { VIEW_TYPES, ViewType, ROUTES, PROJECTS_CONFIG } from '#/constants';
 import { useProjects } from '#/hooks';
 import { Project } from '#/types';

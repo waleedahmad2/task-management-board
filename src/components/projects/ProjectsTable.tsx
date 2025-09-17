@@ -1,10 +1,17 @@
 import { JSX, useMemo } from 'react';
 
-import GenericTable from '#/components/common/GenericTable';
-import { PROJECT_STATUSES, STATUS_LABELS, getStatusDotColor, PROJECT_TABLE_COLUMNS, HOVER_COLORS } from '#/constants';
+import { GenericTable } from '#/components';
+import {
+  PROJECT_STATUSES,
+  STATUS_LABELS,
+  getStatusDotColor,
+  PROJECT_TABLE_COLUMNS,
+  HOVER_COLORS,
+  type ProjectColumnType,
+} from '#/constants';
 import { ProjectsTableProps, Project, ProjectStatus } from '#/types';
 import { cn } from '#/utils';
-import ProjectTableColumn, { ColumnType } from './ProjectTableColumn';
+import ProjectTableColumn from './ProjectTableColumn';
 
 /**
  * Projects table component using GenericTable with status grouping
@@ -43,7 +50,7 @@ const ProjectsTable = ({
   const columns = PROJECT_TABLE_COLUMNS.map(({ key, ...rest }) => ({
     ...rest,
     key,
-    render: (project: Project) => <ProjectTableColumn project={project} columnType={key as ColumnType} />,
+    render: (project: Project) => <ProjectTableColumn project={project} columnType={key as ProjectColumnType} />,
   }));
 
   // Create sections for grouped display

@@ -4,24 +4,12 @@ import { showToast } from '#/components/common';
 import { TASK_MODAL_MODES, MESSAGES, TASK_STATUS_ORDER, TASK_STATUSES } from '#/constants';
 import { TASKS_CONFIG } from '#/constants/tasks';
 import { createTask, updateTask, deleteTask } from '#/data/tasks/mutations';
-import { useGetTasksInfinite } from '#/data/tasks/queries/getTasksInfinite';
+import { useGetTasksInfinite } from '#/data/tasks/queries';
 import { useInfiniteScroll } from '#/hooks';
 import { mockAssignees } from '#/mocks/tasks/data';
 import { taskFormSchema } from '#/schemas';
 import { Task, TaskStatus, TaskDragResult, TaskPriority, TaskFormData } from '#/types/task.types';
 import { UseTasksPerColumnProps, UseTasksPerColumnReturn } from '#/types/tasks/useTasksPerColumn.types';
-
-// Helper function to get assignee data by ID
-const getAssigneeById = (assigneeId: string) => {
-  const foundAssignee = mockAssignees.find(a => a.id === assigneeId);
-  return foundAssignee
-    ? {
-        id: foundAssignee.id,
-        name: foundAssignee.name,
-        email: foundAssignee.email,
-      }
-    : undefined;
-};
 
 export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTasksPerColumnReturn => {
   const pageSize = TASKS_CONFIG.INFINITE_SCROLL.PAGE_SIZE;
@@ -94,6 +82,18 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
     {} as Record<TaskStatus, boolean>
   );
 
+  // Helper function to get assignee data by ID
+  const getAssigneeById = (assigneeId: string) => {
+    const foundAssignee = mockAssignees.find(a => a.id === assigneeId);
+    return foundAssignee
+      ? {
+          id: foundAssignee.id,
+          name: foundAssignee.name,
+          email: foundAssignee.email,
+        }
+      : undefined;
+  };
+
   const handleTaskSubmit = useCallback(
     async (data: unknown, modalMode: 'create' | 'edit', editingTask: Task | null): Promise<void> => {
       try {
@@ -126,10 +126,12 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
             isOptimisticUpdateRef.current = false;
           }, 100);
         } else if (modalMode === TASK_MODAL_MODES.EDIT && editingTask) {
+          const { assigneeId, ...formDataWithoutAssigneeId } = validatedData;
           const updates = {
-            ...validatedData,
+            ...formDataWithoutAssigneeId,
             priority: validatedData.priority as TaskPriority,
             status: validatedData.status as TaskStatus,
+            assignee: assigneeId ? getAssigneeById(assigneeId) : undefined,
             updatedAt: new Date().toISOString(),
           };
 
@@ -181,7 +183,6 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
         console.error('Failed to delete task:', error);
         statusQueries[task.status].refetch();
         isOptimisticUpdateRef.current = false;
-        showToast('error', MESSAGES.TASK.DELETE_ERROR);
       }
     },
     [statusQueries]
@@ -201,8 +202,11 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
 
       setTasksByStatus(prev => {
         const newState = { ...prev };
+
+        // Remove task from source column
         newState[sourceColumn] = newState[sourceColumn].filter(task => task.id !== taskId);
 
+        // Create updated task with new status and order
         const updatedTask = {
           ...taskToMove,
           status: targetColumn,
@@ -210,11 +214,17 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
           updatedAt: new Date().toISOString(),
         };
 
-        newState[targetColumn] = [
-          ...newState[targetColumn].slice(0, targetIndex),
-          updatedTask,
-          ...newState[targetColumn].slice(targetIndex),
-        ];
+        // Insert task at the correct position in target column
+        const targetTasks = [...newState[targetColumn]];
+        targetTasks.splice(targetIndex, 0, updatedTask);
+
+        // Update orders for all tasks in the target column
+        const reorderedTasks = targetTasks.map((task, index) => ({
+          ...task,
+          order: index,
+        }));
+
+        newState[targetColumn] = reorderedTasks;
 
         return newState;
       });

@@ -3,13 +3,13 @@ import { JSX } from 'react';
 import { Edit, Trash2 } from 'lucide-react';
 
 import { Button } from '#/components/ui/button';
-import { TASK_ACTIONS } from '#/constants/task';
+import { TASK_ACTIONS } from '#/constants';
 import { useAuth } from '#/context';
 import { cn, canDelete } from '#/utils';
 
 interface TaskCardActionsProps {
-  onEdit: () => void;
-  onDelete: () => void;
+  onEdit: (e: React.MouseEvent) => void;
+  onDelete: (e: React.MouseEvent) => void;
   className?: string;
 }
 

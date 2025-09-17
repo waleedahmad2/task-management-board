@@ -20,6 +20,8 @@
     "test:integration": "vitest run src/test/integration",
     "test:unit:watch": "vitest --watch src/test/unit",
     "test:integration:watch": "vitest --watch src/test/integration",
+    "test:ci": "yarn test:run && yarn lint && yarn type-check",
+    "type-check": "tsc --noEmit",
     "prepare": "husky"
   },
   "lint-staged": {

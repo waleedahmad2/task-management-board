@@ -2,7 +2,7 @@ import { JSX } from 'react';
 
 import { User } from 'lucide-react';
 
-import { TASK_FOOTER_TEXT } from '#/constants/task';
+import { TASK_FOOTER_TEXT } from '#/constants';
 import { cn } from '#/utils';
 
 interface TaskCardFooterProps {

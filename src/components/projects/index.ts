@@ -3,6 +3,7 @@ export { default as ProjectCard } from './ProjectCard';
 export { default as ProjectCardFooter } from './ProjectCardFooter';
 export { default as ProjectCardHeader } from './ProjectCardHeader';
 export { default as ProjectCardOwner } from './ProjectCardOwner';
+export { default as ProjectCardTeamMembers } from './ProjectCardTeamMembers';
 export { ProjectBoardCard } from './ProjectBoardCard';
 export { default as ProjectsTable } from './ProjectsTable';
 export { default as ProjectStatusColumns } from './ProjectStatusColumns';

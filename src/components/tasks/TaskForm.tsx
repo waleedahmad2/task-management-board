@@ -3,13 +3,12 @@ import { JSX, useEffect, useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { DynamicForm } from '#/components';
-import { showToast } from '#/components/common/showToast';
-import { TASK_FORM_FIELDS, MESSAGES } from '#/constants';
+import { DynamicForm, showToast } from '#/components';
+import { TASK_FORM_FIELDS, MESSAGES, REGEX } from '#/constants';
 import { useAuth } from '#/context';
 import { mockAssignees } from '#/mocks/tasks/data';
 import { taskFormSchema, TaskFormData } from '#/schemas';
-import { TaskStatus, TaskPriority } from '#/types/task.types';
+import { TaskStatus, TaskPriority } from '#/types';
 
 interface TaskFormProps {
   onSubmit: (data: TaskFormData) => void;
@@ -25,7 +24,6 @@ interface TaskFormProps {
  * Form component for creating and editing tasks
  * Clean form without duplicated headers or buttons
  */
-const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
 const TaskForm = ({
   onSubmit,
@@ -35,6 +33,7 @@ const TaskForm = ({
   submitLabel,
   isEditMode = false,
 }: TaskFormProps): JSX.Element => {
+  const { DATE: DATE_REGEX } = REGEX;
   const { user } = useAuth();
 
   // Determine if we're in edit mode based on initialData or explicit prop
@@ -57,21 +56,7 @@ const TaskForm = ({
   };
 
   // Create assignees list with current user included
-  const assignees = useMemo(() => {
-    if (!user) return mockAssignees;
-
-    const { id: userId, name: userName, email: userEmail } = user;
-
-    // Check if current user is already in mockAssignees
-    const userExists = mockAssignees.some(assignee => assignee.id === userId);
-
-    if (userExists) {
-      return mockAssignees;
-    }
-
-    // Add current user to the list
-    return [{ id: userId, name: userName, email: userEmail }, ...mockAssignees];
-  }, [user]);
+  const assignees = useMemo(() => mockAssignees, []);
 
   const form = useForm<TaskFormData>({
     resolver: zodResolver(taskFormSchema),
@@ -93,7 +78,7 @@ const TaskForm = ({
       priority = 'medium',
       status = defaultStatus,
       dueDate = '',
-      assigneeId = user?.id || '',
+      assigneeId = '',
     } = initialData;
 
     const formData = {
@@ -108,10 +93,7 @@ const TaskForm = ({
     form.reset(formData);
   }, [initialData, form, defaultStatus, user?.id]);
 
-  const fields = TASK_FORM_FIELDS(initialData as Record<string, unknown>, defaultStatus, assignees, user?.id) as Record<
-    string,
-    unknown
-  >;
+  const fields = TASK_FORM_FIELDS(initialData as Record<string, unknown>, defaultStatus, assignees, user?.id);
 
   // Enhanced submit handler to format date correctly and show success toast
   const handleSubmit = async (data: TaskFormData) => {

@@ -1,5 +1,7 @@
 import { JSX } from 'react';
 
+import { cn } from '#/utils';
+
 /**
  * Props for NoData component
  */
@@ -18,7 +20,7 @@ const NoData = ({
   message = 'Your recent AI agent tasks will show up here as you start using them.',
   className = '',
 }: NoDataProps): JSX.Element => (
-  <div className={`flex items-center justify-center min-h-screen ${className}`}>
+  <div className={cn('flex items-center justify-center min-h-screen', className)}>
     <div className='flex flex-col max-w-[22rem] items-center justify-center gap-2 text-center'>
       <p className='font-inter text-base font-medium leading-6 text-gray-700'>{title}</p>
       {message && <p className='font-inter text-sm leading-4 text-gray-500 max-w-md'>{message}</p>}

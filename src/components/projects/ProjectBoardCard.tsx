@@ -8,6 +8,8 @@ interface ProjectBoardCardProps {
 }
 
 export const ProjectBoardCard = ({ project, onProjectClick }: ProjectBoardCardProps): JSX.Element => {
+  const { id, name, description, status, createdAt, members } = project;
+
   const handleProjectClick = useCallback((): void => {
     onProjectClick(project);
   }, [onProjectClick, project]);
@@ -27,31 +29,29 @@ export const ProjectBoardCard = ({ project, onProjectClick }: ProjectBoardCardPr
 
   return (
     <div
-      key={project.id}
+      key={id}
       onClick={handleProjectClick}
       className='bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg hover:border-blue-300 cursor-pointer transition-all duration-200 group'
     >
       <div className='flex items-start justify-between mb-4'>
         <div className='flex-1'>
-          <h3 className='text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors'>
-            {project.name}
-          </h3>
-          {project.description && <p className='text-sm text-gray-600 mt-1 line-clamp-2'>{project.description}</p>}
+          <h3 className='text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors'>{name}</h3>
+          {description && <p className='text-sm text-gray-600 mt-1 line-clamp-2'>{description}</p>}
         </div>
         <div className='ml-2'>
           <span
-            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusConfig(project.status)}`}
+            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusConfig(status)}`}
           >
-            {project.status}
+            {status}
           </span>
         </div>
       </div>
 
       <div className='flex items-center justify-between text-sm text-gray-500'>
-        <span>Created {new Date(project.createdAt).toLocaleDateString()}</span>
+        <span>Created {new Date(createdAt).toLocaleDateString()}</span>
         <div className='flex items-center space-x-1'>
           <span>👥</span>
-          <span>{project.members?.length || 0}</span>
+          <span>{members?.length || 0}</span>
         </div>
       </div>
 

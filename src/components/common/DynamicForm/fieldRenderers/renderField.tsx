@@ -5,10 +5,10 @@ import { FieldValues } from 'react-hook-form';
 import { FIELD_TYPES } from '#/constants';
 import { FormFieldError } from '#/types/form.types';
 import { DynamicFormFieldProps } from '#/types/forms';
-import renderDateField from './renderDateField';
-import renderDefaultField from './renderDefaultField';
-import renderSelectField from './renderSelectField';
-import renderTextareaField from './renderTextareaField';
+import DateField from './DateField';
+import DefaultField from './DefaultField';
+import SelectField from './SelectField';
+import TextareaField from './TextareaField';
 
 /**
  * Main field renderer function
@@ -20,16 +20,16 @@ const renderField = <T extends FieldValues>(
 ): JSX.Element => {
   switch (field.type) {
     case FIELD_TYPES.TEXTAREA:
-      return renderTextareaField(field, form, fieldError);
+      return TextareaField(field, form, fieldError);
 
     case FIELD_TYPES.SELECT:
-      return renderSelectField(field, form, fieldError);
+      return SelectField(field, form, fieldError);
 
     case FIELD_TYPES.DATE:
-      return renderDateField(field, form, fieldError);
+      return DateField(field, form, fieldError);
 
     default:
-      return renderDefaultField(field, form, fieldError);
+      return DefaultField(field, form, fieldError);
   }
 };
 

@@ -3,7 +3,7 @@ import { JSX } from 'react';
 import { AlertCircle, Clock, Zap, CheckCircle } from 'lucide-react';
 
 import { getTaskPriorityStyle } from '#/constants/task';
-import { TaskPriority } from '#/types/task.types';
+import { TaskPriority } from '#/types';
 import { cn } from '#/utils';
 
 interface TaskCardPriorityProps {

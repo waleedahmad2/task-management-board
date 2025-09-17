@@ -2,7 +2,7 @@ import { JSX } from 'react';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '#/components/ui/dialog';
 import { TaskFormData } from '#/schemas';
-import { TaskStatus } from '#/types/task.types';
+import { TaskStatus } from '#/types';
 import TaskForm from './TaskForm';
 
 interface TaskModalProps {

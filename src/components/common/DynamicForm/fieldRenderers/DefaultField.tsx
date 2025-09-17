@@ -10,7 +10,7 @@ import { DynamicFormFieldProps } from '#/types/forms';
  * Enhanced default input field with better micro-interactions
  * Clear focus states, better error handling, and visual feedback
  */
-const renderDefaultField = <T extends FieldValues>(
+const DefaultField = <T extends FieldValues>(
   field: DynamicFormFieldProps<T>['field'],
   form: DynamicFormFieldProps<T>['form'],
   fieldError: FormFieldError | undefined
@@ -35,4 +35,4 @@ const renderDefaultField = <T extends FieldValues>(
   />
 );
 
-export default renderDefaultField;
+export default DefaultField;

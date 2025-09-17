@@ -1,9 +1,8 @@
 import { JSX, useCallback } from 'react';
 
-import { Calendar } from 'lucide-react';
-
-import { Task } from '#/types/task.types';
-import { cn, formatDate, isTaskOverdue } from '#/utils';
+import { Task } from '#/types';
+import { cn, isTaskOverdue } from '#/utils';
+import TaskCardDueDate from './TaskCardDueDate';
 import TaskCardFooter from './TaskCardFooter';
 import TaskCardHeader from './TaskCardHeader';
 import TaskCardPriority from './TaskCardPriority';
@@ -68,31 +67,7 @@ const TaskCard = ({ task, onClick, onEdit, onDelete, className = '' }: TaskCardP
         <TaskCardPriority priority={priority} />
       </div>
 
-      {/* Due date with better visual treatment */}
-      <div className='mb-3 relative z-10'>
-        <div className='flex items-center justify-between'>
-          <div className='flex items-center space-x-2'>
-            <div className='flex items-center space-x-1.5'>
-              <Calendar className={cn('w-3.5 h-3.5', isOverdue ? 'text-red-500' : 'text-gray-400')} />
-              <span className='text-xs font-medium text-gray-600'>Due</span>
-            </div>
-            {dueDate ? (
-              <span
-                className={cn(
-                  'px-2 py-1 text-xs font-medium rounded-full',
-                  isOverdue
-                    ? 'bg-red-100 text-red-700 border border-red-200'
-                    : 'bg-gray-100 text-gray-600 border border-gray-200'
-                )}
-              >
-                {formatDate(dueDate)}
-              </span>
-            ) : (
-              <span className='text-xs text-gray-400 italic'>No due date</span>
-            )}
-          </div>
-        </div>
-      </div>
+      <TaskCardDueDate dueDate={dueDate} />
 
       <TaskCardFooter assignee={assignee} overdue={isOverdue} />
     </div>

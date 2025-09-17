@@ -6,8 +6,8 @@ import TaskCardActions from './TaskCardActions';
 interface TaskCardHeaderProps {
   title: string;
   description?: string;
-  onEdit: () => void;
-  onDelete: () => void;
+  onEdit: (e: React.MouseEvent) => void;
+  onDelete: (e: React.MouseEvent) => void;
   className?: string;
 }
 

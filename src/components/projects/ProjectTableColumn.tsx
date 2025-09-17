@@ -2,16 +2,14 @@ import { JSX } from 'react';
 
 import { Calendar, User } from 'lucide-react';
 
-import { STATUS_COLORS } from '#/constants';
+import { STATUS_COLORS, PROJECT_COLUMN_TYPES, PROJECT_TABLE_CONFIG, type ProjectColumnType } from '#/constants';
 import { Project, ProjectStatus } from '#/types';
 import { formatDate } from '#/utils';
 import MemberAvatar from './MemberAvatar';
 
-export type ColumnType = 'name' | 'owner' | 'members' | 'createdAt' | 'updatedAt' | 'status';
-
 interface ProjectTableColumnProps {
   project: Project;
-  columnType: ColumnType;
+  columnType: ProjectColumnType;
 }
 
 const getStatusColor = (status: ProjectStatus): string => {
@@ -19,10 +17,11 @@ const getStatusColor = (status: ProjectStatus): string => {
 };
 
 const ProjectTableColumn = ({ project, columnType }: ProjectTableColumnProps): JSX.Element => {
+  const { name, description, owner, members = [], createdAt, updatedAt, status } = project || {};
+
   const renderColumn = (): JSX.Element => {
     switch (columnType) {
-      case 'name': {
-        const { name, description } = project || {};
+      case PROJECT_COLUMN_TYPES.NAME: {
         return (
           <div>
             <div className='text-sm font-medium text-gray-900'>{name}</div>
@@ -31,30 +30,28 @@ const ProjectTableColumn = ({ project, columnType }: ProjectTableColumnProps): J
         );
       }
 
-      case 'owner': {
-        const { owner } = project || {};
-        const { name, email, avatar } = owner || {};
+      case PROJECT_COLUMN_TYPES.OWNER: {
+        const { name: ownerName, email, avatar } = owner || {};
         return (
           <div className='flex items-center'>
             <div className='w-8 h-8 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-full flex items-center justify-center mr-3'>
               {avatar ? (
-                <img src={avatar} alt={name} className='w-full h-full rounded-full object-cover' />
+                <img src={avatar} alt={ownerName} className='w-full h-full rounded-full object-cover' />
               ) : (
                 <User className='w-4 h-4 text-indigo-600' />
               )}
             </div>
             <div>
-              <div className='text-sm font-medium text-gray-900'>{name}</div>
+              <div className='text-sm font-medium text-gray-900'>{ownerName}</div>
               <div className='text-xs text-gray-500'>{email}</div>
             </div>
           </div>
         );
       }
 
-      case 'members': {
-        const { members = [] } = project || {};
-        const visibleMembers = members?.slice(0, 3) || [];
-        const remainingCount = members?.length - 3 || 0;
+      case PROJECT_COLUMN_TYPES.MEMBERS: {
+        const visibleMembers = members?.slice(0, PROJECT_TABLE_CONFIG.VISIBLE_MEMBERS_LIMIT) || [];
+        const remainingCount = members?.length - PROJECT_TABLE_CONFIG.VISIBLE_MEMBERS_LIMIT || 0;
         return (
           <div className='flex items-center'>
             <div className='flex -space-x-2 mr-3'>
@@ -67,8 +64,7 @@ const ProjectTableColumn = ({ project, columnType }: ProjectTableColumnProps): J
         );
       }
 
-      case 'createdAt': {
-        const { createdAt } = project || {};
+      case PROJECT_COLUMN_TYPES.CREATED_AT: {
         return (
           <div className='flex items-center text-sm text-gray-500'>
             <Calendar className='w-4 h-4 mr-2' />
@@ -77,13 +73,11 @@ const ProjectTableColumn = ({ project, columnType }: ProjectTableColumnProps): J
         );
       }
 
-      case 'updatedAt': {
-        const { updatedAt } = project || {};
+      case PROJECT_COLUMN_TYPES.UPDATED_AT: {
         return <div className='text-sm text-gray-500'>{formatDate(updatedAt)}</div>;
       }
 
-      case 'status': {
-        const { status } = project || {};
+      case PROJECT_COLUMN_TYPES.STATUS: {
         return (
           <span className={`px-2 py-1 text-xs font-semibold rounded-full border capitalize ${getStatusColor(status)}`}>
             {status}

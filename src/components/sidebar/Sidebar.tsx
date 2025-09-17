@@ -2,6 +2,7 @@ import { JSX, useState, useCallback } from 'react';
 
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
+import { Button } from '#/components/ui';
 import { SidebarFooter, SidebarHeader, SidebarItemsList } from '.';
 import FeatureFlagsSection from '../common/FeatureFlagsSection';
 
@@ -22,7 +23,8 @@ const Sidebar = (): JSX.Element => {
 
       {/* Feature Flags Section */}
       <div className='border-t border-gray-200'>
-        <button
+        <Button
+          variant='ghost'
           onClick={handleToggleFeatureFlags}
           className='w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-200'
         >
@@ -32,7 +34,7 @@ const Sidebar = (): JSX.Element => {
           ) : (
             <ChevronDown className='w-4 h-4 text-gray-500' />
           )}
-        </button>
+        </Button>
 
         {isFeatureFlagsOpen && (
           <div className='px-4 pb-4'>

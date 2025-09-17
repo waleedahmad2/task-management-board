@@ -2,7 +2,7 @@ import { JSX } from 'react';
 
 import { Calendar, User, Clock, Target, Flag, Timer } from 'lucide-react';
 
-import { Task } from '#/types/task.types';
+import { Task } from '#/types';
 import { formatDate } from '#/utils';
 import { PropertyRow } from './PropertyRow';
 

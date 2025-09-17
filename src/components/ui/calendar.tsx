@@ -3,10 +3,21 @@
 import * as React from 'react';
 
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import { DayPicker, getDefaultClassNames } from 'react-day-picker';
+import { DayPicker, getDefaultClassNames, type DayPickerProps } from 'react-day-picker';
 
-import { Button, buttonVariants } from '#/components/ui/button';
+import { buttonVariants } from '#/components/ui/button';
 import { cn } from '#/lib/utils';
+
+interface CalendarProps {
+  className?: string;
+  classNames?: Partial<DayPickerProps['classNames']>;
+  showOutsideDays?: boolean;
+  captionLayout?: 'label' | 'dropdown' | 'dropdown-months' | 'dropdown-years';
+  buttonVariant?: 'link' | 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost';
+  formatters?: Partial<DayPickerProps['formatters']>;
+  components?: Partial<DayPickerProps['components']>;
+  [key: string]: unknown;
+}
 
 function Calendar({
   className,
@@ -17,7 +28,7 @@ function Calendar({
   formatters,
   components,
   ...props
-}) {
+}: CalendarProps) {
   const defaultClassNames = getDefaultClassNames();
 
   return (
@@ -124,19 +135,30 @@ function Calendar({
   );
 }
 
-function CalendarDayButton({ className, day, modifiers, ...props }) {
+interface CalendarDayButtonProps {
+  className?: string;
+  day: { date: Date };
+  modifiers: {
+    selected?: boolean;
+    range_start?: boolean;
+    range_end?: boolean;
+    range_middle?: boolean;
+    focused?: boolean;
+  };
+}
+
+function CalendarDayButton({ className, day, modifiers, ...props }: CalendarDayButtonProps) {
   const defaultClassNames = getDefaultClassNames();
 
-  const ref = React.useRef(null);
+  const ref = React.useRef<HTMLButtonElement>(null);
   React.useEffect(() => {
     if (modifiers.focused) ref.current?.focus();
   }, [modifiers.focused]);
 
   return (
-    <Button
+    <button
       ref={ref}
-      variant='ghost'
-      size='icon'
+      type='button'
       data-day={day.date.toLocaleDateString()}
       data-selected-single={
         modifiers.selected && !modifiers.range_start && !modifiers.range_end && !modifiers.range_middle
@@ -145,6 +167,7 @@ function CalendarDayButton({ className, day, modifiers, ...props }) {
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
+        buttonVariants({ variant: 'ghost', size: 'icon' }),
         'data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 flex aspect-square h-auto w-full min-w-[--cell-size] flex-col gap-0 font-normal leading-none data-[range-end=true]:rounded-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] [&>span]:text-xs [&>span]:opacity-70 min-h-[1.75rem]',
         defaultClassNames.day,
         className

@@ -5,20 +5,20 @@ import { FieldValues, Controller } from 'react-hook-form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '#/components/ui/select';
 import { FormFieldError } from '#/types/form.types';
 import { DynamicFormFieldProps } from '#/types/forms';
+import { setFieldValue } from './fieldCommands';
 
 /**
  * Render select field with proper form integration
  */
-const renderSelectField = <T extends FieldValues>(
+const SelectField = <T extends FieldValues>(
   field: DynamicFormFieldProps<T>['field'],
   form: DynamicFormFieldProps<T>['form'],
   fieldError: FormFieldError | undefined
 ): JSX.Element => {
-  const { control, setValue, trigger } = form;
+  const { control } = form;
 
   const handleValueChange = (newValue: string) => {
-    setValue(field.name as string, newValue as string, { shouldValidate: true });
-    trigger(field.name as string);
+    setFieldValue(form, field.name, newValue);
   };
 
   const renderSelect = ({
@@ -53,4 +53,4 @@ const renderSelectField = <T extends FieldValues>(
   return <Controller name={field.name} control={control} rules={field.validation} render={renderSelect} />;
 };
 
-export default renderSelectField;
+export default SelectField;
