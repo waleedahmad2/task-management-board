@@ -18,16 +18,16 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
   const isOptimisticUpdateRef = useRef(false);
 
   // Simple queries for each status - following useProjectStatusColumns pattern
-  const backlogQuery = useGetTasksInfinite({ params: { projectId, status: 'backlog', pageSize } });
-  const inProgressQuery = useGetTasksInfinite({ params: { projectId, status: 'in-progress', pageSize } });
-  const reviewQuery = useGetTasksInfinite({ params: { projectId, status: 'review', pageSize } });
-  const doneQuery = useGetTasksInfinite({ params: { projectId, status: 'done', pageSize } });
+  const backlogQuery = useGetTasksInfinite({ params: { projectId, status: TASK_STATUSES[0], pageSize } });
+  const inProgressQuery = useGetTasksInfinite({ params: { projectId, status: TASK_STATUSES[1], pageSize } });
+  const reviewQuery = useGetTasksInfinite({ params: { projectId, status: TASK_STATUSES[2], pageSize } });
+  const doneQuery = useGetTasksInfinite({ params: { projectId, status: TASK_STATUSES[3], pageSize } });
 
   const statusQueries = {
-    backlog: backlogQuery,
-    'in-progress': inProgressQuery,
-    review: reviewQuery,
-    done: doneQuery,
+    [TASK_STATUSES[0]]: backlogQuery,
+    [TASK_STATUSES[1]]: inProgressQuery,
+    [TASK_STATUSES[2]]: reviewQuery,
+    [TASK_STATUSES[3]]: doneQuery,
   };
 
   // Simple data extraction - EXACTLY like useProjectStatusColumns
@@ -51,7 +51,7 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
     if (hasData) {
       setTasksByStatus(serverTasksByStatus);
     }
-  }, [statusQueries.backlog.data, statusQueries['in-progress'].data, statusQueries.done.data]);
+  }, [statusQueries[TASK_STATUSES[0]].data, statusQueries[TASK_STATUSES[1]].data, statusQueries[TASK_STATUSES[2]].data, statusQueries[TASK_STATUSES[3]].data]);
 
   const allTasks = useMemo(() => Object.values(tasksByStatus).flat(), [tasksByStatus]);
 
@@ -256,34 +256,34 @@ export const useTasksPerColumn = ({ projectId }: UseTasksPerColumnProps): UseTas
   }, []);
 
   const backlogScrollHandler = useInfiniteScroll({
-    fetchNextPage: statusQueries.backlog.fetchNextPage,
-    hasNextPage: hasNextPage.backlog,
-    isFetchingNextPage: isFetchingNextPage.backlog,
+    fetchNextPage: statusQueries[TASK_STATUSES[0]].fetchNextPage,
+    hasNextPage: hasNextPage[TASK_STATUSES[0]],
+    isFetchingNextPage: isFetchingNextPage[TASK_STATUSES[0]],
   });
 
   const inProgressScrollHandler = useInfiniteScroll({
-    fetchNextPage: statusQueries['in-progress'].fetchNextPage,
-    hasNextPage: hasNextPage['in-progress'],
-    isFetchingNextPage: isFetchingNextPage['in-progress'],
+    fetchNextPage: statusQueries[TASK_STATUSES[1]].fetchNextPage,
+    hasNextPage: hasNextPage[TASK_STATUSES[1]],
+    isFetchingNextPage: isFetchingNextPage[TASK_STATUSES[1]],
   });
 
   const reviewScrollHandler = useInfiniteScroll({
-    fetchNextPage: statusQueries.review.fetchNextPage,
-    hasNextPage: hasNextPage.review,
-    isFetchingNextPage: isFetchingNextPage.review,
+    fetchNextPage: statusQueries[TASK_STATUSES[2]].fetchNextPage,
+    hasNextPage: hasNextPage[TASK_STATUSES[2]],
+    isFetchingNextPage: isFetchingNextPage[TASK_STATUSES[2]],
   });
 
   const doneScrollHandler = useInfiniteScroll({
-    fetchNextPage: statusQueries.done.fetchNextPage,
-    hasNextPage: hasNextPage.done,
-    isFetchingNextPage: isFetchingNextPage.done,
+    fetchNextPage: statusQueries[TASK_STATUSES[3]].fetchNextPage,
+    hasNextPage: hasNextPage[TASK_STATUSES[3]],
+    isFetchingNextPage: isFetchingNextPage[TASK_STATUSES[3]],
   });
 
   const columnScrollHandlers = {
-    backlog: backlogScrollHandler,
-    'in-progress': inProgressScrollHandler,
-    review: reviewScrollHandler,
-    done: doneScrollHandler,
+    [TASK_STATUSES[0]]: backlogScrollHandler,
+    [TASK_STATUSES[1]]: inProgressScrollHandler,
+    [TASK_STATUSES[2]]: reviewScrollHandler,
+    [TASK_STATUSES[3]]: doneScrollHandler,
   };
 
   return {
