@@ -6,10 +6,10 @@ import { TASKS_CONFIG } from '#/constants/tasks';
 import { createTask, updateTask, deleteTask } from '#/data/tasks/mutations';
 import { useGetTasksInfinite } from '#/data/tasks/queries/getTasksInfinite';
 import { useInfiniteScroll } from '#/hooks';
+import { mockAssignees } from '#/mocks/tasks/data';
 import { taskFormSchema } from '#/schemas';
 import { Task, TaskStatus, TaskDragResult, TaskPriority, TaskFormData } from '#/types/task.types';
 import { UseTasksPerColumnProps, UseTasksPerColumnReturn } from '#/types/tasks/useTasksPerColumn.types';
-import { mockAssignees } from '#/mocks/tasks/data';
 
 // Helper function to get assignee data by ID
 const getAssigneeById = (assigneeId: string) => {
