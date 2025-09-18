@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import { PROJECTS_CONFIG } from '#/constants/projects';
+import { PROJECTS_CONFIG } from '#/constants';
 import { ProjectsInfiniteResponse } from '#/data/projects/queries/getProjects';
 import { useGetProjectsInfinite } from '#/data/projects/queries/getProjectsInfinite';
 import { useInfiniteScroll } from '#/hooks';
